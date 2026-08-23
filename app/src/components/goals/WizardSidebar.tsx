@@ -2,6 +2,7 @@
 
 import { GoalFormData, TaskFormData, VERIFICATION_LABELS } from "@/lib/types";
 import TiltCard from "@/components/ui/TiltCard";
+import { Lock, ArrowRight, Loader2 } from "lucide-react";
 
 interface WizardSidebarProps {
   goal: GoalFormData;
@@ -40,7 +41,7 @@ export default function WizardSidebar({
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-[#1E293B] pb-4">
           <div className="w-10 h-10 rounded-xl bg-[#10B981] text-[#090D10] flex items-center justify-center font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]">
-            <span className="material-symbols-outlined text-xl">lock_clock</span>
+            <Lock className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div>
             <h3 className="font-sans text-base font-bold text-[#F8FAFC]">Vault Summary</h3>
@@ -50,17 +51,17 @@ export default function WizardSidebar({
 
         {/* Commitment Specs */}
         <div className="space-y-3 font-mono text-xs">
-          <div className="flex justify-between p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
+          <div className="flex justify-between items-center p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
             <span className="text-[#94A3B8]">Final Deadline:</span>
             <span className="text-[#F8FAFC] font-bold">{formatDisplayDate(goal.end_date)}</span>
           </div>
 
-          <div className="flex justify-between p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
+          <div className="flex justify-between items-center p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
             <span className="text-[#94A3B8]">Verification:</span>
             <span className="text-[#10B981] font-bold">{VERIFICATION_LABELS[primaryVerification] || "Photo Proof"}</span>
           </div>
 
-          <div className="flex justify-between p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
+          <div className="flex justify-between items-center p-3 bg-[#090D10] rounded-xl border border-[#1E293B]">
             <span className="text-[#94A3B8]">Milestones:</span>
             <span className="text-[#F8FAFC] font-bold">{tasks.length} Steps</span>
           </div>
@@ -83,22 +84,22 @@ export default function WizardSidebar({
         <button
           onClick={onNext}
           disabled={isLoading}
-          className="btn-primary w-full text-center !py-3.5 text-sm"
+          className="btn-primary w-full text-center !py-3.5 text-sm inline-flex items-center justify-center gap-2"
         >
           {isLoading ? (
-            <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
-              Processing...
-            </span>
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Processing...</span>
+            </>
           ) : currentStep === 3 ? (
             <>
-              Confirm & Deposit Stake
-              <span className="material-symbols-outlined text-lg">lock</span>
+              <span>Confirm & Deposit Stake</span>
+              <Lock className="w-4 h-4" />
             </>
           ) : (
             <>
-              Next Step
-              <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              <span>Next Step</span>
+              <ArrowRight className="w-4 h-4" />
             </>
           )}
         </button>

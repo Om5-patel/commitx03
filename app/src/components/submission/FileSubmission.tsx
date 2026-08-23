@@ -3,11 +3,13 @@
 import { useState } from "react";
 import confetti from "canvas-confetti";
 import TiltCard from "@/components/ui/TiltCard";
+import { Link2, Rocket, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 interface FileSubmissionProps {
   taskId: string;
   goalId: string;
   taskTitle: string;
+  taskDescription?: string;
   onSuccess: () => void;
 }
 
@@ -99,7 +101,7 @@ export default function FileSubmission({
                 Repository / Deliverable URL
               </label>
               <div className="flex items-center gap-2 bg-[#090D10] border border-[#1E293B] rounded-xl px-3.5 py-3 focus-within:border-[#F59E0B] transition-colors">
-                <span className="material-symbols-outlined text-[#64748B] text-lg">link</span>
+                <Link2 className="w-4 h-4 text-[#64748B] shrink-0" />
                 <input
                   type="url"
                   value={artifactUrl}
@@ -133,17 +135,17 @@ export default function FileSubmission({
             <button
               type="submit"
               disabled={evaluating}
-              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider flex items-center justify-center gap-2"
+              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider inline-flex items-center justify-center gap-2"
             >
               {evaluating ? (
                 <>
-                  <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
-                  AI INSPECTOR (OpenRouter Free): Evaluating Artifact...
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>AI INSPECTOR (OpenRouter Free): Evaluating Artifact...</span>
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-lg">rocket_launch</span>
-                  SUBMIT ARTIFACT FOR VERIFICATION
+                  <Rocket className="w-4 h-4" />
+                  <span>SUBMIT ARTIFACT FOR VERIFICATION</span>
                 </>
               )}
             </button>
@@ -158,9 +160,11 @@ export default function FileSubmission({
                   : "bg-[#F43F5E]/20 text-[#F43F5E] border border-[#F43F5E]/40"
               }`}
             >
-              <span className="material-symbols-outlined text-3xl">
-                {evaluationResult.passed ? "verified" : "cancel"}
-              </span>
+              {evaluationResult.passed ? (
+                <CheckCircle2 className="w-8 h-8 stroke-[2.5]" />
+              ) : (
+                <XCircle className="w-8 h-8 stroke-[2.5]" />
+              )}
             </div>
 
             <div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { GoalCategory, GoalFormData } from "@/lib/types";
+import { BookOpen, Dumbbell, Terminal } from "lucide-react";
 
 interface StepGoalInfoProps {
   data: GoalFormData;
@@ -11,7 +12,7 @@ const categories: {
   id: GoalCategory;
   title: string;
   desc: string;
-  icon: string;
+  Icon: typeof BookOpen;
   method: string;
   accentColor: string;
 }[] = [
@@ -19,7 +20,7 @@ const categories: {
     id: "study",
     title: "Deep Study & Skill Sprint",
     desc: "Read books, master complex technical topics, prep for exams or certifications.",
-    icon: "menu_book",
+    Icon: BookOpen,
     method: "AI Dynamic Quiz (OpenRouter Free)",
     accentColor: "#06B6D4",
   },
@@ -27,7 +28,7 @@ const categories: {
     id: "generic_habit",
     title: "Habit, Fitness & Routine",
     desc: "Daily morning focus, workout sessions, gym check-ins, meditation streak.",
-    icon: "fitness_center",
+    Icon: Dumbbell,
     method: "GPS Viewfinder Photo Proof",
     accentColor: "#10B981",
   },
@@ -35,7 +36,7 @@ const categories: {
     id: "business_creative",
     title: "Code, Product & Deliverables",
     desc: "Shipping feature code, GitHub commits, design prototypes, client deliverables.",
-    icon: "terminal",
+    Icon: Terminal,
     method: "Artifact Link / File AI Inspector",
     accentColor: "#F59E0B",
   },
@@ -98,13 +99,13 @@ export default function StepGoalInfo({ data, onChange }: StepGoalInfoProps) {
           Category & Verification Engine
         </label>
         <div className="grid grid-cols-1 gap-4">
-          {categories.map((cat) => {
-            const isSelected = data.category === cat.id;
+          {categories.map(({ id, title, desc, Icon, method }) => {
+            const isSelected = data.category === id;
 
             return (
               <div
-                key={cat.id}
-                onClick={() => onChange({ category: cat.id })}
+                key={id}
+                onClick={() => onChange({ category: id })}
                 className={`p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
                   isSelected
                     ? "border-[#10B981] bg-[#12181E] shadow-[0_0_20px_rgba(16,185,129,0.15)]"
@@ -118,22 +119,20 @@ export default function StepGoalInfo({ data, onChange }: StepGoalInfoProps) {
                       : "bg-[#12181E] text-[#94A3B8] border border-[#1E293B]"
                   }`}
                 >
-                  <span className="material-symbols-outlined text-2xl">
-                    {cat.icon}
-                  </span>
+                  <Icon className="w-6 h-6" />
                 </div>
 
                 <div className="flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <h4 className="font-sans font-bold text-base text-[#F8FAFC]">
-                      {cat.title}
+                      {title}
                     </h4>
                     <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#090D10] text-[#10B981] border border-[#10B981]/30 w-max">
-                      {cat.method}
+                      {method}
                     </span>
                   </div>
                   <p className="text-[#94A3B8] text-xs mt-1 leading-relaxed">
-                    {cat.desc}
+                    {desc}
                   </p>
                 </div>
               </div>

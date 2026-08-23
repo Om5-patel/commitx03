@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import TiltCard from "@/components/ui/TiltCard";
+import { Gavel, Loader2 } from "lucide-react";
 
 interface DisputeItem {
   id: string;
@@ -49,16 +50,12 @@ export default function DisputesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center p-24">
-          <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
-            progress_activity
-          </span>
+          <Loader2 className="w-8 h-8 text-[#06B6D4] animate-spin" />
         </div>
       ) : disputes.length === 0 ? (
         <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
           <div className="w-16 h-16 bg-[#06B6D4]/15 text-[#06B6D4] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-3xl font-bold">
-              gavel
-            </span>
+            <Gavel className="w-8 h-8 stroke-[2.5]" />
           </div>
           <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
             No Active Arbitration Cases

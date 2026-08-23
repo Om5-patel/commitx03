@@ -53,7 +53,13 @@ export default function RootLayout({
       lang="en"
       className={`${plusJakarta.variable} ${jetbrainsMono.variable} dark h-full`}
     >
-      <body className="min-h-full flex flex-col bg-[#090D10] text-[#F8FAFC] font-sans antialiased relative">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#090D10] text-[#F8FAFC] font-sans antialiased relative selection:bg-[#10B981] selection:text-[#090D10]">
         <ToastProvider>
           <BackgroundMesh />
           {children}

@@ -6,6 +6,7 @@ import { CATEGORY_LABELS, VERIFICATION_LABELS } from "@/lib/types";
 import TiltCard from "@/components/ui/TiltCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 import MilestoneRoadmap from "@/components/ui/MilestoneRoadmap";
+import { ArrowLeft, Split, CheckCircle2, Loader2 } from "lucide-react";
 
 interface GoalDetailProps {
   params: Promise<{ id: string }>;
@@ -54,9 +55,7 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-24">
-        <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-          progress_activity
-        </span>
+        <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
       </div>
     );
   }
@@ -84,8 +83,8 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
         href="/goals"
         className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors"
       >
-        <span className="material-symbols-outlined text-lg">arrow_back</span>
-        BACK TO ALL COMMITMENTS
+        <ArrowLeft className="w-4 h-4" />
+        <span>BACK TO ALL COMMITMENTS</span>
       </Link>
 
       {/* Hero Header Card */}
@@ -126,7 +125,7 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#10B981]">alt_route</span>
+            <Split className="w-5 h-5 text-[#10B981]" />
             <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Milestone Verification Track</h3>
           </div>
           <span className="text-xs font-mono text-[#94A3B8]">{completedCount} of {tasks.length} Completed</span>
@@ -191,9 +190,9 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
                       Submit Proof
                     </Link>
                   ) : isPassed ? (
-                    <span className="text-xs font-mono font-bold text-[#10B981] bg-[#10B981]/15 border border-[#10B981]/30 px-3 py-1 rounded-full flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm">verified</span>
-                      REFUNDED
+                    <span className="text-xs font-mono font-bold text-[#10B981] bg-[#10B981]/15 border border-[#10B981]/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>REFUNDED</span>
                     </span>
                   ) : isFailed ? (
                     <span className="text-xs font-mono font-bold text-[#F43F5E] bg-[#F43F5E]/15 border border-[#F43F5E]/30 px-3 py-1 rounded-full">

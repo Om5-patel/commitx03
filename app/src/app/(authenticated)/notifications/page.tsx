@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import TiltCard from "@/components/ui/TiltCard";
+import { BellOff, CheckCircle2, Lock, Bell, ArrowRight, Loader2 } from "lucide-react";
 
 interface NotificationItem {
   id: string;
@@ -66,16 +67,12 @@ export default function NotificationsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center p-24">
-          <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-            progress_activity
-          </span>
+          <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
         </div>
       ) : notifications.length === 0 ? (
         <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
           <div className="w-16 h-16 bg-[#12181E] border border-[#1E293B] text-[#94A3B8] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-3xl">
-              notifications_off
-            </span>
+            <BellOff className="w-8 h-8" />
           </div>
           <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
             No New Notifications
@@ -103,13 +100,13 @@ export default function NotificationsPage() {
                     : "bg-[#12181E] text-[#94A3B8]"
                 }`}
               >
-                <span className="material-symbols-outlined text-xl">
-                  {n.type === "result"
-                    ? "verified"
-                    : n.type === "payment_confirmed"
-                    ? "lock"
-                    : "notifications"}
-                </span>
+                {n.type === "result" ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : n.type === "payment_confirmed" ? (
+                  <Lock className="w-5 h-5" />
+                ) : (
+                  <Bell className="w-5 h-5" />
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
@@ -132,8 +129,8 @@ export default function NotificationsPage() {
                     href={`/goals/${n.related_id}`}
                     className="inline-flex items-center gap-1 text-xs font-mono text-[#10B981] font-bold mt-2 hover:underline"
                   >
-                    View Commitment Details
-                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                    <span>View Commitment Details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 )}
               </div>

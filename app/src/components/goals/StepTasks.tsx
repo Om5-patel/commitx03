@@ -1,6 +1,17 @@
 "use client";
 
 import { GoalFormData, TaskFormData, VerificationMethod } from "@/lib/types";
+import {
+  Banknote,
+  Calendar,
+  ShieldCheck,
+  Split,
+  Plus,
+  Trash2,
+  Camera,
+  HelpCircle,
+  UploadCloud,
+} from "lucide-react";
 
 interface StepTasksProps {
   goal: GoalFormData;
@@ -89,7 +100,7 @@ export default function StepTasks({
       <section className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#10B981]/15 text-[#10B981] flex items-center justify-center font-bold">
-            <span className="material-symbols-outlined text-xl">payments</span>
+            <Banknote className="w-5 h-5" />
           </div>
           <div>
             <h3 className="font-sans text-lg font-bold text-[#F8FAFC]">Financial Stake Pledge</h3>
@@ -138,7 +149,7 @@ export default function StepTasks({
       <section className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#F59E0B]/15 text-[#F59E0B] flex items-center justify-center font-bold">
-            <span className="material-symbols-outlined text-xl">event</span>
+            <Calendar className="w-5 h-5" />
           </div>
           <div>
             <h3 className="font-sans text-lg font-bold text-[#F8FAFC]">Final Target Date</h3>
@@ -161,7 +172,7 @@ export default function StepTasks({
       <section className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#06B6D4]/15 text-[#06B6D4] flex items-center justify-center font-bold">
-            <span className="material-symbols-outlined text-xl">verified</span>
+            <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <h3 className="font-sans text-lg font-bold text-[#F8FAFC]">Proof Verification Mode</h3>
@@ -171,22 +182,22 @@ export default function StepTasks({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { id: "photo", label: "Camera Proof", desc: "GPS & time-stamped camera", icon: "photo_camera" },
-            { id: "quiz", label: "AI Study Quiz", desc: "5 dynamic MCQs (≥80% Pass)", icon: "quiz" },
-            { id: "file_ai", label: "Deliverable AI", desc: "Code, commit, or doc review", icon: "upload_file" },
-          ].map((m) => (
+            { id: "photo", label: "Camera Proof", desc: "GPS & time-stamped camera", Icon: Camera },
+            { id: "quiz", label: "AI Study Quiz", desc: "5 dynamic MCQs (≥80% Pass)", Icon: HelpCircle },
+            { id: "file_ai", label: "Deliverable AI", desc: "Code, commit, or doc review", Icon: UploadCloud },
+          ].map(({ id, label, desc, Icon }) => (
             <div
-              key={m.id}
-              onClick={() => handleVerificationChange(m.id as any)}
+              key={id}
+              onClick={() => handleVerificationChange(id as any)}
               className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                activeMethod === m.id
+                activeMethod === id
                   ? "bg-[#10B981]/15 border-[#10B981] text-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.15)]"
                   : "bg-[#12181E] border-[#1E293B] text-[#94A3B8] hover:border-[#334155]"
               }`}
             >
-              <span className="material-symbols-outlined text-2xl mb-1">{m.icon}</span>
-              <h4 className="font-sans font-bold text-sm text-[#F8FAFC]">{m.label}</h4>
-              <p className="text-[11px] text-[#94A3B8] mt-0.5">{m.desc}</p>
+              <Icon className="w-6 h-6 mb-2" />
+              <h4 className="font-sans font-bold text-sm text-[#F8FAFC]">{label}</h4>
+              <p className="text-[11px] text-[#94A3B8] mt-0.5">{desc}</p>
             </div>
           ))}
         </div>
@@ -197,7 +208,7 @@ export default function StepTasks({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#10B981]/15 text-[#10B981] flex items-center justify-center font-bold">
-              <span className="material-symbols-outlined text-xl">alt_route</span>
+              <Split className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-sans text-lg font-bold text-[#F8FAFC]">
@@ -212,10 +223,10 @@ export default function StepTasks({
           <button
             type="button"
             onClick={handleAddTask}
-            className="btn-glass text-xs !py-2 !px-3 font-mono"
+            className="btn-glass text-xs !py-2 !px-3 font-mono inline-flex items-center gap-1.5"
           >
-            <span className="material-symbols-outlined text-sm">add</span>
-            Add Step
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add Step</span>
           </button>
         </div>
 
@@ -244,9 +255,10 @@ export default function StepTasks({
                   <button
                     type="button"
                     onClick={() => handleRemoveTask(idx)}
-                    className="text-[#F43F5E] hover:bg-[#F43F5E]/15 p-1 rounded-lg transition-colors cursor-pointer"
+                    className="text-[#F43F5E] hover:bg-[#F43F5E]/15 p-1 rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
+                    title="Remove milestone"
                   >
-                    <span className="material-symbols-outlined text-base">delete</span>
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 )}
               </div>

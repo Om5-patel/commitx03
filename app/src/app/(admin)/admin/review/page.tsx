@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import TiltCard from "@/components/ui/TiltCard";
+import { CheckCheck, AlertTriangle, Check, Loader2 } from "lucide-react";
 
 interface ReviewItem {
   id: string;
@@ -46,7 +48,7 @@ export default function AdminReviewQueuePage() {
   const handleAction = async (id: string, action: "approve" | "reject") => {
     setProcessingId(id);
     try {
-      const res = await fetch(`/api/admin/submissions/${id}`, {
+      await fetch(`/api/admin/submissions/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -55,11 +57,9 @@ export default function AdminReviewQueuePage() {
         }),
       });
 
-      // Remove from list on completion
       setReviews((prev) => prev.filter((r) => r.id !== id));
     } catch (e) {
       console.error(e);
-      // Still remove for smooth demo
       setReviews((prev) => prev.filter((r) => r.id !== id));
     } finally {
       setProcessingId(null);
@@ -69,86 +69,85 @@ export default function AdminReviewQueuePage() {
   return (
     <div className="w-full flex flex-col gap-8">
       <div>
-        <h1 className="font-headline text-4xl text-on-surface mb-2">
+        <span className="text-xs font-mono font-bold tracking-widest text-[#F59E0B] uppercase">
+          AUDIT QUEUE
+        </span>
+        <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
           Manual Review Queue
         </h1>
-        <p className="text-on-surface-variant text-base">
+        <p className="text-sm text-[#94A3B8] mt-1">
           Flagged submissions requiring human adjudication. Approving triggers an immediate stake refund; rejecting converts the stake to platform revenue.
         </p>
       </div>
 
       {reviews.length === 0 ? (
-        <div className="bg-surface rounded-3xl p-12 text-center border border-outline-variant/30 shadow-sm">
-          <div className="w-16 h-16 bg-primary-container text-on-primary-container rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-3xl filled">
-              task_alt
-            </span>
+        <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
+          <div className="w-16 h-16 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <CheckCheck className="w-8 h-8 stroke-[2.5]" />
           </div>
-          <h3 className="font-headline text-2xl font-bold text-on-surface mb-1">
+          <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-1">
             Review Queue Clean!
           </h3>
-          <p className="text-on-surface-variant text-sm">
+          <p className="text-xs text-[#94A3B8]">
             All submitted milestones have been automatically resolved or audited.
           </p>
-        </div>
+        </TiltCard>
       ) : (
         <div className="space-y-6">
           {reviews.map((r) => (
-            <div
+            <TiltCard
               key={r.id}
-              className="bg-surface rounded-3xl p-8 border border-outline-variant/30 shadow-sm flex flex-col gap-6"
+              className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col gap-6"
             >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-tertiary bg-tertiary-fixed/40 px-3 py-1 rounded-full">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#F59E0B] bg-[#F59E0B]/15 border border-[#F59E0B]/30 px-3 py-0.5 rounded-full">
                       {r.method}
                     </span>
-                    <span className="text-xs text-on-surface-variant">
+                    <span className="text-xs font-mono text-[#94A3B8]">
                       {r.submittedAt}
                     </span>
                   </div>
-                  <h3 className="font-headline text-2xl font-bold text-on-surface mt-2">
+                  <h3 className="font-sans text-2xl font-bold text-[#F8FAFC] mt-2">
                     {r.taskTitle}
                   </h3>
-                  <p className="text-sm text-on-surface-variant">
-                    Submitted by: <strong>{r.userName}</strong> ({r.userEmail})
+                  <p className="text-xs text-[#94A3B8] mt-0.5">
+                    Submitted by: <strong className="text-[#F8FAFC]">{r.userName}</strong> ({r.userEmail})
                   </p>
                 </div>
 
-                <div className="bg-surface-container-low px-5 py-3 rounded-2xl border border-outline-variant/20 text-right">
-                  <span className="text-xs font-bold text-on-surface-variant uppercase">
+                <div className="bg-[#090D10] px-5 py-3 rounded-xl border border-[#1E293B] text-right">
+                  <span className="text-xs font-mono text-[#94A3B8] uppercase block">
                     Stake in Escrow
                   </span>
-                  <div className="font-headline text-2xl font-bold text-primary">
+                  <div className="font-mono text-2xl font-extrabold text-[#10B981]">
                     ₹{r.stakeAmount}
                   </div>
                 </div>
               </div>
 
               {/* Flag reason box */}
-              <div className="p-4 rounded-2xl bg-tertiary-container/20 border border-tertiary/30 text-xs flex items-start gap-3">
-                <span className="material-symbols-outlined text-tertiary text-lg shrink-0 mt-0.5">
-                  warning
-                </span>
+              <div className="p-4 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-[#F59E0B] shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-on-surface block mb-0.5">
+                  <strong className="text-[#F8FAFC] block mb-0.5 font-mono">
                     Flag Trigger Reason:
                   </strong>
-                  <span className="text-on-surface-variant leading-relaxed">
+                  <span className="text-[#94A3B8] leading-relaxed">
                     {r.flagReason}
                   </span>
                 </div>
               </div>
 
               {/* Submitted content preview */}
-              <div className="p-4 rounded-2xl bg-surface-container text-xs font-mono text-on-surface leading-relaxed whitespace-pre-wrap">
+              <div className="p-4 rounded-xl bg-[#090D10] border border-[#1E293B] text-xs font-mono text-[#F8FAFC] leading-relaxed whitespace-pre-wrap">
                 {r.artifactContent}
               </div>
 
               {/* Review note input */}
               <div>
-                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">
+                <label className="block text-xs font-mono font-bold text-[#94A3B8] uppercase tracking-wider mb-2">
                   Reviewer Audit Note
                 </label>
                 <input
@@ -158,37 +157,40 @@ export default function AdminReviewQueuePage() {
                   onChange={(e) =>
                     setNotes({ ...notes, [r.id]: e.target.value })
                   }
-                  className="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full bg-[#090D10] border border-[#1E293B] rounded-xl px-4 py-3 text-xs font-mono text-[#F8FAFC] outline-none focus:border-[#10B981]"
                 />
               </div>
 
               {/* Action Buttons */}
               <div className="flex items-center justify-end gap-4 pt-2">
                 <button
+                  type="button"
                   onClick={() => handleAction(r.id, "reject")}
                   disabled={processingId === r.id}
-                  className="px-6 py-3 rounded-xl border border-error/40 text-error font-bold text-sm hover:bg-error-container/20 transition-all cursor-pointer disabled:opacity-50"
+                  className="btn-destructive text-xs !py-2.5 !px-5 font-mono cursor-pointer disabled:opacity-50"
                 >
                   Reject & Forfeit Stake
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleAction(r.id, "approve")}
                   disabled={processingId === r.id}
-                  className="bg-primary text-on-primary font-bold text-sm px-8 py-3 rounded-xl shadow-sm hover:bg-primary/90 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                  className="btn-primary text-xs !py-2.5 !px-6 font-mono cursor-pointer disabled:opacity-50 inline-flex items-center gap-2"
                 >
                   {processingId === r.id ? (
-                    "Processing..."
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Processing...</span>
+                    </>
                   ) : (
                     <>
-                      Approve & Refund Stake (₹{r.stakeAmount})
-                      <span className="material-symbols-outlined text-base">
-                        check
-                      </span>
+                      <span>Approve & Refund Stake (₹{r.stakeAmount})</span>
+                      <Check className="w-4 h-4" />
                     </>
                   )}
                 </button>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       )}

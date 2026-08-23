@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import TiltCard from "@/components/ui/TiltCard";
+import { Camera, RefreshCw, LockOpen, Loader2 } from "lucide-react";
 
 interface CameraCaptureProps {
   taskId: string;
@@ -94,7 +95,6 @@ export default function CameraCapture({
     };
   }, []);
 
-  // Capture shutter
   const handleCapture = () => {
     setFlash(true);
     setTimeout(() => setFlash(false), 200);
@@ -215,9 +215,7 @@ export default function CameraCapture({
 
               {!hasCamera && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 bg-[#090D10]">
-                  <span className="material-symbols-outlined text-4xl text-[#10B981] mb-2 animate-pulse">
-                    photo_camera
-                  </span>
+                  <Camera className="w-10 h-10 text-[#10B981] mb-2 animate-pulse" />
                   <p className="text-xs font-mono text-[#F8FAFC] font-bold">READY FOR CAPTURE</p>
                   <p className="text-[11px] text-[#64748B] mt-1">Tap Shutter to record cryptographically signed proof</p>
                 </div>
@@ -257,10 +255,10 @@ export default function CameraCapture({
             <button
               type="button"
               onClick={handleCapture}
-              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider flex items-center justify-center gap-2"
+              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider inline-flex items-center justify-center gap-2"
             >
-              <span className="material-symbols-outlined text-xl">camera</span>
-              CAPTURE VERIFICATION SNAPSHOT
+              <Camera className="w-5 h-5" />
+              <span>CAPTURE VERIFICATION SNAPSHOT</span>
             </button>
           ) : (
             <>
@@ -268,25 +266,26 @@ export default function CameraCapture({
                 type="button"
                 onClick={handleRetake}
                 disabled={submitting}
-                className="btn-glass flex-1 !py-3.5 text-xs font-mono"
+                className="btn-glass flex-1 !py-3.5 text-xs font-mono inline-flex items-center justify-center gap-2"
               >
-                Retake Photo
+                <RefreshCw className="w-4 h-4" />
+                <span>Retake Photo</span>
               </button>
               <button
                 type="button"
                 onClick={handleSubmitProof}
                 disabled={submitting}
-                className="btn-primary flex-1 !py-3.5 text-xs font-mono"
+                className="btn-primary flex-1 !py-3.5 text-xs font-mono inline-flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>
-                    <span className="material-symbols-outlined animate-spin text-base">progress_activity</span>
-                    Transmitting...
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Transmitting...</span>
                   </>
                 ) : (
                   <>
-                    Transmit & Unlock Stake
-                    <span className="material-symbols-outlined text-base">lock_open</span>
+                    <span>Transmit & Unlock Stake</span>
+                    <LockOpen className="w-4 h-4" />
                   </>
                 )}
               </button>

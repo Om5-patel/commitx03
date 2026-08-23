@@ -5,6 +5,18 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import TiltCard from "@/components/ui/TiltCard";
 import ProgressRing from "@/components/ui/ProgressRing";
+import {
+  Lock,
+  ArrowRight,
+  BookOpen,
+  Dumbbell,
+  Code2,
+  ShieldCheck,
+  CheckCircle2,
+  Clock,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 
 export default function LandingPage() {
   // Stake calculator state
@@ -19,26 +31,31 @@ export default function LandingPage() {
       {/* ── Public Navbar ── */}
       <header className="sticky top-0 z-50 w-full bg-[#090D10]/80 backdrop-blur-2xl border-b border-[#1E293B]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 font-sans text-2xl font-black tracking-tight">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 font-sans text-2xl font-black tracking-tight text-[#F8FAFC]">
             <div className="w-9 h-9 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-              <span className="material-symbols-outlined font-bold text-xl">lock_clock</span>
+              <Lock className="w-5 h-5 stroke-[2.5]" />
             </div>
-            <span>Commit<span className="text-[#10B981]">X</span></span>
+            <span className="flex items-center leading-none">
+              Commit<span className="text-[#10B981]">X</span>
+            </span>
           </Link>
 
+          {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#94A3B8]">
             <Link href="#calculator" className="hover:text-[#10B981] transition-colors">Stake Calculator</Link>
             <Link href="#protocol" className="hover:text-[#10B981] transition-colors">How Protocol Works</Link>
             <Link href="#guarantee" className="hover:text-[#10B981] transition-colors">Refund Escrow</Link>
           </nav>
 
+          {/* Actions */}
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-sm font-semibold text-[#94A3B8] hover:text-[#F8FAFC] px-3 py-2 transition-colors">
               Log in
             </Link>
-            <Link href="/signup" className="btn-primary text-xs uppercase tracking-wider !py-2.5 !px-5">
-              Launch App
-              <span className="material-symbols-outlined text-base">arrow_forward</span>
+            <Link href="/signup" className="btn-primary text-xs uppercase tracking-wider !py-2.5 !px-5 inline-flex items-center gap-2">
+              <span>Launch App</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -67,11 +84,11 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link href="/signup" className="btn-primary text-base !py-4 !px-8 text-center">
-                Lock In Your Commitment
-                <span className="material-symbols-outlined">lock</span>
+              <Link href="/signup" className="btn-primary text-base !py-4 !px-8 text-center inline-flex items-center justify-center gap-2">
+                <span>Lock In Your Commitment</span>
+                <Lock className="w-5 h-5" />
               </Link>
-              <Link href="#calculator" className="btn-glass text-base !py-4 !px-8 text-center">
+              <Link href="#calculator" className="btn-glass text-base !py-4 !px-8 text-center inline-flex items-center justify-center">
                 Calculate Stake & ROI
               </Link>
             </div>
@@ -98,7 +115,7 @@ export default function LandingPage() {
             <TiltCard glow="emerald" className="w-full max-w-md p-6 sm:p-8 bg-[#12181E]/90 backdrop-blur-2xl border border-[#1E293B]">
               <div className="flex items-center justify-between border-b border-[#1E293B] pb-4">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-[#10B981] animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
                   <span className="text-xs font-mono font-bold tracking-wider text-[#10B981] uppercase">ACTIVE COMMITMENT VAULT</span>
                 </div>
                 <span className="text-xs font-mono text-[#94A3B8]">ID #8291</span>
@@ -119,15 +136,15 @@ export default function LandingPage() {
               {/* Milestone Mini Path */}
               <div className="bg-[#090D10] p-4 rounded-xl border border-[#1E293B] flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-1.5 text-[#10B981]">
-                  <span className="material-symbols-outlined text-sm">check_circle</span>
+                  <CheckCircle2 className="w-4 h-4" />
                   <span>M1 (₹200)</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[#10B981]">
-                  <span className="material-symbols-outlined text-sm">check_circle</span>
+                  <CheckCircle2 className="w-4 h-4" />
                   <span>M2 (₹200)</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[#F59E0B] animate-pulse">
-                  <span className="material-symbols-outlined text-sm">hourglass_top</span>
+                  <Clock className="w-4 h-4" />
                   <span>M3 (TODAY)</span>
                 </div>
               </div>
@@ -188,22 +205,22 @@ export default function LandingPage() {
                   <label className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase block mb-3">GOAL CATEGORY</label>
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { id: "study", label: "Study Sprint", icon: "menu_book" },
-                      { id: "habit", label: "Habit / Gym", icon: "fitness_center" },
-                      { id: "work", label: "Code / Deliverable", icon: "code" },
-                    ].map((cat) => (
+                      { id: "study", label: "Study Sprint", Icon: BookOpen },
+                      { id: "habit", label: "Habit / Gym", Icon: Dumbbell },
+                      { id: "work", label: "Code / Deliverable", Icon: Code2 },
+                    ].map(({ id, label, Icon }) => (
                       <button
-                        key={cat.id}
+                        key={id}
                         type="button"
-                        onClick={() => setCategory(cat.id as any)}
-                        className={`p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-2 transition-all cursor-pointer ${
-                          category === cat.id
+                        onClick={() => setCategory(id as any)}
+                        className={`p-3.5 rounded-xl border text-xs font-semibold flex flex-col items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                          category === id
                             ? "bg-[#10B981]/15 border-[#10B981] text-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                            : "bg-[#090D10] border-[#1E293B] text-[#94A3B8] hover:border-[#334155]"
+                            : "bg-[#090D10] border-[#1E293B] text-[#94A3B8] hover:border-[#334155] hover:text-[#F8FAFC]"
                         }`}
                       >
-                        <span className="material-symbols-outlined text-xl">{cat.icon}</span>
-                        {cat.label}
+                        <Icon className="w-5 h-5" />
+                        <span className="text-center font-medium leading-tight">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -241,22 +258,23 @@ export default function LandingPage() {
                 </div>
 
                 <div className="space-y-3 font-mono text-xs">
-                  <div className="flex justify-between p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
+                  <div className="flex justify-between items-center p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
                     <span className="text-[#94A3B8]">Total Locked in Escrow:</span>
                     <span className="text-[#F8FAFC] font-bold">₹{stakeAmount}</span>
                   </div>
-                  <div className="flex justify-between p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
+                  <div className="flex justify-between items-center p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
                     <span className="text-[#94A3B8]">Refund on Each Verified Step:</span>
                     <span className="text-[#10B981] font-bold">₹{stakePerMilestone} (100% Back)</span>
                   </div>
-                  <div className="flex justify-between p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
+                  <div className="flex justify-between items-center p-3 bg-[#12181E] rounded-xl border border-[#1E293B]">
                     <span className="text-[#94A3B8]">AI Verification Engine Cost:</span>
                     <span className="text-[#06B6D4] font-bold">₹0 (Free OpenRouter)</span>
                   </div>
                 </div>
 
-                <Link href="/signup" className="btn-primary w-full text-center !py-3.5">
-                  Start This Goal Commitment
+                <Link href="/signup" className="btn-primary w-full text-center !py-3.5 inline-flex items-center justify-center gap-2">
+                  <span>Start This Goal Commitment</span>
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -279,37 +297,37 @@ export default function LandingPage() {
               step: "01",
               title: "Lock Your Pledge",
               description: "Choose your goal, set concrete deadlines, and deposit your stake into an encrypted escrow contract.",
-              icon: "lock_clock",
+              Icon: Lock,
               accent: "emerald",
             },
             {
               step: "02",
               title: "Submit Dynamic Proof",
               description: "Take live 5-question AI quizzes for study goals, snap GPS camera check-ins for fitness, or link code commits for work.",
-              icon: "verified_user",
+              Icon: ShieldCheck,
               accent: "cyan",
             },
             {
               step: "03",
               title: "Instant Stake Refund",
               description: "As soon as your proof passes verification, your stake is unlocked and credited straight back to you. Zero fees.",
-              icon: "currency_rupee",
+              Icon: Sparkles,
               accent: "amber",
             },
-          ].map((card) => (
-            <TiltCard key={card.step} className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between">
+          ].map(({ step, title, description, Icon }) => (
+            <TiltCard key={step} className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <span className="font-mono text-3xl font-black text-[#1E293B]">{card.step}</span>
+                  <span className="font-mono text-3xl font-black text-[#1E293B]">{step}</span>
                   <div className="w-12 h-12 rounded-xl bg-[#090D10] border border-[#1E293B] flex items-center justify-center text-[#10B981]">
-                    <span className="material-symbols-outlined text-2xl">{card.icon}</span>
+                    <Icon className="w-6 h-6" />
                   </div>
                 </div>
-                <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">{card.title}</h3>
-                <p className="text-sm text-[#94A3B8] mt-3 leading-relaxed">{card.description}</p>
+                <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">{title}</h3>
+                <p className="text-sm text-[#94A3B8] mt-3 leading-relaxed">{description}</p>
               </div>
               <div className="mt-8 pt-4 border-t border-[#1E293B]/60 flex items-center gap-2 text-xs font-mono text-[#10B981]">
-                <span className="material-symbols-outlined text-sm">bolt</span>
+                <Zap className="w-4 h-4" />
                 <span>AUTOMATED PROTOCOL</span>
               </div>
             </TiltCard>
@@ -326,9 +344,9 @@ export default function LandingPage() {
           <p className="text-base sm:text-lg text-[#94A3B8] max-w-xl">
             Put your money where your ambition is. Join committed professionals, students, and builders today.
           </p>
-          <Link href="/signup" className="btn-primary text-base !py-4 !px-10 mt-2">
-            Create Your First Commitment Vault
-            <span className="material-symbols-outlined">arrow_forward</span>
+          <Link href="/signup" className="btn-primary text-base !py-4 !px-10 mt-2 inline-flex items-center gap-2">
+            <span>Create Your First Commitment Vault</span>
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>

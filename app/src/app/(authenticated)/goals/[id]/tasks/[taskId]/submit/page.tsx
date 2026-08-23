@@ -6,6 +6,7 @@ import Link from "next/link";
 import CameraCapture from "@/components/submission/CameraCapture";
 import QuizSubmission from "@/components/submission/QuizSubmission";
 import FileSubmission from "@/components/submission/FileSubmission";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 
 interface SubmitPageProps {
   params: Promise<{ id: string; taskId: string }>;
@@ -71,9 +72,7 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-24">
-        <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-          progress_activity
-        </span>
+        <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
       </div>
     );
   }
@@ -82,9 +81,7 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
     return (
       <div className="p-12 rounded-3xl bg-[#12181E] border border-[#10B981]/50 shadow-[0_0_50px_rgba(16,185,129,0.2)] max-w-lg mx-auto text-center flex flex-col items-center gap-6 my-16">
         <div className="w-20 h-20 bg-[#10B981]/20 text-[#10B981] rounded-full flex items-center justify-center border border-[#10B981]/40">
-          <span className="material-symbols-outlined text-4xl font-bold">
-            verified
-          </span>
+          <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
         </div>
         <h2 className="font-sans text-3xl font-extrabold text-[#F8FAFC]">
           Milestone Verified!
@@ -104,8 +101,8 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
         href={`/goals/${goalId}`}
         className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors mb-2"
       >
-        <span className="material-symbols-outlined text-base">arrow_back</span>
-        BACK TO COMMITMENT VAULT
+        <ArrowLeft className="w-4 h-4" />
+        <span>BACK TO COMMITMENT VAULT</span>
       </Link>
 
       {method === "photo" ? (

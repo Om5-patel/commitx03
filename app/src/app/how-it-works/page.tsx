@@ -1,6 +1,16 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
+import TiltCard from "@/components/ui/TiltCard";
+import {
+  Lock,
+  Banknote,
+  ShieldCheck,
+  Sparkles,
+  CheckCircle2,
+  ChevronDown,
+  ArrowRight,
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "How It Works",
@@ -12,10 +22,10 @@ const steps = [
   {
     number: "01",
     title: "Lock Your Goal",
-    icon: "lock",
-    color: "primary",
-    bgColor: "bg-primary-container",
-    textColor: "text-on-primary-container",
+    Icon: Lock,
+    accent: "text-[#10B981]",
+    bgAccent: "bg-[#10B981]/15",
+    borderAccent: "border-[#10B981]/30",
     description:
       "Choose your goal category — Generic Habit, Study, or Business/Creative. Give it a clear title, break it into measurable sub-tasks, and set firm deadlines. This isn't a wish list; it's a commitment contract.",
     details: [
@@ -27,46 +37,46 @@ const steps = [
   {
     number: "02",
     title: "Stake Your Pledge",
-    icon: "savings",
-    color: "tertiary",
-    bgColor: "bg-tertiary-container",
-    textColor: "text-on-tertiary-container",
+    Icon: Banknote,
+    accent: "text-[#F59E0B]",
+    bgAccent: "bg-[#F59E0B]/15",
+    borderAccent: "border-[#F59E0B]/30",
     description:
       "Deposit a meaningful monetary stake (₹100 – ₹10,000) against your goal. This isn't a fee — it's your own money held in escrow. The real financial risk turns casual goals into serious commitments.",
     details: [
-      "Secure payment via Razorpay",
+      "Secure payment via Razorpay / Escrow Trust",
       "Your money is held safely — not spent",
-      "Stake is divided across your sub-tasks",
+      "Stake is divided equally across your milestones",
     ],
   },
   {
     number: "03",
     title: "Verify Completion",
-    icon: "verified",
-    color: "secondary",
-    bgColor: "bg-secondary-container",
-    textColor: "text-on-secondary-container",
+    Icon: ShieldCheck,
+    accent: "text-[#06B6D4]",
+    bgAccent: "bg-[#06B6D4]/15",
+    borderAccent: "border-[#06B6D4]/30",
     description:
       "Submit proof of completion through the method matched to your goal type. Our multi-layer verification system ensures honest effort is recognized and fraud is caught.",
     details: [
-      "📸 Photo Proof — in-app camera with EXIF + hash checks",
-      "📝 Knowledge Quiz — AI-generated MCQs on your study material",
-      "📁 File Upload — AI relevance analysis of your work artifact",
+      "Photo Proof — in-app viewfinder camera with timestamp + hash checks",
+      "Knowledge Quiz — AI-generated MCQs (OpenRouter Free) on your study material",
+      "File Upload — AI relevance analysis of your code deliverable or document",
     ],
   },
   {
     number: "04",
-    title: "Get Refunded",
-    icon: "energy_savings_leaf",
-    color: "primary",
-    bgColor: "bg-primary-fixed",
-    textColor: "text-primary",
+    title: "Instant 100% Refund",
+    Icon: Sparkles,
+    accent: "text-[#10B981]",
+    bgAccent: "bg-[#10B981]/15",
+    borderAccent: "border-[#10B981]/30",
     description:
       "Pass verification and your full stake is refunded immediately. Miss a deadline or fail verification, and the stake is forfeited. The protocol is simple: follow through, and you lose nothing.",
     details: [
-      "✅ Pass → Full stake refunded to your payment method",
-      "❌ Fail → Stake forfeited (recorded as CommitX revenue)",
-      "🔄 Disputed? → Manual review pathway available",
+      "Pass → Full stake refunded to your account balance instantly",
+      "Fail → Stake forfeited (recorded as CommitX revenue)",
+      "Disputed? → Fair human arbitration pathway available",
     ],
   },
 ];
@@ -78,140 +88,150 @@ const faqs = [
   },
   {
     q: "Can I dispute a failed verification?",
-    a: "Yes. If you believe the verification was unfair, you can file a dispute. It will be reviewed manually by our team within 48 hours, and if resolved in your favour, your stake is refunded.",
+    a: "Yes. If you believe the verification was unfair, you can file a dispute. It will be reviewed manually by our arbitration team, and if resolved in your favour, your stake is refunded.",
   },
   {
     q: "How is photo proof verified?",
-    a: "Photos must be taken through our in-app camera (no gallery uploads). We check the EXIF timestamp, GPS data, and run a perceptual hash comparison against your previous submissions to prevent reuse.",
+    a: "Photos must be taken through our in-app camera (no gallery uploads). We check the GPS data, timestamp, and run a perceptual hash comparison against your previous submissions to prevent reuse.",
   },
   {
     q: "What if the AI quiz or file check is wrong?",
-    a: "Low-confidence results are automatically routed to manual review rather than auto-rejecting. For quizzes, you get one retry after 24 hours.",
+    a: "Low-confidence results are automatically routed to manual review rather than auto-rejecting. For quizzes, you can retry if you need a second attempt.",
   },
   {
     q: "Is my payment information safe?",
-    a: "All payments are processed through Razorpay, India's leading payment gateway. We never store your card details. Stake funds are held in our Razorpay account and refunded directly to your original payment method.",
+    a: "All payments are processed through Razorpay, India's leading payment gateway. We never store your card details. Stake funds are held safely in escrow and refunded directly to you.",
   },
 ];
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#090D10] text-[#F8FAFC]">
       {/* Public Nav */}
-      <nav className="sticky top-0 z-50 flex justify-between items-center px-6 lg:px-8 h-20 w-full bg-surface border-b border-surface-container-low shadow-sm">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-6 lg:px-8 h-20 w-full bg-[#090D10]/80 backdrop-blur-2xl border-b border-[#1E293B]">
         <Link
           href="/"
-          className="font-headline text-2xl font-bold text-primary tracking-tight"
+          className="flex items-center gap-2.5 font-sans text-2xl font-black tracking-tight text-[#F8FAFC]"
         >
-          CommitX
+          <div className="w-9 h-9 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <Lock className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <span className="flex items-center leading-none">
+            Commit<span className="text-[#10B981]">X</span>
+          </span>
         </Link>
         <div className="flex items-center gap-4">
           <Link
             href="/login"
-            className="text-on-surface-variant hover:text-primary font-label font-semibold text-sm transition-colors"
+            className="text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-sm transition-colors px-3 py-2"
           >
             Log in
           </Link>
           <Link
             href="/signup"
-            className="bg-primary text-on-primary font-label font-bold text-sm px-5 py-2.5 rounded-xl transition-colors hover:bg-primary/90 shadow-sm active:scale-95"
+            className="btn-primary text-xs uppercase tracking-wider !py-2.5 !px-5 inline-flex items-center gap-2"
           >
-            Get Started
+            <span>Launch App</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </nav>
+      </header>
 
       {/* Header */}
-      <section className="py-20 bg-surface-bright">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <h1 className="font-headline text-5xl lg:text-6xl font-bold text-on-surface mb-6 leading-tight">
+      <section className="py-20 bg-[#0E141A] border-b border-[#1E293B]">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-4">
+          <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+            PROTOCOL ARCHITECTURE
+          </span>
+          <h1 className="font-sans text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
             How CommitX Works
           </h1>
-          <p className="text-xl text-on-surface-variant leading-relaxed max-w-2xl mx-auto">
-            A four-step protocol that transforms good intentions into
-            guaranteed action. No excuses, no workarounds — just results.
+          <p className="text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
+            A four-step financial protocol that transforms good intentions into
+            guaranteed execution. Zero excuses, zero fees on success.
           </p>
         </div>
       </section>
 
       {/* Steps */}
-      <section className="py-20 bg-surface-container-low">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8 space-y-16">
-          {steps.map((step, i) => (
+      <section className="py-20 max-w-5xl mx-auto px-6 lg:px-8 space-y-16">
+        {steps.map((step, i) => (
+          <TiltCard
+            key={step.number}
+            className="p-8 sm:p-10 bg-[#12181E] border border-[#1E293B]"
+          >
             <div
-              key={step.number}
               className={`flex flex-col ${
                 i % 2 === 1 ? "lg:flex-row-reverse" : "lg:flex-row"
-              } gap-12 items-center`}
+              } gap-10 items-center`}
             >
-              <div className="flex-1 max-w-xl">
-                <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 max-w-xl space-y-4">
+                <div className="flex items-center gap-3">
                   <div
-                    className={`w-14 h-14 rounded-2xl ${step.bgColor} ${step.textColor} flex items-center justify-center`}
+                    className={`w-12 h-12 rounded-xl ${step.bgAccent} ${step.borderAccent} border ${step.accent} flex items-center justify-center`}
                   >
-                    <span className="material-symbols-outlined filled text-2xl">
-                      {step.icon}
-                    </span>
+                    <step.Icon className="w-6 h-6" />
                   </div>
-                  <span className="font-headline text-sm text-on-surface-variant font-medium tracking-widest uppercase">
-                    Step {step.number}
+                  <span className="font-mono text-xs text-[#94A3B8] font-bold tracking-widest uppercase">
+                    STEP {step.number}
                   </span>
                 </div>
-                <h2 className="font-headline text-3xl font-bold text-on-surface mb-4">
+
+                <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC]">
                   {step.title}
                 </h2>
-                <p className="text-on-surface-variant text-lg leading-relaxed mb-6">
+                <p className="text-[#94A3B8] text-sm sm:text-base leading-relaxed">
                   {step.description}
                 </p>
-                <ul className="space-y-3">
+
+                <ul className="space-y-2.5 pt-2">
                   {step.details.map((detail, j) => (
                     <li
                       key={j}
-                      className="flex items-start gap-3 text-on-surface-variant"
+                      className="flex items-start gap-2.5 text-xs font-mono text-[#F8FAFC]"
                     >
-                      <span className="material-symbols-outlined text-primary text-sm mt-1">
-                        check_circle
-                      </span>
+                      <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" />
                       <span>{detail}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="flex-1 w-full max-w-md aspect-square rounded-3xl bg-surface shadow-organic border border-outline-variant/10 flex items-center justify-center">
+
+              <div className="flex-1 w-full max-w-sm aspect-video sm:aspect-square rounded-2xl bg-[#090D10] border border-[#1E293B] flex items-center justify-center p-8">
                 <div
-                  className={`w-24 h-24 ${step.bgColor} rounded-[40%_60%_70%_30%/40%_50%_60%_50%] flex items-center justify-center`}
+                  className={`w-24 h-24 ${step.bgAccent} border ${step.borderAccent} rounded-3xl flex items-center justify-center shadow-2xl`}
                 >
-                  <span
-                    className={`material-symbols-outlined filled ${step.textColor} text-5xl`}
-                  >
-                    {step.icon}
-                  </span>
+                  <step.Icon className={`w-12 h-12 ${step.accent}`} />
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </TiltCard>
+        ))}
       </section>
 
       {/* FAQ */}
-      <section className="py-20 bg-surface">
+      <section className="py-20 bg-[#0E141A] border-t border-[#1E293B]">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <h2 className="font-headline text-3xl font-bold text-on-surface text-center mb-12">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
+          <div className="text-center mb-12">
+            <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+              FREQUENTLY ASKED QUESTIONS
+            </span>
+            <h2 className="font-sans text-3xl font-extrabold text-[#F8FAFC] mt-2">
+              Everything you need to know
+            </h2>
+          </div>
+
+          <div className="space-y-4">
             {faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-surface-container rounded-2xl border border-outline-variant/20 overflow-hidden"
+                className="group bg-[#12181E] rounded-2xl border border-[#1E293B] overflow-hidden"
               >
-                <summary className="flex items-center justify-between p-6 cursor-pointer font-headline font-semibold text-on-surface hover:text-primary transition-colors list-none">
-                  {faq.q}
-                  <span className="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform duration-200">
-                    expand_more
-                  </span>
+                <summary className="flex items-center justify-between p-6 cursor-pointer font-sans font-bold text-base text-[#F8FAFC] hover:text-[#10B981] transition-colors list-none">
+                  <span>{faq.q}</span>
+                  <ChevronDown className="w-5 h-5 text-[#94A3B8] group-open:rotate-180 transition-transform duration-200" />
                 </summary>
-                <div className="px-6 pb-6 text-on-surface-variant leading-relaxed">
+                <div className="px-6 pb-6 text-xs font-mono text-[#94A3B8] leading-relaxed">
                   {faq.a}
                 </div>
               </details>
@@ -221,17 +241,17 @@ export default function HowItWorksPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-surface-container-low border-t border-outline-variant/20">
-        <div className="max-w-2xl mx-auto text-center px-6">
-          <h2 className="font-headline text-3xl font-bold text-on-surface mb-6">
+      <section className="py-20 border-t border-[#1E293B]">
+        <div className="max-w-2xl mx-auto text-center px-6 space-y-6">
+          <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC]">
             Ready to commit?
           </h2>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 bg-primary text-on-primary font-bold text-lg px-10 py-4 rounded-xl shadow-organic hover:bg-primary/90 transition-all duration-200 active:scale-95"
+            className="btn-primary text-base !py-4 !px-10 inline-flex items-center gap-2"
           >
-            Create Your First Goal
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span>Create Your First Goal</span>
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>

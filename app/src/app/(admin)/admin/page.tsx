@@ -4,6 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import TiltCard from "@/components/ui/TiltCard";
 import CountUpNumber from "@/components/ui/CountUpNumber";
+import {
+  FileCheck2,
+  Gavel,
+  Banknote,
+  Landmark,
+} from "lucide-react";
 
 export default function AdminOverviewPage() {
   const [stats] = useState({
@@ -34,7 +40,7 @@ export default function AdminOverviewPage() {
             <span className="text-[10px] font-mono font-bold text-[#F59E0B] uppercase tracking-wider">
               PENDING REVIEWS
             </span>
-            <span className="material-symbols-outlined text-lg text-[#F59E0B]">rate_review</span>
+            <FileCheck2 className="w-5 h-5 text-[#F59E0B]" />
           </div>
           <CountUpNumber value={stats.pendingReviews} className="text-3xl sm:text-4xl text-[#F8FAFC]" />
           <Link
@@ -50,7 +56,7 @@ export default function AdminOverviewPage() {
             <span className="text-[10px] font-mono font-bold text-[#F43F5E] uppercase tracking-wider">
               OPEN DISPUTES
             </span>
-            <span className="material-symbols-outlined text-lg text-[#F43F5E]">gavel</span>
+            <Gavel className="w-5 h-5 text-[#F43F5E]" />
           </div>
           <CountUpNumber value={stats.openDisputes} className="text-3xl sm:text-4xl text-[#F43F5E]" />
           <Link
@@ -66,7 +72,7 @@ export default function AdminOverviewPage() {
             <span className="text-[10px] font-mono font-bold text-[#10B981] uppercase tracking-wider">
               PLATFORM REVENUE
             </span>
-            <span className="material-symbols-outlined text-lg text-[#10B981]">payments</span>
+            <Banknote className="w-5 h-5 text-[#10B981]" />
           </div>
           <CountUpNumber value={stats.totalRevenue} prefix="₹" className="text-3xl sm:text-4xl text-[#10B981]" />
           <span className="text-[10px] font-mono text-[#64748B] mt-4 block">
@@ -79,7 +85,7 @@ export default function AdminOverviewPage() {
             <span className="text-[10px] font-mono font-bold text-[#06B6D4] uppercase tracking-wider">
               ESCROW VAULT
             </span>
-            <span className="material-symbols-outlined text-lg text-[#06B6D4]">account_balance</span>
+            <Landmark className="w-5 h-5 text-[#06B6D4]" />
           </div>
           <CountUpNumber value={stats.activeStakes} prefix="₹" className="text-3xl sm:text-4xl text-[#06B6D4]" />
           <span className="text-[10px] font-mono text-[#64748B] mt-4 block">
@@ -93,7 +99,7 @@ export default function AdminOverviewPage() {
         <TiltCard className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between gap-6">
           <div>
             <div className="w-12 h-12 rounded-2xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-2xl">rate_review</span>
+              <FileCheck2 className="w-6 h-6" />
             </div>
             <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
               Manual Review Queue
@@ -113,7 +119,7 @@ export default function AdminOverviewPage() {
         <TiltCard className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between gap-6">
           <div>
             <div className="w-12 h-12 rounded-2xl bg-[#10B981]/20 text-[#10B981] flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-2xl">payments</span>
+              <Banknote className="w-6 h-6" />
             </div>
             <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
               Treasury & Forfeiture Ledger

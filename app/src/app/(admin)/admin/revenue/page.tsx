@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import TiltCard from "@/components/ui/TiltCard";
+import { Download } from "lucide-react";
 
 interface RevenueRecord {
   id: string;
@@ -13,7 +15,7 @@ interface RevenueRecord {
 }
 
 export default function AdminRevenuePage() {
-  const [records, setRecords] = useState<RevenueRecord[]>([
+  const [records] = useState<RevenueRecord[]>([
     {
       id: "tx-1",
       date: "Aug 19, 2026",
@@ -63,105 +65,108 @@ export default function AdminRevenuePage() {
 
   return (
     <div className="w-full flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-[#1E293B] pb-6">
         <div>
-          <h1 className="font-headline text-4xl text-on-surface mb-2">
+          <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+            ESCROW TREASURY
+          </span>
+          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
             Platform Revenue & Treasury
           </h1>
-          <p className="text-on-surface-variant text-base">
+          <p className="text-sm text-[#94A3B8] mt-1">
             Audit log of all forfeited stakes converting directly into CommitX platform earnings.
           </p>
         </div>
 
         <button
           onClick={exportCSV}
-          className="bg-primary text-on-primary font-bold text-sm px-6 py-3 rounded-xl shadow-sm hover:bg-primary/90 transition-all flex items-center gap-2 cursor-pointer"
+          className="btn-primary text-xs font-mono !py-3 !px-5 inline-flex items-center gap-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-lg">download</span>
-          Export Audit CSV
+          <Download className="w-4 h-4" />
+          <span>Export Audit CSV</span>
         </button>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
-          <span className="text-xs font-bold text-primary uppercase tracking-wider block mb-2">
-            Total Forfeiture Earnings
+        <TiltCard glow="emerald" className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[10px] font-mono font-bold text-[#10B981] uppercase tracking-wider block mb-2">
+            TOTAL FORFEITURE EARNINGS
           </span>
-          <div className="font-headline text-4xl font-bold text-primary">
+          <div className="font-mono text-3xl sm:text-4xl font-black text-[#10B981]">
             ₹{totalRevenue.toLocaleString("en-IN")}
           </div>
-          <span className="text-xs text-on-surface-variant mt-2 block">
-            Retained in Razorpay Merchant Account
+          <span className="text-[10px] font-mono text-[#64748B] mt-2 block">
+            Retained in Merchant Trust Account
           </span>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
-          <span className="text-xs font-bold text-tertiary uppercase tracking-wider block mb-2">
-            Total Stakes Deposited
+        <TiltCard glow="amber" className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[10px] font-mono font-bold text-[#F59E0B] uppercase tracking-wider block mb-2">
+            TOTAL STAKES DEPOSITED
           </span>
-          <div className="font-headline text-4xl font-bold text-on-surface">
+          <div className="font-mono text-3xl sm:text-4xl font-black text-[#F8FAFC]">
             ₹1,42,500
           </div>
-          <span className="text-xs text-on-surface-variant mt-2 block">
+          <span className="text-[10px] font-mono text-[#64748B] mt-2 block">
             Across 240 active commitments
           </span>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
-          <span className="text-xs font-bold text-secondary uppercase tracking-wider block mb-2">
-            Refund Payout Rate
+        <TiltCard glow="cyan" className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[10px] font-mono font-bold text-[#06B6D4] uppercase tracking-wider block mb-2">
+            REFUND PAYOUT RATE
           </span>
-          <div className="font-headline text-4xl font-bold text-on-surface">
+          <div className="font-mono text-3xl sm:text-4xl font-black text-[#06B6D4]">
             93.7%
           </div>
-          <span className="text-xs text-on-surface-variant mt-2 block">
+          <span className="text-[10px] font-mono text-[#64748B] mt-2 block">
             ₹1,33,500 returned to verified users
           </span>
-        </div>
+        </TiltCard>
       </div>
 
       {/* Revenue Ledger Table */}
-      <div className="bg-surface rounded-3xl border border-outline-variant/30 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-outline-variant/20 flex justify-between items-center">
-          <h2 className="font-headline font-bold text-xl text-on-surface">
+      <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B] overflow-hidden">
+        <div className="border-b border-[#1E293B] pb-4 mb-4 flex justify-between items-center">
+          <h2 className="font-sans font-bold text-lg text-[#F8FAFC]">
             Forfeiture Transaction History
           </h2>
-          <span className="text-xs text-on-surface-variant">
+          <span className="text-xs font-mono text-[#94A3B8]">
             Showing {records.length} records
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse font-mono text-xs">
             <thead>
-              <tr className="bg-surface-container-low text-on-surface-variant text-[11px] font-bold uppercase tracking-wider border-b border-outline-variant/20">
-                <th className="py-4 px-6">Date</th>
-                <th className="py-4 px-6">User</th>
-                <th className="py-4 px-6">Milestone Commitment</th>
-                <th className="py-4 px-6">Forfeiture Reason</th>
-                <th className="py-4 px-6 text-right">Revenue (INR)</th>
+              <tr className="bg-[#090D10] text-[#94A3B8] text-[10px] font-bold uppercase tracking-wider border-b border-[#1E293B]">
+                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4">User</th>
+                <th className="py-3 px-4">Milestone Commitment</th>
+                <th className="py-3 px-4">Forfeiture Reason</th>
+                <th className="py-3 px-4 text-right">Revenue (INR)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/20 text-xs">
+            <tbody className="divide-y divide-[#1E293B]/60">
               {records.map((r) => (
                 <tr
                   key={r.id}
-                  className="hover:bg-surface-container-low/50 transition-colors"
+                  className="hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="py-4 px-6 font-semibold text-on-surface">
+                  <td className="py-3.5 px-4 font-semibold text-[#F8FAFC]">
                     {r.date}
                   </td>
-                  <td className="py-4 px-6 font-bold text-on-surface">
+                  <td className="py-3.5 px-4 font-bold text-[#F8FAFC]">
                     {r.userName}
                   </td>
-                  <td className="py-4 px-6 text-on-surface-variant">
+                  <td className="py-3.5 px-4 text-[#94A3B8]">
                     {r.taskTitle}
                   </td>
-                  <td className="py-4 px-6 text-error">
+                  <td className="py-3.5 px-4 text-[#F43F5E]">
                     {r.reason}
                   </td>
-                  <td className="py-4 px-6 text-right font-headline font-bold text-primary text-sm">
+                  <td className="py-3.5 px-4 text-right font-bold text-[#10B981] text-sm">
                     + ₹{r.amount}.00
                   </td>
                 </tr>
@@ -169,7 +174,7 @@ export default function AdminRevenuePage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </TiltCard>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CATEGORY_LABELS } from "@/lib/types";
 import TiltCard from "@/components/ui/TiltCard";
 import ProgressRing from "@/components/ui/ProgressRing";
+import { PlusCircle, Lock, ArrowRight, Loader2 } from "lucide-react";
 
 interface GoalItem {
   id: string;
@@ -86,25 +87,21 @@ export default function GoalsListPage() {
 
         <Link
           href="/goals/new"
-          className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5"
+          className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5 inline-flex items-center gap-2"
         >
-          <span className="material-symbols-outlined text-lg">add_circle</span>
-          Create New Vault
+          <PlusCircle className="w-4 h-4" />
+          <span>Create New Vault</span>
         </Link>
       </header>
 
       {loading ? (
         <div className="flex items-center justify-center p-24">
-          <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-            progress_activity
-          </span>
+          <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
         </div>
       ) : goals.length === 0 ? (
         <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
           <div className="w-16 h-16 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-3xl font-bold">
-              lock_clock
-            </span>
+            <Lock className="w-8 h-8 stroke-[2.5]" />
           </div>
           <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
             No Active Commitment Vaults
@@ -114,10 +111,10 @@ export default function GoalsListPage() {
           </p>
           <Link
             href="/goals/new"
-            className="btn-primary text-xs !py-3 !px-5"
+            className="btn-primary text-xs !py-3 !px-5 inline-flex items-center gap-2"
           >
-            Create Your First Goal
-            <span className="material-symbols-outlined text-base">arrow_forward</span>
+            <span>Create Your First Goal</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </TiltCard>
       ) : (

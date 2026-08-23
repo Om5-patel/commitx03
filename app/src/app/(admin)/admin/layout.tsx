@@ -2,6 +2,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import BackgroundMesh from "@/components/ui/BackgroundMesh";
+import {
+  Terminal,
+  LayoutDashboard,
+  FileCheck2,
+  Gavel,
+  Banknote,
+  ArrowLeft,
+} from "lucide-react";
 
 export default async function AdminLayout({
   children,
@@ -43,9 +51,9 @@ export default async function AdminLayout({
               className="flex items-center gap-2.5 font-sans text-xl font-black tracking-tight"
             >
               <div className="w-8 h-8 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black">
-                <span className="material-symbols-outlined text-lg font-bold">terminal</span>
+                <Terminal className="w-4 h-4 stroke-[2.5]" />
               </div>
-              <span>
+              <span className="flex items-center leading-none">
                 Commit<span className="text-[#10B981]">X</span>
               </span>
               <span className="text-[9px] font-mono font-bold bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 px-2 py-0.5 rounded-full uppercase">
@@ -62,40 +70,32 @@ export default async function AdminLayout({
               href="/admin"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-[#10B981]">
-                dashboard
-              </span>
-              Terminal Overview
+              <LayoutDashboard className="w-4 h-4 text-[#10B981]" />
+              <span>Terminal Overview</span>
             </Link>
 
             <Link
               href="/admin/review"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-[#F59E0B]">
-                rate_review
-              </span>
-              Review Queue
+              <FileCheck2 className="w-4 h-4 text-[#F59E0B]" />
+              <span>Review Queue</span>
             </Link>
 
             <Link
               href="/admin/disputes"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-[#06B6D4]">
-                gavel
-              </span>
-              Arbitration
+              <Gavel className="w-4 h-4 text-[#06B6D4]" />
+              <span>Arbitration</span>
             </Link>
 
             <Link
               href="/admin/revenue"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-[#10B981]">
-                payments
-              </span>
-              Escrow Ledger
+              <Banknote className="w-4 h-4 text-[#10B981]" />
+              <span>Escrow Ledger</span>
             </Link>
           </nav>
         </div>
@@ -103,10 +103,10 @@ export default async function AdminLayout({
         <div className="pt-6 border-t border-[#1E293B]">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors"
           >
-            <span className="material-symbols-outlined text-base">arrow_back</span>
-            User Dashboard
+            <ArrowLeft className="w-4 h-4" />
+            <span>User Dashboard</span>
           </Link>
         </div>
       </aside>

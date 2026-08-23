@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import TiltCard from "@/components/ui/TiltCard";
+import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 interface QuizQuestion {
   id: string;
@@ -15,6 +16,7 @@ interface QuizSubmissionProps {
   taskId: string;
   goalId: string;
   taskTitle: string;
+  taskDescription?: string;
   onSuccess: () => void;
 }
 
@@ -34,7 +36,6 @@ export default function QuizSubmission({
   const [score, setScore] = useState<{ correct: number; total: number; passed: boolean } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Fetch or generate quiz
   useEffect(() => {
     async function loadQuiz() {
       try {
@@ -140,9 +141,7 @@ export default function QuizSubmission({
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-16 gap-4">
-        <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
-          progress_activity
-        </span>
+        <Loader2 className="w-8 h-8 text-[#06B6D4] animate-spin" />
         <p className="text-xs font-mono text-[#94A3B8]">
           AI ENGINE (OpenRouter Free): Generating knowledge check questions...
         </p>
@@ -210,9 +209,7 @@ export default function QuizSubmission({
                     <span>{opt}</span>
                   </div>
                   {isSelected && (
-                    <span className="material-symbols-outlined text-[#06B6D4] text-lg">
-                      check_circle
-                    </span>
+                    <CheckCircle2 className="w-5 h-5 text-[#06B6D4]" />
                   )}
                 </button>
               );
@@ -241,9 +238,7 @@ export default function QuizSubmission({
         <div className="text-center py-6 space-y-6">
           {submitting ? (
             <div className="flex flex-col items-center gap-4">
-              <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
-                progress_activity
-              </span>
+              <Loader2 className="w-8 h-8 text-[#06B6D4] animate-spin" />
               <p className="text-xs font-mono text-[#94A3B8]">
                 AI SCORING ENGINE: Validating answers...
               </p>
@@ -251,9 +246,7 @@ export default function QuizSubmission({
           ) : score?.passed ? (
             <div className="space-y-6">
               <div className="w-20 h-20 rounded-full bg-[#10B981]/20 text-[#10B981] flex items-center justify-center mx-auto border border-[#10B981]/40 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
-                <span className="material-symbols-outlined text-4xl font-bold">
-                  verified
-                </span>
+                <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
               </div>
 
               <div>
@@ -280,9 +273,7 @@ export default function QuizSubmission({
           ) : (
             <div className="space-y-6">
               <div className="w-20 h-20 rounded-full bg-[#F43F5E]/20 text-[#F43F5E] flex items-center justify-center mx-auto border border-[#F43F5E]/40">
-                <span className="material-symbols-outlined text-4xl font-bold">
-                  cancel
-                </span>
+                <XCircle className="w-10 h-10 stroke-[2.5]" />
               </div>
 
               <div>

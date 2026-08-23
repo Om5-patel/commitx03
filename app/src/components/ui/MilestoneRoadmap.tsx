@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CheckCircle2, Clock, XCircle, Gavel, Lock } from "lucide-react";
 
 export interface MilestoneNode {
   id: string;
@@ -49,17 +50,17 @@ export default function MilestoneRoadmap({ tasks, goalId }: MilestoneRoadmapProp
                     : "bg-[#12181E] text-[#64748B] border border-[#1E293B] opacity-50 shadow-[0_8px_0_#0E141A]"
                 }`}
               >
-                <span className="material-symbols-outlined text-2xl font-bold">
-                  {isPassed
-                    ? "check_circle"
-                    : isPending
-                    ? "hourglass_top"
-                    : isFailed
-                    ? "cancel"
-                    : isDisputed
-                    ? "gavel"
-                    : "lock"}
-                </span>
+                {isPassed ? (
+                  <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
+                ) : isPending ? (
+                  <Clock className="w-6 h-6 stroke-[2.5]" />
+                ) : isFailed ? (
+                  <XCircle className="w-6 h-6 stroke-[2.5]" />
+                ) : isDisputed ? (
+                  <Gavel className="w-6 h-6 stroke-[2.5]" />
+                ) : (
+                  <Lock className="w-5 h-5" />
+                )}
 
                 {/* Node Index Badge */}
                 <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#0E141A] border border-[#1E293B] text-[10px] font-mono font-bold text-[#F8FAFC] flex items-center justify-center">

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import TiltCard from "@/components/ui/TiltCard";
 import CountUpNumber from "@/components/ui/CountUpNumber";
+import { ShieldAlert, Loader2 } from "lucide-react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -50,9 +51,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-24">
-        <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-          progress_activity
-        </span>
+        <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
       </div>
     );
   }
@@ -105,7 +104,7 @@ export default function ProfilePage() {
         <TiltCard glow="amber" className="p-6 bg-[#12181E] border border-[#F59E0B]/40 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
-              <span className="material-symbols-outlined text-2xl">admin_panel_settings</span>
+              <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
               <h3 className="font-sans text-base font-bold text-[#F8FAFC]">

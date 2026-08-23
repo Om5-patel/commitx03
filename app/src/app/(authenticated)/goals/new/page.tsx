@@ -8,6 +8,7 @@ import StepTasks from "@/components/goals/StepTasks";
 import StepReview from "@/components/goals/StepReview";
 import WizardSidebar from "@/components/goals/WizardSidebar";
 import { GoalFormData, TaskFormData, CATEGORY_VERIFICATION_MAP } from "@/lib/types";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 
 export default function NewGoalPage() {
   const router = useRouter();
@@ -171,9 +172,9 @@ export default function NewGoalPage() {
       <div className="flex items-center justify-between py-4 border-b border-[#1E293B]">
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors cursor-pointer"
         >
-          <span className="material-symbols-outlined text-lg">arrow_back</span>
+          <ArrowLeft className="w-4 h-4" />
           <span>{step === 1 ? "DASHBOARD" : "PREVIOUS STEP"}</span>
         </button>
 
@@ -204,7 +205,7 @@ export default function NewGoalPage() {
       {/* Error Alert Banner */}
       {errorMsg && (
         <div className="p-4 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono flex items-center gap-3">
-          <span className="material-symbols-outlined text-lg shrink-0">error</span>
+          <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}

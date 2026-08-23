@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState } from "react";
 import confetti from "canvas-confetti";
+import { CheckCircle2, AlertCircle, AlertTriangle, Info } from "lucide-react";
 
 interface ToastMessage {
   id: string;
@@ -35,7 +36,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => [...prev, newToast]);
 
     if (type === "success") {
-      // Emerald & Amber celebratory confetti burst
       confetti({
         particleCount: 75,
         spread: 60,
@@ -43,7 +43,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         colors: ["#10B981", "#F59E0B", "#06B6D4", "#F8FAFC"],
       });
     } else if (type === "danger") {
-      // Flash red screen vignette
       setShowVignette(true);
       setTimeout(() => setShowVignette(false), 2000);
     }
@@ -84,7 +83,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             >
               <div className="flex items-start gap-3">
                 <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 ${
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
                     isSuccess
                       ? "bg-[#10B981]/20 text-[#10B981]"
                       : isDanger
@@ -94,15 +93,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       : "bg-[#06B6D4]/20 text-[#06B6D4]"
                   }`}
                 >
-                  <span className="material-symbols-outlined text-xl">
-                    {isSuccess
-                      ? "verified"
-                      : isDanger
-                      ? "error"
-                      : isWarning
-                      ? "warning"
-                      : "info"}
-                  </span>
+                  {isSuccess ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : isDanger ? (
+                    <AlertCircle className="w-5 h-5" />
+                  ) : isWarning ? (
+                    <AlertTriangle className="w-5 h-5" />
+                  ) : (
+                    <Info className="w-5 h-5" />
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-0">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { UserPlus, ArrowRight, Loader2 } from "lucide-react";
 
 export default function SignupPage() {
   const supabase = createClient();
@@ -55,9 +56,7 @@ export default function SignupPage() {
     <>
       <div className="text-center mb-8">
         <div className="w-12 h-12 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#10B981]/30">
-          <span className="material-symbols-outlined text-2xl font-bold">
-            person_add
-          </span>
+          <UserPlus className="w-6 h-6 stroke-[2.5]" />
         </div>
         <h1 className="font-sans text-2xl font-extrabold text-[#F8FAFC]">
           Join CommitX Protocol
@@ -136,19 +135,17 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary w-full !py-3.5 text-xs font-mono tracking-wider disabled:opacity-50"
+          className="btn-primary w-full !py-3.5 text-xs font-mono tracking-wider disabled:opacity-50 inline-flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
-              <span className="material-symbols-outlined animate-spin text-base">
-                progress_activity
-              </span>
-              INITIALIZING ACCOUNT...
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>INITIALIZING ACCOUNT...</span>
             </>
           ) : (
             <>
-              CREATE ACCOUNT
-              <span className="material-symbols-outlined text-base">arrow_forward</span>
+              <span>CREATE ACCOUNT</span>
+              <ArrowRight className="w-4 h-4" />
             </>
           )}
         </button>

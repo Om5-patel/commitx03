@@ -8,6 +8,22 @@ import TiltCard from "@/components/ui/TiltCard";
 import FlipCountdown from "@/components/ui/FlipCountdown";
 import ProgressRing from "@/components/ui/ProgressRing";
 import CountUpNumber from "@/components/ui/CountUpNumber";
+import {
+  PlusCircle,
+  Clock,
+  Camera,
+  Shield,
+  TrendingUp,
+  Flame,
+  ArrowRight,
+  ArrowDownLeft,
+  Lock,
+  X,
+  FolderKanban,
+  Receipt,
+  Loader2,
+  Banknote,
+} from "lucide-react";
 
 interface GoalItem {
   id: string;
@@ -33,7 +49,7 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const isNewGoal = searchParams.get("new_goal");
 
-  const [goals, setGoals] = useState<GoalItem[]>([
+  const [goals] = useState<GoalItem[]>([
     {
       id: "demo-1",
       title: "Daily Morning Meditation & Focus",
@@ -66,12 +82,12 @@ function DashboardContent() {
     },
   ]);
 
-  const [totalCapital, setTotalCapital] = useState<number>(4250);
-  const [successRate, setSuccessRate] = useState<number>(94);
-  const [refundedTotal, setRefundedTotal] = useState<number>(3150);
-  const [streakDays, setStreakDays] = useState<number>(14);
+  const [totalCapital] = useState<number>(4250);
+  const [successRate] = useState<number>(94);
+  const [refundedTotal] = useState<number>(3150);
+  const [streakDays] = useState<number>(14);
 
-  const [treasuryLogs, setTreasuryLogs] = useState<LogItem[]>([
+  const [treasuryLogs] = useState<LogItem[]>([
     {
       id: "log-1",
       title: "Verified: Read 30 Pages System Design",
@@ -95,7 +111,6 @@ function DashboardContent() {
     },
   ]);
 
-  // Trigger celebration confetti if arriving from newly created goal
   useEffect(() => {
     if (isNewGoal) {
       confetti({
@@ -125,9 +140,9 @@ function DashboardContent() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/goals/new" className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5">
-            <span className="material-symbols-outlined text-lg">add_circle</span>
-            Lock New Goal
+          <Link href="/goals/new" className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5 inline-flex items-center gap-2">
+            <PlusCircle className="w-4 h-4" />
+            <span>Lock New Goal</span>
           </Link>
         </div>
       </div>
@@ -138,7 +153,7 @@ function DashboardContent() {
           {/* Left info */}
           <div className="lg:col-span-6 space-y-4">
             <div className="inline-flex items-center gap-2 bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 px-3.5 py-1 rounded-full text-xs font-mono font-bold">
-              <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+              <Clock className="w-3.5 h-3.5 animate-pulse" />
               <span>VERIFICATION WINDOW OPEN</span>
             </div>
 
@@ -153,14 +168,14 @@ function DashboardContent() {
             <div className="flex items-center gap-3 pt-2">
               <Link
                 href="/goals/demo-1/tasks/task-101/submit"
-                className="btn-primary !py-3.5 !px-6 text-sm"
+                className="btn-primary !py-3.5 !px-6 text-sm inline-flex items-center gap-2"
               >
-                <span className="material-symbols-outlined text-lg">camera_alt</span>
-                Verify Milestone Now
+                <Camera className="w-4 h-4" />
+                <span>Verify Milestone Now</span>
               </Link>
               <Link
                 href="/goals/demo-1"
-                className="btn-glass !py-3.5 !px-5 text-sm"
+                className="btn-glass !py-3.5 !px-5 text-sm inline-flex items-center"
               >
                 View Roadmap
               </Link>
@@ -186,7 +201,7 @@ function DashboardContent() {
             prefix: "₹",
             color: "text-[#10B981]",
             glow: "emerald",
-            icon: "shield_lock",
+            Icon: Shield,
             sub: "Locked in Escrow",
           },
           {
@@ -195,7 +210,7 @@ function DashboardContent() {
             suffix: "%",
             color: "text-[#F8FAFC]",
             glow: "none",
-            icon: "trending_up",
+            Icon: TrendingUp,
             sub: "Top 5% of Protocol",
           },
           {
@@ -204,7 +219,7 @@ function DashboardContent() {
             prefix: "₹",
             color: "text-[#06B6D4]",
             glow: "cyan",
-            icon: "currency_rupee",
+            Icon: Banknote,
             sub: "Returned to Account",
           },
           {
@@ -213,28 +228,26 @@ function DashboardContent() {
             suffix: " Days",
             color: "text-[#F59E0B]",
             glow: "amber",
-            icon: "local_fire_department",
+            Icon: Flame,
             sub: "Zero missed milestones",
           },
-        ].map((tile, i) => (
-          <TiltCard key={i} glow={tile.glow as any} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-44">
+        ].map(({ label, value, prefix, suffix, color, glow, Icon, sub }, i) => (
+          <TiltCard key={i} glow={glow as any} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-44">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
-                {tile.label}
+                {label}
               </span>
-              <span className={`material-symbols-outlined text-xl ${tile.color}`}>
-                {tile.icon}
-              </span>
+              <Icon className={`w-5 h-5 ${color}`} />
             </div>
 
             <div>
               <CountUpNumber
-                value={tile.value}
-                prefix={tile.prefix}
-                suffix={tile.suffix}
-                className={`text-3xl sm:text-4xl ${tile.color}`}
+                value={value}
+                prefix={prefix}
+                suffix={suffix}
+                className={`text-3xl sm:text-4xl ${color}`}
               />
-              <p className="text-xs font-mono text-[#64748B] mt-1">{tile.sub}</p>
+              <p className="text-xs font-mono text-[#64748B] mt-1">{sub}</p>
             </div>
           </TiltCard>
         ))}
@@ -244,12 +257,12 @@ function DashboardContent() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#10B981]">folder_special</span>
+            <FolderKanban className="w-5 h-5 text-[#10B981]" />
             <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Active Commitment Vaults</h3>
           </div>
-          <Link href="/goals" className="text-xs font-mono text-[#10B981] hover:underline flex items-center gap-1">
-            View All Vaults
-            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          <Link href="/goals" className="text-xs font-mono text-[#10B981] hover:underline inline-flex items-center gap-1">
+            <span>View All Vaults</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -292,13 +305,13 @@ function DashboardContent() {
                 <div className="flex items-center gap-2 pt-2">
                   <Link
                     href={`/goals/${g.id}`}
-                    className="btn-glass flex-1 text-center !py-2.5 text-xs font-mono"
+                    className="btn-glass flex-1 text-center !py-2.5 text-xs font-mono inline-flex items-center justify-center"
                   >
                     Details
                   </Link>
                   <Link
                     href={`/goals/${g.id}/tasks/${g.nextTaskId || "t1"}/submit`}
-                    className="btn-primary flex-1 text-center !py-2.5 text-xs font-mono"
+                    className="btn-primary flex-1 text-center !py-2.5 text-xs font-mono inline-flex items-center justify-center"
                   >
                     Submit Proof
                   </Link>
@@ -313,7 +326,7 @@ function DashboardContent() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#F59E0B]">receipt_long</span>
+            <Receipt className="w-5 h-5 text-[#F59E0B]" />
             <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Financial Audit Ledger</h3>
           </div>
           <span className="text-xs font-mono text-[#64748B]">Automated Escrow Logs</span>
@@ -337,9 +350,13 @@ function DashboardContent() {
                           : "bg-[#F59E0B]/15 text-[#F59E0B]"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-xl">
-                        {isRefund ? "arrow_downward" : isForfeit ? "close" : "lock"}
-                      </span>
+                      {isRefund ? (
+                        <ArrowDownLeft className="w-5 h-5" />
+                      ) : isForfeit ? (
+                        <X className="w-5 h-5" />
+                      ) : (
+                        <Lock className="w-5 h-5" />
+                      )}
                     </div>
                     <div>
                       <p className="text-sm font-bold text-[#F8FAFC]">{log.title}</p>
@@ -387,9 +404,7 @@ export default function DashboardPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-[60vh]">
-          <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
-            progress_activity
-          </span>
+          <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
         </div>
       }
     >

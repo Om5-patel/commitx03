@@ -2,6 +2,7 @@
 
 import { GoalFormData, TaskFormData, VERIFICATION_LABELS, CATEGORY_LABELS } from "@/lib/types";
 import TiltCard from "@/components/ui/TiltCard";
+import { ShieldCheck, Lock, Loader2 } from "lucide-react";
 
 interface StepReviewProps {
   goal: GoalFormData;
@@ -87,9 +88,7 @@ export default function StepReview({
 
         {/* Escrow Guarantee Callout */}
         <div className="p-4 rounded-xl bg-[#10B981]/10 border border-[#10B981]/30 flex items-start gap-3 text-xs text-[#F8FAFC]">
-          <span className="material-symbols-outlined text-[#10B981] text-xl shrink-0 mt-0.5">
-            shield_lock
-          </span>
+          <ShieldCheck className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
             <strong className="text-[#10B981]">The CommitX Escrow Guarantee:</strong> Your ₹{goal.total_stake} stake is safely held in trust. As you complete and verify each milestone, 100% of that milestone&apos;s stake is instantly refunded back to you.
           </div>
@@ -100,17 +99,17 @@ export default function StepReview({
       <button
         onClick={onConfirm}
         disabled={isLoading}
-        className="btn-primary w-full text-center !py-4 text-base tracking-wide"
+        className="btn-primary w-full text-center !py-4 text-base tracking-wide inline-flex items-center justify-center gap-2"
       >
         {isLoading ? (
-          <span className="flex items-center gap-2">
-            <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span>
-            Locking In Escrow Capital...
-          </span>
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Locking In Escrow Capital...</span>
+          </>
         ) : (
           <>
-            Deposit Stake & Lock Commitment (₹{goal.total_stake})
-            <span className="material-symbols-outlined text-xl">lock</span>
+            <span>Deposit Stake & Lock Commitment (₹{goal.total_stake})</span>
+            <Lock className="w-5 h-5" />
           </>
         )}
       </button>
