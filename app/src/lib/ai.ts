@@ -1,16 +1,16 @@
 /**
  * CommitX AI Verification Engine powered by OpenRouter.
- * Uses a strictly 100% FREE model fallback chain.
+ * Uses a strictly 100% FREE model fallback chain and openrouter/free router.
  */
 
 export const STRICT_FREE_MODELS_CHAIN = [
-  "google/gemini-2.0-flash-exp:free",
-  "meta-llama/llama-3.3-70b-instruct:free",
-  "qwen/qwen-2.5-72b-instruct:free",
-  "mistralai/mistral-small-3.2-24b-instruct:free",
-  "deepseek/deepseek-chat:free",
-  "meta-llama/llama-3.1-8b-instruct:free",
-  "google/gemma-2-9b-it:free",
+  "openrouter/free",
+  "google/gemma-4-31b-it:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "nvidia/nemotron-3.5-lightning:free",
+  "nvidia/nemotron-3-nano-30b-a3b:free",
+  "z-ai/glm-5.2:free",
+  "liquid/lfm-2.5-2.6b:free",
 ] as const;
 
 export interface QuizQuestion {
@@ -50,7 +50,6 @@ export async function callOpenRouter(prompt: string, jsonMode: boolean = true): 
         },
         body: JSON.stringify({
           model,
-          models: [...STRICT_FREE_MODELS_CHAIN], // OpenRouter internal fallback chain
           messages: [
             {
               role: "user",
