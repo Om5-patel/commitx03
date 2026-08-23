@@ -244,7 +244,7 @@ export default function FileSubmission({
               <span className="material-symbols-outlined animate-spin text-xl">
                 progress_activity
               </span>
-              Analyzing Artifact with Gemini AI...
+              Analyzing Artifact with AI Engine...
             </>
           ) : (
             <>
