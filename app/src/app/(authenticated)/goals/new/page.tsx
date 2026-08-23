@@ -18,25 +18,34 @@ export default function NewGoalPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Goal Form State
-  const [goalData, setGoalData] = useState<GoalFormData>({
-    title: "",
-    description: "",
-    category: "generic_habit",
-    total_stake: 150,
-    start_date: new Date().toISOString().split("T")[0],
-    end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+  const [goalData, setGoalData] = useState<GoalFormData>(() => {
+    const now = new Date();
+    const future = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    return {
+      title: "",
+      description: "",
+      category: "generic_habit",
+      total_stake: 150,
+      start_date: now.toISOString().split("T")[0],
+      end_date: future.toISOString().split("T")[0],
+    };
   });
 
   // Tasks Form State
-  const [tasks, setTasks] = useState<TaskFormData[]>([
-    {
-      title: "Daily Proof Submission",
-      description: "Submit daily verified evidence",
-      verification_method: "photo",
-      stake_amount: 150,
-      deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    },
-  ]);
+  const [tasks, setTasks] = useState<TaskFormData[]>(() => {
+    const now = new Date();
+    const future = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    return [
+      {
+        title: "Daily Proof Submission",
+        description: "Submit daily verified evidence",
+        verification_method: "photo",
+        stake_amount: 150,
+        deadline: future.toISOString().split("T")[0],
+      },
+    ];
+  });
+
 
   const handleGoalChange = (updated: Partial<GoalFormData>) => {
     const nextGoal = { ...goalData, ...updated };
