@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   LayoutDashboard,
@@ -23,10 +24,10 @@ export default function TopNavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#090D10]/90 backdrop-blur-md border-b border-[#1E293B]">
+    <header className="sticky top-0 z-50 w-full bg-[#090D10]/90 dark:bg-[#090D10]/90 light:bg-white/90 backdrop-blur-md border-b border-[#1E293B] transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6 sm:gap-8">
           <Link
             href="/"
             className="flex items-center gap-2.5 font-sans text-lg font-bold tracking-tight text-white"
@@ -63,8 +64,10 @@ export default function TopNavBar() {
           </nav>
         </div>
 
-        {/* Right Action Trigger */}
-        <div className="flex items-center gap-2.5">
+        {/* Right Actions: Theme Toggle + New Goal + Notifications + Profile */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <ThemeToggle />
+
           <Link
             href="/goals/new"
             className="hidden sm:inline-flex btn-glass text-xs font-mono !py-1.5 !px-3 items-center gap-1.5"
@@ -76,7 +79,7 @@ export default function TopNavBar() {
           {/* Notifications Icon with Badge */}
           <Link
             href="/notifications"
-            className="relative p-2 rounded-lg bg-[#12181E] border border-[#1E293B] text-white/50 hover:text-white transition-colors inline-flex items-center justify-center"
+            className="relative p-2 rounded-lg bg-[#12181E] border border-[#1E293B] text-white/50 hover:text-white transition-colors inline-flex items-center justify-center min-w-[36px] min-h-[36px]"
             title="Notifications"
           >
             <Bell className="w-4 h-4" />
@@ -86,7 +89,7 @@ export default function TopNavBar() {
           {/* Profile Badge */}
           <Link
             href="/profile"
-            className="p-2 rounded-lg bg-[#12181E] border border-[#1E293B] text-white/50 hover:text-[#10B981] transition-colors inline-flex items-center justify-center"
+            className="p-2 rounded-lg bg-[#12181E] border border-[#1E293B] text-white/50 hover:text-[#10B981] transition-colors inline-flex items-center justify-center min-w-[36px] min-h-[36px]"
             title="Account Passport"
           >
             <User className="w-4 h-4" />

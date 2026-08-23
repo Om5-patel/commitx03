@@ -167,27 +167,27 @@ export default function NewGoalPage() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 md:pb-8 space-y-6 sm:space-y-8">
       {/* Step Progress Header */}
-      <div className="flex items-center justify-between py-4 border-b border-[#1E293B]">
+      <div className="flex items-center justify-between py-3 border-b border-[#1E293B]">
         <button
           onClick={handleBack}
-          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 type-label text-[#94A3B8] hover:text-[#10B981] transition-colors cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>{step === 1 ? "DASHBOARD" : "PREVIOUS STEP"}</span>
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>{step === 1 ? "DASHBOARD" : "BACK"}</span>
         </button>
 
         <div className="flex flex-col items-center">
-          <span className="text-[11px] font-mono tracking-widest text-[#10B981] font-bold uppercase mb-1.5">
+          <span className="type-label text-[10px] text-[#10B981] font-bold uppercase mb-1">
             STEP 0{step} OF 03
           </span>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {[1, 2, 3].map((s) => (
               <div
                 key={s}
-                className={`h-1.5 w-10 rounded-full transition-all duration-300 ${
-                  step >= s ? "bg-[#10B981] shadow-[0_0_8px_#10B981]" : "bg-[#1E293B]"
+                className={`h-1 w-8 sm:w-10 rounded-full transition-all duration-300 ${
+                  step >= s ? "bg-[#10B981]" : "bg-[#1E293B]"
                 }`}
               />
             ))}
@@ -196,7 +196,7 @@ export default function NewGoalPage() {
 
         <Link
           href="/dashboard"
-          className="text-xs font-mono text-[#94A3B8] hover:text-[#F43F5E] transition-colors"
+          className="type-label text-[10px] text-[#94A3B8] hover:text-[#F43F5E] transition-colors"
         >
           DISCARD
         </Link>
@@ -204,15 +204,15 @@ export default function NewGoalPage() {
 
       {/* Error Alert Banner */}
       {errorMsg && (
-        <div className="p-4 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono flex items-center gap-3">
+        <div className="p-3.5 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono flex items-center gap-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {/* Main Content Layout */}
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-start">
-        <div className="flex-1 w-full max-w-3xl">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+        <div className="flex-1 w-full">
           {step === 1 && (
             <StepGoalInfo data={goalData} onChange={handleGoalChange} />
           )}

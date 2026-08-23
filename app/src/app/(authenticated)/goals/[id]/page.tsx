@@ -61,7 +61,7 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
 
   if (!goal) {
     return (
-      <div className="p-12 text-center bg-[#12181E] border border-[#1E293B] rounded-2xl max-w-lg mx-auto my-12">
+      <div className="p-8 sm:p-12 text-center bg-[#12181E] border border-[#1E293B] rounded-2xl max-w-lg mx-auto my-12">
         <h2 className="type-heading text-lg text-white mb-4">Goal Commitment Not Found</h2>
         <Link href="/dashboard" className="btn-glass text-xs !py-2.5 !px-4">
           Return to Dashboard
@@ -75,7 +75,7 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
   const refundedCapital = completedCount * (tasks[0]?.stake_amount || 0);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-8 space-y-8 sm:space-y-10">
       {/* Back button */}
       <Link
         href="/goals"
@@ -86,8 +86,8 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
       </Link>
 
       {/* ── Signature 3D Commitment Card & Specs ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-6 flex justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+        <div className="lg:col-span-6 flex justify-center w-full">
           <CommitmentCard
             stakeAmount={goal.total_stake}
             goalTitle={goal.title}
@@ -96,11 +96,11 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
           />
         </div>
 
-        <div className="lg:col-span-6 bg-[#12181E] border border-[#1E293B] rounded-2xl p-6 space-y-4">
+        <div className="lg:col-span-6 bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 sm:p-6 space-y-4">
           <span className="type-label text-[#10B981] px-2.5 py-0.5 rounded bg-[#090D10] border border-[#1E293B]">
             {CATEGORY_LABELS[goal.category as keyof typeof CATEGORY_LABELS] || goal.category}
           </span>
-          <h1 className="type-heading text-xl text-white">
+          <h1 className="type-heading text-lg sm:text-xl text-white">
             {goal.title}
           </h1>
           {goal.description && (
@@ -112,20 +112,20 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
           <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#1E293B]">
             <div>
               <span className="type-label text-[10px] block">TOTAL STAKE</span>
-              <span className="font-mono text-lg font-bold text-white">₹{goal.total_stake}</span>
+              <span className="font-mono text-base sm:text-lg font-bold text-white">₹{goal.total_stake}</span>
             </div>
             <div>
               <span className="type-label text-[10px] block">REFUNDED TO DATE</span>
-              <span className="font-mono text-lg font-bold text-[#10B981]">₹{refundedCapital}</span>
+              <span className="font-mono text-base sm:text-lg font-bold text-[#10B981]">₹{refundedCapital}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* ── Physical Milestone Rail Track ── */}
-      <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-6 space-y-3">
+      <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 sm:p-6 space-y-3 overflow-x-auto">
         <div className="flex items-center justify-between">
-          <span className="type-heading text-sm text-white">
+          <span className="type-heading text-xs sm:text-sm text-white">
             Milestone Verification Rail
           </span>
           <span className="font-mono text-xs text-white/50">
@@ -138,7 +138,7 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
 
       {/* ── Milestone Deliverable Requirements ── */}
       <div className="space-y-3">
-        <h3 className="type-heading text-sm text-white">
+        <h3 className="type-heading text-xs sm:text-sm text-white">
           Milestone Breakdown
         </h3>
 
@@ -151,11 +151,11 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
             return (
               <div
                 key={task.id || index}
-                className="p-4 sm:p-5 rounded-2xl bg-[#12181E] border border-[#1E293B] flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[#334155] transition-colors"
+                className="p-4 sm:p-5 rounded-2xl bg-[#12181E] border border-[#1E293B] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:border-[#334155] transition-colors"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
                       isPassed
                         ? "bg-[#10B981] text-[#090D10]"
                         : isPending
@@ -169,25 +169,25 @@ export default function GoalDetailPage({ params }: GoalDetailProps) {
                   </div>
 
                   <div>
-                    <h4 className="type-heading text-sm text-white">
+                    <h4 className="type-heading text-xs sm:text-sm text-white">
                       {task.title}
                     </h4>
-                    <p className="type-body text-xs mt-0.5">
+                    <p className="type-body text-[11px] sm:text-xs mt-0.5">
                       {VERIFICATION_LABELS[task.verification_method as keyof typeof VERIFICATION_LABELS] || task.verification_method}
                       {task.deadline && ` • Due: ${task.deadline}`}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 justify-between sm:justify-end">
-                  <span className="font-mono text-sm font-bold text-white">
+                <div className="flex items-center gap-3 sm:gap-4 justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-[#1E293B]">
+                  <span className="font-mono text-xs sm:text-sm font-bold text-white">
                     ₹{task.stake_amount}
                   </span>
 
                   {isPending ? (
                     <Link
                       href={`/goals/${id}/tasks/${task.id}/submit`}
-                      className="verify-btn !py-2.5 !px-5 text-xs font-mono"
+                      className="verify-btn !py-2 sm:!py-2.5 !px-4 sm:!px-5 text-xs font-mono"
                     >
                       Verify Now
                     </Link>

@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import TiltCard from "@/components/ui/TiltCard";
-import CountUpNumber from "@/components/ui/CountUpNumber";
 import { ShieldAlert, Loader2 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -60,93 +58,93 @@ export default function ProfilePage() {
   const email = user?.email || "user@commitx.in";
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-8">
-      <div className="border-b border-[#1E293B] pb-6">
-        <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-8 space-y-6 sm:space-y-8">
+      <div className="border-b border-[#1E293B] pb-4 sm:pb-6">
+        <span className="type-label text-[#10B981]">
           ACCOUNTABILITY PASSPORT
         </span>
-        <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+        <h1 className="font-sans text-2xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">
           Identity & Escrow Passport
         </h1>
       </div>
 
       {/* Profile Card */}
-      <TiltCard glow="emerald" className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-6">
-          <div className="w-18 h-18 rounded-2xl bg-[#10B981] text-[#090D10] flex items-center justify-center text-3xl font-mono font-black shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+      <div className="p-5 sm:p-6 bg-[#12181E] border border-[#1E293B] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
+        <div className="flex items-center gap-4 sm:gap-5">
+          <div className="w-14 h-14 rounded-2xl bg-[#10B981] text-[#090D10] flex items-center justify-center text-2xl font-mono font-black shrink-0">
             {fullName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div className="flex items-center gap-3">
-              <h2 className="font-sans text-2xl font-extrabold text-[#F8FAFC]">
+            <div className="flex items-center gap-2.5">
+              <h2 className="type-heading text-lg text-white">
                 {fullName}
               </h2>
               {isAdmin && (
-                <span className="bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                  Auditor Admin
+                <span className="bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase">
+                  Auditor
                 </span>
               )}
             </div>
-            <p className="text-xs font-mono text-[#94A3B8] mt-1">{email}</p>
+            <p className="type-body text-xs font-mono mt-0.5">{email}</p>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="btn-destructive text-xs !py-2.5 !px-5 font-mono cursor-pointer"
+          className="btn-destructive text-xs !py-2.5 !px-4 font-mono cursor-pointer w-full sm:w-auto text-center"
         >
           Disconnect & Sign Out
         </button>
-      </TiltCard>
+      </div>
 
       {/* Admin Quick Link */}
       {isAdmin && (
-        <TiltCard glow="amber" className="p-6 bg-[#12181E] border border-[#F59E0B]/40 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
-              <ShieldAlert className="w-6 h-6" />
+        <div className="p-5 bg-[#12181E] border border-[#F59E0B]/40 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-sans text-base font-bold text-[#F8FAFC]">
+              <h3 className="type-heading text-sm text-white">
                 CommitX Admin Arbitration Station
               </h3>
-              <p className="text-xs text-[#94A3B8] mt-0.5">
+              <p className="type-body text-xs mt-0.5">
                 Review flagged submissions, resolve disputes, and audit treasury forfeitures.
               </p>
             </div>
           </div>
 
-          <Link href="/admin" className="btn-primary text-xs !py-2.5 !px-4 shrink-0">
+          <Link href="/admin" className="verify-btn text-xs !py-2 !px-4 shrink-0 w-full sm:w-auto text-center">
             Open Terminal
           </Link>
-        </TiltCard>
+        </div>
       )}
 
       {/* Performance Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
-          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-5 bg-[#12181E] border border-[#1E293B] rounded-2xl">
+          <span className="type-label block mb-1.5">
             COMPLETED VAULTS
           </span>
-          <CountUpNumber value={8} className="text-3xl text-[#10B981]" />
-          <p className="text-xs font-mono text-[#64748B] mt-1">100% verified milestones</p>
-        </TiltCard>
+          <div className="type-data text-2xl text-[#10B981]">8</div>
+          <p className="type-body text-[11px] mt-1">100% verified milestones</p>
+        </div>
 
-        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
-          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+        <div className="p-5 bg-[#12181E] border border-[#1E293B] rounded-2xl">
+          <span className="type-label block mb-1.5">
             HISTORIC REFUND RATE
           </span>
-          <CountUpNumber value={94} suffix="%" className="text-3xl text-[#F8FAFC]" />
-          <p className="text-xs font-mono text-[#64748B] mt-1">Top tier protocol reputation</p>
-        </TiltCard>
+          <div className="type-data text-2xl text-white">94%</div>
+          <p className="type-body text-[11px] mt-1">Top tier protocol reputation</p>
+        </div>
 
-        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
-          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+        <div className="p-5 bg-[#12181E] border border-[#1E293B] rounded-2xl">
+          <span className="type-label block mb-1.5">
             CAPITAL RECOVERED
           </span>
-          <CountUpNumber value={3850} prefix="₹" className="text-3xl text-[#06B6D4]" />
-          <p className="text-xs font-mono text-[#64748B] mt-1">Refunded directly to you</p>
-        </TiltCard>
+          <div className="type-data text-2xl text-[#06B6D4]">₹3,850</div>
+          <p className="type-body text-[11px] mt-1">Refunded directly to you</p>
+        </div>
       </div>
     </div>
   );

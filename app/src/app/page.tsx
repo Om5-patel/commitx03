@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import CommitmentCard from "@/components/ui/CommitmentCard";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   ArrowRight,
@@ -23,12 +24,12 @@ export default function LandingPage() {
   const stakePerMilestone = Math.round(stakeAmount / milestones);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090D10] text-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-[#090D10] text-[#F8FAFC] pb-12">
       {/* ── Public Navbar ── */}
       <header className="sticky top-0 z-50 w-full bg-[#090D10]/90 backdrop-blur-md border-b border-[#1E293B]">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 font-sans text-xl font-bold tracking-tight text-white">
+          <Link href="/" className="flex items-center gap-2.5 font-sans text-lg sm:text-xl font-bold tracking-tight text-white">
             <div className="w-8 h-8 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black">
               <Lock className="w-4 h-4 stroke-[2.5]" />
             </div>
@@ -45,11 +46,12 @@ export default function LandingPage() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="type-heading text-xs hover:text-white px-3 py-2 transition-colors">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
+            <Link href="/login" className="type-heading text-xs hover:text-white px-2.5 py-1.5 transition-colors">
               Log in
             </Link>
-            <Link href="/signup" className="verify-btn !py-2.5 !px-5 text-xs font-mono">
+            <Link href="/signup" className="verify-btn !py-2 !px-4 sm:!py-2.5 sm:!px-5 text-xs font-mono">
               Launch App
             </Link>
           </div>
@@ -57,29 +59,29 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero Section with 3D Signature Vault Card ── */}
-      <section className="pt-16 pb-24 lg:pt-24 lg:pb-32">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <section className="pt-12 pb-16 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-32">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Left Hero Copy */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
+          <div className="lg:col-span-7 flex flex-col gap-5 sm:gap-6 text-center lg:text-left">
             <div>
               <span className="type-label text-[#10B981] px-3 py-1 rounded-full bg-[#12181E] border border-[#10B981]/30">
                 COMMITTED CAPITAL PROTOCOL
               </span>
             </div>
 
-            <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12]">
+            <h1 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.15]">
               Pledge your stake. <br />
               <span className="text-[#10B981]">
                 Earn it all back.
               </span>
             </h1>
 
-            <p className="type-body text-sm sm:text-base leading-relaxed max-w-xl">
+            <p className="type-body text-xs sm:text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
               Lock in your financial pledge in an automated escrow vault. Complete milestones verified by AI study quizzes, GPS photo check-ins, or code deliverables to trigger <strong>instant 100% refunds</strong>.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2 justify-center lg:justify-start">
               <Link href="/signup" className="verify-btn text-sm !py-3.5 !px-7">
                 <span>Lock In Your Commitment</span>
                 <Lock className="w-4 h-4" />
@@ -90,24 +92,24 @@ export default function LandingPage() {
             </div>
 
             {/* Quiet Stats */}
-            <div className="pt-8 border-t border-[#1E293B] grid grid-cols-3 gap-6">
+            <div className="pt-6 sm:pt-8 border-t border-[#1E293B] grid grid-cols-3 gap-4 sm:gap-6 text-center">
               <div>
-                <p className="type-data text-xl sm:text-2xl text-[#10B981]">₹1,42,500+</p>
-                <p className="type-body text-[11px] mt-0.5">Refunded to Users</p>
+                <p className="type-data text-lg sm:text-2xl text-[#10B981]">₹1,42,500+</p>
+                <p className="type-body text-[10px] sm:text-[11px] mt-0.5">Refunded</p>
               </div>
               <div>
-                <p className="type-data text-xl sm:text-2xl text-white">94.2%</p>
-                <p className="type-body text-[11px] mt-0.5">Completion Rate</p>
+                <p className="type-data text-lg sm:text-2xl text-white">94.2%</p>
+                <p className="type-body text-[10px] sm:text-[11px] mt-0.5">Success Rate</p>
               </div>
               <div>
-                <p className="type-data text-xl sm:text-2xl text-[#06B6D4]">₹0 Fees</p>
-                <p className="type-body text-[11px] mt-0.5">Free Verification</p>
+                <p className="type-data text-lg sm:text-2xl text-[#06B6D4]">₹0 Fees</p>
+                <p className="type-body text-[10px] sm:text-[11px] mt-0.5">Verification</p>
               </div>
             </div>
           </div>
 
           {/* Right Hero: Signature 3D Commitment Vault Card */}
-          <div className="lg:col-span-5 flex justify-center">
+          <div className="lg:col-span-5 flex justify-center w-full">
             <CommitmentCard
               stakeAmount={1000}
               goalTitle="Master System Design & Services"
@@ -120,9 +122,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Interactive Stake & Escrow Calculator Section ── */}
-      <section id="calculator" className="py-20 bg-[#0E141A] border-y border-[#1E293B]">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center max-w-xl mx-auto mb-12">
+      <section id="calculator" className="py-16 sm:py-20 bg-[#0E141A] border-y border-[#1E293B]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-xl mx-auto mb-10">
             <span className="type-label text-[#10B981]">FINANCIAL STAKE ENGINE</span>
             <h2 className="font-sans text-2xl sm:text-3xl font-bold text-white mt-1">
               Interactive Stake Calculator
@@ -132,10 +134,10 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="p-6 sm:p-8 bg-[#12181E] border border-[#1E293B] rounded-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="p-5 sm:p-8 bg-[#12181E] border border-[#1E293B] rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
               {/* Controls */}
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 {/* Stake Slider */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
@@ -149,7 +151,7 @@ export default function LandingPage() {
                     step="50"
                     value={stakeAmount}
                     onChange={(e) => setStakeAmount(Number(e.target.value))}
-                    className="w-full accent-[#10B981] h-1.5 bg-[#090D10] rounded-lg cursor-pointer"
+                    className="w-full accent-[#10B981] h-2 bg-[#090D10] rounded-lg cursor-pointer"
                   />
                   <div className="flex justify-between type-body text-[10px] mt-1 font-mono">
                     <span>₹100 (Micro)</span>
@@ -161,7 +163,7 @@ export default function LandingPage() {
                 {/* Category Selection */}
                 <div>
                   <span className="type-label block mb-2">CATEGORY</span>
-                  <div className="grid grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                     {[
                       { id: "study", label: "Study Sprint", Icon: BookOpen },
                       { id: "habit", label: "Habit / Gym", Icon: Dumbbell },
@@ -171,14 +173,14 @@ export default function LandingPage() {
                         key={id}
                         type="button"
                         onClick={() => setCategory(id as any)}
-                        className={`p-3 rounded-xl border text-xs flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                        className={`p-2.5 sm:p-3 rounded-xl border text-xs flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer min-h-[44px] ${
                           category === id
                             ? "bg-[#10B981]/15 border-[#10B981] text-[#10B981]"
                             : "bg-[#090D10] border-[#1E293B] text-white/50 hover:border-[#334155]"
                         }`}
                       >
                         <Icon className="w-4 h-4" />
-                        <span className="type-heading text-[11px]">{label}</span>
+                        <span className="type-heading text-[10px] sm:text-[11px]">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -193,7 +195,7 @@ export default function LandingPage() {
                         key={cnt}
                         type="button"
                         onClick={() => setMilestones(cnt)}
-                        className={`flex-1 py-1.5 rounded-lg font-mono text-xs border transition-colors cursor-pointer ${
+                        className={`flex-1 py-2 rounded-lg font-mono text-xs border transition-colors cursor-pointer min-h-[44px] ${
                           milestones === cnt
                             ? "bg-[#10B981] text-[#090D10] font-bold border-[#10B981]"
                             : "bg-[#090D10] border-[#1E293B] text-white/50 hover:text-white"
@@ -207,7 +209,7 @@ export default function LandingPage() {
               </div>
 
               {/* Dynamic Breakdown Card */}
-              <div className="p-5 rounded-xl bg-[#090D10] border border-[#1E293B] flex flex-col justify-between h-full space-y-4">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#090D10] border border-[#1E293B] flex flex-col justify-between h-full space-y-4">
                 <div>
                   <span className="type-label text-[#10B981]">ESCROW SIMULATION</span>
                   <h4 className="type-heading text-sm text-white mt-1">
@@ -215,7 +217,7 @@ export default function LandingPage() {
                   </h4>
                 </div>
 
-                <div className="space-y-2.5 font-mono text-xs">
+                <div className="space-y-2 font-mono text-xs">
                   <div className="flex justify-between items-center p-2.5 bg-[#12181E] rounded-lg border border-[#1E293B]">
                     <span className="text-white/50">Total in Escrow:</span>
                     <span className="font-bold text-white">₹{stakeAmount}</span>
@@ -241,15 +243,15 @@ export default function LandingPage() {
       </section>
 
       {/* ── The 3-Step Protocol ── */}
-      <section id="protocol" className="py-20 max-w-5xl mx-auto px-6">
-        <div className="text-center max-w-xl mx-auto mb-12">
+      <section id="protocol" className="py-16 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="text-center max-w-xl mx-auto mb-10">
           <span className="type-label text-[#10B981]">THE COMMITX PROTOCOL</span>
           <h2 className="font-sans text-2xl sm:text-3xl font-bold text-white mt-1">
             Engineered for Zero-Excuses Execution
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {[
             {
               step: "01",
@@ -270,7 +272,7 @@ export default function LandingPage() {
               Icon: Sparkles,
             },
           ].map(({ step, title, description, Icon }) => (
-            <div key={step} className="p-6 bg-[#12181E] border border-[#1E293B] rounded-2xl flex flex-col justify-between">
+            <div key={step} className="p-5 sm:p-6 bg-[#12181E] border border-[#1E293B] rounded-2xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-mono text-2xl font-bold text-white/20">{step}</span>
@@ -287,15 +289,15 @@ export default function LandingPage() {
       </section>
 
       {/* ── Call To Action Banner ── */}
-      <section className="py-16 max-w-5xl mx-auto px-6 w-full mb-8">
-        <div className="p-8 sm:p-12 rounded-2xl bg-[#12181E] border border-[#1E293B] flex flex-col items-center text-center gap-4">
-          <h2 className="font-sans text-2xl sm:text-4xl font-bold text-white tracking-tight">
+      <section className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 w-full mb-8">
+        <div className="p-6 sm:p-12 rounded-2xl bg-[#12181E] border border-[#1E293B] flex flex-col items-center text-center gap-4">
+          <h2 className="font-sans text-xl sm:text-3xl font-bold text-white tracking-tight">
             Stop breaking promises to yourself.
           </h2>
-          <p className="type-body text-sm max-w-lg">
+          <p className="type-body text-xs sm:text-sm max-w-lg">
             Put your money where your ambition is. Join committed professionals, students, and builders today.
           </p>
-          <Link href="/signup" className="verify-btn text-sm !py-3.5 !px-8 mt-2">
+          <Link href="/signup" className="verify-btn text-xs sm:text-sm !py-3 !px-6 sm:!py-3.5 sm:!px-8 mt-2">
             <span>Create Your Commitment Vault</span>
             <ArrowRight className="w-4 h-4" />
           </Link>

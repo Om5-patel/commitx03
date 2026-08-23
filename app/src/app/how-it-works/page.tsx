@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
-import TiltCard from "@/components/ui/TiltCard";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   Banknote,
@@ -108,45 +108,45 @@ export default function HowItWorksPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#090D10] text-[#F8FAFC]">
       {/* Public Nav */}
-      <header className="sticky top-0 z-50 flex justify-between items-center px-6 lg:px-8 h-20 w-full bg-[#090D10]/80 backdrop-blur-2xl border-b border-[#1E293B]">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-4 sm:px-6 lg:px-8 h-16 sm:h-20 w-full bg-[#090D10]/80 backdrop-blur-2xl border-b border-[#1E293B]">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-sans text-2xl font-black tracking-tight text-[#F8FAFC]"
+          className="flex items-center gap-2.5 font-sans text-lg sm:text-2xl font-bold tracking-tight text-white"
         >
-          <div className="w-9 h-9 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-            <Lock className="w-5 h-5 stroke-[2.5]" />
+          <div className="w-8 h-8 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black">
+            <Lock className="w-4 h-4 stroke-[2.5]" />
           </div>
           <span className="flex items-center leading-none">
             Commit<span className="text-[#10B981]">X</span>
           </span>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <ThemeToggle />
           <Link
             href="/login"
-            className="text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-sm transition-colors px-3 py-2"
+            className="type-heading text-xs hover:text-white px-2.5 py-1.5 transition-colors"
           >
             Log in
           </Link>
           <Link
             href="/signup"
-            className="btn-primary text-xs uppercase tracking-wider !py-2.5 !px-5 inline-flex items-center gap-2"
+            className="verify-btn !py-2 !px-4 sm:!py-2.5 sm:!px-5 text-xs font-mono"
           >
-            <span>Launch App</span>
-            <ArrowRight className="w-4 h-4" />
+            Launch App
           </Link>
         </div>
       </header>
 
       {/* Header */}
-      <section className="py-20 bg-[#0E141A] border-b border-[#1E293B]">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+      <section className="py-16 sm:py-20 bg-[#0E141A] border-b border-[#1E293B]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-3 sm:space-y-4">
+          <span className="type-label text-[#10B981]">
             PROTOCOL ARCHITECTURE
           </span>
-          <h1 className="font-sans text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
+          <h1 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight">
             How CommitX Works
           </h1>
-          <p className="text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
+          <p className="type-body text-xs sm:text-base leading-relaxed max-w-2xl mx-auto">
             A four-step financial protocol that transforms good intentions into
             guaranteed execution. Zero excuses, zero fees on success.
           </p>
@@ -154,84 +154,84 @@ export default function HowItWorksPage() {
       </section>
 
       {/* Steps */}
-      <section className="py-20 max-w-5xl mx-auto px-6 lg:px-8 space-y-16">
+      <section className="py-16 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
         {steps.map((step, i) => (
-          <TiltCard
+          <div
             key={step.number}
-            className="p-8 sm:p-10 bg-[#12181E] border border-[#1E293B]"
+            className="p-6 sm:p-8 bg-[#12181E] border border-[#1E293B] rounded-2xl"
           >
             <div
               className={`flex flex-col ${
                 i % 2 === 1 ? "lg:flex-row-reverse" : "lg:flex-row"
-              } gap-10 items-center`}
+              } gap-6 sm:gap-8 items-center`}
             >
-              <div className="flex-1 max-w-xl space-y-4">
-                <div className="flex items-center gap-3">
+              <div className="flex-1 max-w-xl space-y-3">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className={`w-12 h-12 rounded-xl ${step.bgAccent} ${step.borderAccent} border ${step.accent} flex items-center justify-center`}
+                    className={`w-10 h-10 rounded-xl ${step.bgAccent} ${step.borderAccent} border ${step.accent} flex items-center justify-center`}
                   >
-                    <step.Icon className="w-6 h-6" />
+                    <step.Icon className="w-5 h-5" />
                   </div>
-                  <span className="font-mono text-xs text-[#94A3B8] font-bold tracking-widest uppercase">
+                  <span className="type-label font-mono">
                     STEP {step.number}
                   </span>
                 </div>
 
-                <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC]">
+                <h2 className="type-heading text-lg sm:text-2xl text-white">
                   {step.title}
                 </h2>
-                <p className="text-[#94A3B8] text-sm sm:text-base leading-relaxed">
+                <p className="type-body text-xs sm:text-sm leading-relaxed">
                   {step.description}
                 </p>
 
-                <ul className="space-y-2.5 pt-2">
+                <ul className="space-y-2 pt-2">
                   {step.details.map((detail, j) => (
                     <li
                       key={j}
-                      className="flex items-start gap-2.5 text-xs font-mono text-[#F8FAFC]"
+                      className="flex items-start gap-2 text-xs font-mono text-white/90"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0 mt-0.5" />
                       <span>{detail}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="flex-1 w-full max-w-sm aspect-video sm:aspect-square rounded-2xl bg-[#090D10] border border-[#1E293B] flex items-center justify-center p-8">
+              <div className="flex-1 w-full max-w-xs aspect-video sm:aspect-square rounded-2xl bg-[#090D10] border border-[#1E293B] flex items-center justify-center p-6">
                 <div
-                  className={`w-24 h-24 ${step.bgAccent} border ${step.borderAccent} rounded-3xl flex items-center justify-center shadow-2xl`}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 ${step.bgAccent} border ${step.borderAccent} rounded-2xl flex items-center justify-center`}
                 >
-                  <step.Icon className={`w-12 h-12 ${step.accent}`} />
+                  <step.Icon className={`w-8 h-8 sm:w-10 sm:h-10 ${step.accent}`} />
                 </div>
               </div>
             </div>
-          </TiltCard>
+          </div>
         ))}
       </section>
 
       {/* FAQ */}
-      <section className="py-20 bg-[#0E141A] border-t border-[#1E293B]">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+      <section className="py-16 sm:py-20 bg-[#0E141A] border-t border-[#1E293B]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="type-label text-[#10B981]">
               FREQUENTLY ASKED QUESTIONS
             </span>
-            <h2 className="font-sans text-3xl font-extrabold text-[#F8FAFC] mt-2">
+            <h2 className="font-sans text-2xl sm:text-3xl font-bold text-white mt-1">
               Everything you need to know
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-[#12181E] rounded-2xl border border-[#1E293B] overflow-hidden"
+                className="group bg-[#12181E] rounded-xl border border-[#1E293B] overflow-hidden"
               >
-                <summary className="flex items-center justify-between p-6 cursor-pointer font-sans font-bold text-base text-[#F8FAFC] hover:text-[#10B981] transition-colors list-none">
+                <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer type-heading text-xs sm:text-sm text-white hover:text-[#10B981] transition-colors list-none">
                   <span>{faq.q}</span>
-                  <ChevronDown className="w-5 h-5 text-[#94A3B8] group-open:rotate-180 transition-transform duration-200" />
+                  <ChevronDown className="w-4 h-4 text-white/40 group-open:rotate-180 transition-transform duration-200" />
                 </summary>
-                <div className="px-6 pb-6 text-xs font-mono text-[#94A3B8] leading-relaxed">
+                <div className="px-4 sm:px-5 pb-4 sm:pb-5 type-body text-xs leading-relaxed">
                   {faq.a}
                 </div>
               </details>
@@ -241,17 +241,17 @@ export default function HowItWorksPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-[#1E293B]">
-        <div className="max-w-2xl mx-auto text-center px-6 space-y-6">
-          <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC]">
+      <section className="py-16 border-t border-[#1E293B]">
+        <div className="max-w-xl mx-auto text-center px-4 space-y-4">
+          <h2 className="font-sans text-2xl sm:text-3xl font-bold text-white">
             Ready to commit?
           </h2>
           <Link
             href="/signup"
-            className="btn-primary text-base !py-4 !px-10 inline-flex items-center gap-2"
+            className="verify-btn text-xs sm:text-sm !py-3 !px-8 inline-flex items-center gap-2"
           >
             <span>Create Your First Goal</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

@@ -92,22 +92,22 @@ function DashboardContent() {
   ]);
 
   return (
-    <div className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <div className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 md:pb-8 space-y-10 sm:space-y-12">
       
       {/* ── Level 1: Header Bar & New Goal Action ── */}
-      <div className="flex items-center justify-between border-b border-[#1E293B] pb-5">
+      <div className="flex items-center justify-between border-b border-[#1E293B] pb-4 sm:pb-5">
         <div>
           <span className="type-label text-[#10B981]">
             PORTFOLIO ACCOUNTABILITY VAULT
           </span>
-          <h1 className="font-sans text-2xl sm:text-3xl font-bold text-[#FFFFFF] tracking-tight mt-0.5">
+          <h1 className="font-sans text-xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">
             Commitment Terminal
           </h1>
         </div>
 
         <Link
           href="/goals/new"
-          className="btn-glass text-xs font-mono uppercase tracking-wider !py-2.5 !px-4 inline-flex items-center gap-2"
+          className="btn-glass text-xs font-mono uppercase tracking-wider !py-2 !px-3 sm:!py-2.5 sm:!px-4 inline-flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4 text-[#10B981]" />
           <span>New Goal</span>
@@ -115,9 +115,9 @@ function DashboardContent() {
       </div>
 
       {/* ── Level 1 Signature Element: 3D Credit-Card Vault Hero ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
         {/* Physical 3D Commitment Card */}
-        <div className="lg:col-span-5 flex justify-center">
+        <div className="lg:col-span-5 flex justify-center w-full">
           <CommitmentCard
             stakeAmount={4250}
             goalTitle="Daily Morning Meditation & Focus"
@@ -127,7 +127,7 @@ function DashboardContent() {
         </div>
 
         {/* Hero Action & Countdown */}
-        <div className="lg:col-span-7 bg-[#12181E] border border-[#1E293B] rounded-2xl p-6 space-y-5">
+        <div className="lg:col-span-7 bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 sm:p-6 space-y-4 sm:space-y-5">
           <div className="flex items-center justify-between">
             <span className="type-label text-[#F59E0B]">
               VERIFICATION WINDOW OPEN
@@ -139,7 +139,7 @@ function DashboardContent() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="type-heading text-lg text-white">
+              <h2 className="type-heading text-base sm:text-lg text-white">
                 Daily Morning Meditation & Focus
               </h2>
               <p className="type-body text-xs mt-1">
@@ -148,22 +148,22 @@ function DashboardContent() {
             </div>
             
             {/* Ticker */}
-            <div className="shrink-0">
+            <div className="shrink-0 flex justify-center">
               <FlipCountdown label="AUTO-FORFEIT" />
             </div>
           </div>
 
           {/* THE ONE HERO MOMENT: Verify Now Button with Physical Sweep */}
-          <div className="pt-2 flex items-center gap-3">
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
             <Link
               href="/goals/demo-1/tasks/task-101/submit"
-              className="verify-btn flex-1 text-center"
+              className="verify-btn flex-1 text-center text-xs sm:text-sm !py-3 sm:!py-3.5"
             >
               Verify Milestone Now
             </Link>
             <Link
               href="/goals/demo-1"
-              className="btn-glass !py-3.5 !px-4 text-xs font-mono"
+              className="btn-glass !py-3 sm:!py-3.5 !px-4 text-xs font-mono text-center"
             >
               Roadmap
             </Link>
@@ -172,37 +172,37 @@ function DashboardContent() {
       </div>
 
       {/* ── Level 2: Flat Stat Tiles (No glow, no drop-shadow) ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
-          <span className="type-label">CAPITAL PROTECTED</span>
-          <div className="type-data">₹ 4,250</div>
-          <span className="type-body text-[11px]">In Escrow Trust</span>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-28 sm:h-32">
+          <span className="type-label text-[10px] sm:text-[11px]">CAPITAL PROTECTED</span>
+          <div className="type-data text-lg sm:text-2xl">₹ 4,250</div>
+          <span className="type-body text-[10px] sm:text-[11px]">In Escrow Trust</span>
         </div>
 
-        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
-          <span className="type-label">SUCCESS RATE</span>
-          <div className="type-data">94%</div>
-          <span className="type-body text-[11px]">Top 5% Protocol</span>
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-28 sm:h-32">
+          <span className="type-label text-[10px] sm:text-[11px]">SUCCESS RATE</span>
+          <div className="type-data text-lg sm:text-2xl">94%</div>
+          <span className="type-body text-[10px] sm:text-[11px]">Top 5% Protocol</span>
         </div>
 
-        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
-          <span className="type-label">STAKE REFUNDED</span>
-          <div className="type-data">₹ 3,150</div>
-          <span className="type-body text-[11px]">Returned to You</span>
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-28 sm:h-32">
+          <span className="type-label text-[10px] sm:text-[11px]">STAKE REFUNDED</span>
+          <div className="type-data text-lg sm:text-2xl">₹ 3,150</div>
+          <span className="type-body text-[10px] sm:text-[11px]">Returned to You</span>
         </div>
 
-        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
-          <span className="type-label">ACTIVE STREAK</span>
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-28 sm:h-32">
+          <span className="type-label text-[10px] sm:text-[11px]">ACTIVE STREAK</span>
           {/* Active streak gets emerald accent color */}
-          <div className="type-data !text-[#10B981]">14 Days</div>
-          <span className="type-body text-[11px]">Zero missed steps</span>
+          <div className="type-data text-lg sm:text-2xl !text-[#10B981]">14 Days</div>
+          <span className="type-body text-[10px] sm:text-[11px]">Zero missed steps</span>
         </div>
       </div>
 
       {/* ── Level 2: Active Commitment Vaults ── */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="type-heading text-base text-white">Active Commitments</h3>
+          <h3 className="type-heading text-sm sm:text-base text-white">Active Commitments</h3>
           <Link
             href="/goals"
             className="type-label text-[#10B981] hover:underline inline-flex items-center gap-1 normal-case font-mono"
@@ -216,10 +216,10 @@ function DashboardContent() {
           {goals.map((g) => (
             <div
               key={g.id}
-              className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-64 hover:border-[#334155] transition-colors"
+              className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-56 sm:h-64 hover:border-[#334155] transition-colors"
             >
               <div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <span className="type-label text-[10px] px-2 py-0.5 rounded bg-[#090D10] border border-[#1E293B]">
                     {g.category === "study" ? "Study Quiz" : g.category === "business_creative" ? "Code Review" : "GPS Photo"}
                   </span>
@@ -233,17 +233,17 @@ function DashboardContent() {
                 </h4>
               </div>
 
-              <div className="py-3 flex items-center justify-between border-y border-[#1E293B]">
+              <div className="py-2.5 sm:py-3 flex items-center justify-between border-y border-[#1E293B]">
                 <div className="space-y-0.5">
-                  <span className="type-body text-[11px] block">Progress</span>
+                  <span className="type-body text-[10px] sm:text-[11px] block">Progress</span>
                   <span className="font-mono text-xs font-bold text-white">
                     {g.completedTasks} / {g.totalTasks} Tasks
                   </span>
                 </div>
                 <ProgressRing
                   progress={g.progress}
-                  size={46}
-                  strokeWidth={5}
+                  size={42}
+                  strokeWidth={4.5}
                   label={`${g.progress}%`}
                   color={g.progress >= 70 ? "emerald" : "amber"}
                 />
@@ -271,7 +271,7 @@ function DashboardContent() {
       {/* ── Level 2: Financial Audit Ledger ── */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="type-heading text-base text-white">Financial Audit Ledger</h3>
+          <h3 className="type-heading text-sm sm:text-base text-white">Financial Audit Ledger</h3>
           <span className="type-label">Automated Escrow Logs</span>
         </div>
 
@@ -283,11 +283,11 @@ function DashboardContent() {
             return (
               <div
                 key={log.id}
-                className="p-4 sm:p-5 flex items-center justify-between hover:bg-white/[0.01] transition-colors"
+                className="p-3.5 sm:p-4 sm:p-5 flex items-center justify-between hover:bg-white/[0.01] transition-colors"
               >
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-3 sm:gap-3.5">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center ${
                       isRefund
                         ? "bg-[#10B981]/15 text-[#10B981]"
                         : isForfeit
@@ -304,14 +304,14 @@ function DashboardContent() {
                     )}
                   </div>
                   <div>
-                    <p className="type-heading text-sm text-white">{log.title}</p>
-                    <p className="type-body text-[11px] font-mono mt-0.5">{log.date}</p>
+                    <p className="type-heading text-xs sm:text-sm text-white">{log.title}</p>
+                    <p className="type-body text-[10px] sm:text-[11px] font-mono mt-0.5">{log.date}</p>
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <p
-                    className={`font-mono text-sm font-bold ${
+                    className={`font-mono text-xs sm:text-sm font-bold ${
                       isRefund
                         ? "text-[#10B981]"
                         : isForfeit
@@ -321,7 +321,7 @@ function DashboardContent() {
                   >
                     {isRefund ? `+₹${log.amount}` : `-₹${log.amount}`}
                   </p>
-                  <span className="type-label text-[10px]">
+                  <span className="type-label text-[9px] sm:text-[10px]">
                     {isRefund ? "Refunded" : isForfeit ? "Forfeited" : "Held in Escrow"}
                   </span>
                 </div>

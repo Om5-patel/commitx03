@@ -79,14 +79,14 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
 
   if (success) {
     return (
-      <div className="p-12 rounded-3xl bg-[#12181E] border border-[#10B981]/50 shadow-[0_0_50px_rgba(16,185,129,0.2)] max-w-lg mx-auto text-center flex flex-col items-center gap-6 my-16">
-        <div className="w-20 h-20 bg-[#10B981]/20 text-[#10B981] rounded-full flex items-center justify-center border border-[#10B981]/40">
-          <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
+      <div className="p-8 sm:p-12 rounded-2xl bg-[#12181E] border border-[#10B981]/50 max-w-lg mx-auto text-center flex flex-col items-center gap-4 my-16 px-4">
+        <div className="w-16 h-16 bg-[#10B981]/20 text-[#10B981] rounded-full flex items-center justify-center border border-[#10B981]/40">
+          <CheckCircle2 className="w-8 h-8 stroke-[2.5]" />
         </div>
-        <h2 className="font-sans text-3xl font-extrabold text-[#F8FAFC]">
+        <h2 className="type-heading text-2xl text-white">
           Milestone Verified!
         </h2>
-        <p className="text-xs font-mono text-[#94A3B8] leading-relaxed">
+        <p className="type-body text-xs font-mono leading-relaxed">
           Your ₹{task?.stake_amount || 150} stake has been unlocked and credited back to your account. Returning to vault...
         </p>
       </div>
@@ -96,12 +96,12 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
   const method = task?.verification_method || "photo";
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-8 space-y-5">
       <Link
         href={`/goals/${goalId}`}
-        className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors mb-2"
+        className="inline-flex items-center gap-1.5 type-label text-[#94A3B8] hover:text-[#10B981] transition-colors"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-3.5 h-3.5" />
         <span>BACK TO COMMITMENT VAULT</span>
       </Link>
 

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CATEGORY_LABELS } from "@/lib/types";
-import TiltCard from "@/components/ui/TiltCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 import { PlusCircle, Lock, ArrowRight, Loader2 } from "lucide-react";
 
@@ -74,22 +73,22 @@ export default function GoalsListPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E293B] pb-6">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 md:pb-8 space-y-6 sm:space-y-8">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E293B] pb-4 sm:pb-6">
         <div>
-          <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+          <span className="type-label text-[#10B981]">
             ESCROW VAULT DIRECTORY
           </span>
-          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">
             Active Commitments
           </h1>
         </div>
 
         <Link
           href="/goals/new"
-          className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5 inline-flex items-center gap-2"
+          className="btn-glass text-xs font-mono uppercase tracking-wider !py-2.5 !px-4 inline-flex items-center gap-2"
         >
-          <PlusCircle className="w-4 h-4" />
+          <PlusCircle className="w-4 h-4 text-[#10B981]" />
           <span>Create New Vault</span>
         </Link>
       </header>
@@ -99,26 +98,26 @@ export default function GoalsListPage() {
           <Loader2 className="w-8 h-8 text-[#10B981] animate-spin" />
         </div>
       ) : goals.length === 0 ? (
-        <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
-          <div className="w-16 h-16 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 stroke-[2.5]" />
+        <div className="p-8 sm:p-12 text-center bg-[#12181E] border border-[#1E293B] rounded-2xl max-w-lg mx-auto">
+          <div className="w-12 h-12 bg-[#10B981]/15 text-[#10B981] rounded-xl flex items-center justify-center mx-auto mb-3">
+            <Lock className="w-6 h-6 stroke-[2.5]" />
           </div>
-          <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
+          <h3 className="type-heading text-lg text-white mb-2">
             No Active Commitment Vaults
           </h3>
-          <p className="text-xs text-[#94A3B8] mb-6 leading-relaxed">
+          <p className="type-body text-xs mb-5 leading-relaxed">
             Lock your financial capital in escrow to guarantee focus on your highest-priority ambitions.
           </p>
           <Link
             href="/goals/new"
-            className="btn-primary text-xs !py-3 !px-5 inline-flex items-center gap-2"
+            className="verify-btn text-xs !py-2.5 !px-5 inline-flex items-center gap-2"
           >
             <span>Create Your First Goal</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </TiltCard>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {goals.map((goal) => {
             const completed = (goal.tasks || []).filter(
               (t: any) => t.status === "verified_pass"
@@ -127,53 +126,53 @@ export default function GoalsListPage() {
             const pct = Math.round((completed / total) * 100);
 
             return (
-              <TiltCard
+              <div
                 key={goal.id}
-                className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-80"
+                className="p-5 bg-[#12181E] border border-[#1E293B] rounded-2xl flex flex-col justify-between h-64 hover:border-[#334155] transition-colors"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#10B981] bg-[#10B981]/15 border border-[#10B981]/30 px-2.5 py-0.5 rounded-full">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="type-label text-[10px] px-2 py-0.5 rounded bg-[#090D10] border border-[#1E293B]">
                       {CATEGORY_LABELS[goal.category] || goal.category}
                     </span>
-                    <span className="font-mono text-sm font-black text-[#10B981]">
-                      ₹{goal.total_stake} Staked
+                    <span className="font-mono text-xs font-bold text-[#10B981]">
+                      ₹{goal.total_stake}
                     </span>
                   </div>
 
-                  <h3 className="font-sans font-bold text-lg text-[#F8FAFC] line-clamp-2">
+                  <h3 className="type-heading text-sm text-white line-clamp-2">
                     {goal.title}
                   </h3>
                   {goal.description && (
-                    <p className="text-[#94A3B8] text-xs line-clamp-2 mt-2 leading-relaxed">
+                    <p className="type-body text-xs line-clamp-2 mt-1.5 leading-relaxed">
                       {goal.description}
                     </p>
                   )}
                 </div>
 
-                <div className="py-4 flex items-center justify-between border-y border-[#1E293B]/60">
-                  <div className="text-xs font-mono space-y-1">
-                    <p className="text-[#94A3B8]">Progress:</p>
-                    <p className="text-[#F8FAFC] font-bold">{completed} / {total} Verified</p>
+                <div className="py-2.5 flex items-center justify-between border-y border-[#1E293B]">
+                  <div className="space-y-0.5">
+                    <span className="type-body text-[10px] block">Progress</span>
+                    <span className="font-mono text-xs font-bold text-white">{completed} / {total} Verified</span>
                   </div>
                   <ProgressRing
                     progress={pct}
-                    size={65}
-                    strokeWidth={6}
+                    size={42}
+                    strokeWidth={4.5}
                     label={`${pct}%`}
                     color={pct >= 60 ? "emerald" : "amber"}
                   />
                 </div>
 
-                <div className="flex items-center gap-2 pt-2">
+                <div className="pt-1">
                   <Link
                     href={`/goals/${goal.id}`}
-                    className="btn-primary w-full text-center !py-2.5 text-xs font-mono"
+                    className="btn-glass w-full text-center !py-2 text-xs font-mono"
                   >
                     Open Commitment Vault
                   </Link>
                 </div>
-              </TiltCard>
+              </div>
             );
           })}
         </div>
