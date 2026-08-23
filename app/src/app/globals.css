@@ -1,0 +1,196 @@
+/* ── Google Fonts & Material Symbols (must precede theme rules) ── */
+@import url("https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+
+@import "tailwindcss";
+
+/* ============================================================
+   CommitX — Terra Design System
+   "Rooted Warmth" — Organic, earthy, premium
+   ============================================================ */
+
+@theme inline {
+  /* ── Primary (Forest Green) ── */
+  --color-primary: #4a7c59;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #78a886;
+  --color-on-primary-container: #d8f0de;
+  --color-primary-fixed: #c8e8d0;
+  --color-primary-fixed-dim: #8ecf9e;
+  --color-on-primary-fixed: #002110;
+  --color-on-primary-fixed-variant: #2a6038;
+  --color-inverse-primary: #8ecf9e;
+
+  /* ── Secondary (Warm Stone) ── */
+  --color-secondary: #6b6358;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f0e8db;
+  --color-on-secondary-container: #5e5548;
+  --color-secondary-fixed: #f0e8db;
+  --color-secondary-fixed-dim: #d4ccbf;
+  --color-on-secondary-fixed: #1e1a13;
+  --color-on-secondary-fixed-variant: #4a4538;
+
+  /* ── Tertiary (Warm Amber) ── */
+  --color-tertiary: #705c30;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #c4a66a;
+  --color-on-tertiary-container: #554020;
+  --color-tertiary-fixed: #f8e0a8;
+  --color-tertiary-fixed-dim: #dcc48e;
+  --color-on-tertiary-fixed: #221a05;
+  --color-on-tertiary-fixed-variant: #554020;
+
+  /* ── Error ── */
+  --color-error: #b83230;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad8;
+  --color-on-error-container: #690005;
+
+  /* ── Surface & Background ── */
+  --color-background: #faf6f0;
+  --color-on-background: #2e3230;
+  --color-surface: #faf6f0;
+  --color-on-surface: #2e3230;
+  --color-on-surface-variant: #4a4e4a;
+  --color-surface-variant: #e4e0d8;
+  --color-surface-bright: #faf6f0;
+  --color-surface-dim: #dbd7cf;
+  --color-surface-tint: #4a7c59;
+  --color-surface-container: #f0ece4;
+  --color-surface-container-low: #f5f1ea;
+  --color-surface-container-high: #eae6de;
+  --color-surface-container-highest: #e4e0d8;
+  --color-surface-container-lowest: #ffffff;
+  --color-inverse-surface: #2e3230;
+  --color-inverse-on-surface: #f5f0e8;
+
+  /* ── Outline ── */
+  --color-outline: #74796e;
+  --color-outline-variant: #c4c8bc;
+
+  /* ── Typography ── */
+  --font-headline: "Literata", serif;
+  --font-display: "Literata", serif;
+  --font-body: "Nunito Sans", sans-serif;
+  --font-label: "Nunito Sans", sans-serif;
+
+  /* ── Border Radius ── */
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 3rem;
+  --radius-full: 9999px;
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+
+body {
+  background: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
+}
+
+/* ── Selection ── */
+::selection {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+/* ── Material Symbols Base ── */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.icon-fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* ============================================================
+   Custom Utilities
+   ============================================================ */
+
+/* Organic shadow — soft, natural, warm */
+.shadow-organic {
+  box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06);
+}
+
+.shadow-organic-lg {
+  box-shadow: 0 8px 40px rgba(46, 50, 48, 0.08);
+}
+
+/* Organic gradient — radial, subtle, layered */
+.bg-organic-gradient {
+  background:
+    radial-gradient(circle at top right, rgba(120, 168, 134, 0.15), transparent 60%),
+    radial-gradient(circle at bottom left, rgba(196, 166, 106, 0.1), transparent 50%);
+}
+
+/* Camera overlay gradient */
+.camera-overlay-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(46, 50, 48, 0.6) 0%,
+    rgba(46, 50, 48, 0) 20%,
+    rgba(46, 50, 48, 0) 70%,
+    rgba(46, 50, 48, 0.8) 100%
+  );
+}
+
+/* ── Scrollbar Styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-container-low);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline);
+}
+
+/* ── Hide number spinners ── */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ── Date picker icon styling ── */
+::-webkit-calendar-picker-indicator {
+  filter: opacity(0.5);
+  cursor: pointer;
+}
+
+/* ── Smooth page transitions ── */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
