@@ -6,33 +6,42 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-commitx.supabase.co";
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
 
-  // Refreshing the auth token
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return supabaseResponse;
+  }
+
+  try {
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value)
+            );
+            supabaseResponse = NextResponse.next({
+              request,
+            });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              supabaseResponse.cookies.set(name, value, options)
+            );
+          },
+        },
+      }
+    );
+
+    // Refreshing the auth token
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
 
   // Protected routes - redirect to login if not authenticated
   const protectedPaths = ["/dashboard", "/goals", "/profile", "/disputes", "/notifications"];
@@ -74,5 +83,10 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  return supabaseResponse;
+    return supabaseResponse;
+  } catch (error) {
+    console.error("Middleware auth update error:", error);
+    return supabaseResponse;
+  }
 }
+
