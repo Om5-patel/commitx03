@@ -2,7 +2,11 @@
   "name": "commitx-root",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "app"
+  ],
   "scripts": {
+    "postinstall": "npm --prefix app install",
     "dev": "npm --prefix app run dev",
     "build": "npm --prefix app run build",
     "start": "npm --prefix app run start",
