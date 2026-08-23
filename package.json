@@ -1,13 +1,12 @@
 {
-  "name": "commitx-root",
-  "version": "1.0.0",
+  "name": "app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd app && npm run dev",
-    "build": "cd app && npm run build",
-    "start": "cd app && npm run start",
-    "lint": "cd app && npm run lint",
-    "postinstall": "cd app && npm install"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
