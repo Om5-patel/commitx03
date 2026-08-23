@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   Banknote,
@@ -121,7 +120,6 @@ export default function HowItWorksPage() {
           </span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-4">
-          <ThemeToggle />
           <Link
             href="/login"
             className="type-heading text-xs hover:text-white px-2.5 py-1.5 transition-colors"

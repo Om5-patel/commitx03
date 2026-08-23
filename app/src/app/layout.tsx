@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import BackgroundMesh from "@/components/ui/BackgroundMesh";
 import { ToastProvider } from "@/components/ui/CinematicToast";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -55,12 +54,10 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${jetbrainsMono.variable} dark h-full`}
     >
       <body className="min-h-full flex flex-col bg-[#090D10] text-[#F8FAFC] font-sans antialiased relative selection:bg-[#10B981] selection:text-[#090D10]">
-        <ThemeProvider>
-          <ToastProvider>
-            <BackgroundMesh />
-            {children}
-          </ToastProvider>
-        </ThemeProvider>
+        <ToastProvider>
+          <BackgroundMesh />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

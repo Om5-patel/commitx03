@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import CommitmentCard from "@/components/ui/CommitmentCard";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   ArrowRight,
@@ -47,7 +46,6 @@ export default function LandingPage() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <ThemeToggle />
             <Link href="/login" className="type-heading text-xs hover:text-white px-2.5 py-1.5 transition-colors">
               Log in
             </Link>

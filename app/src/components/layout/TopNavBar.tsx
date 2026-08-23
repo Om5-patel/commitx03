@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import {
   Lock,
   LayoutDashboard,
@@ -24,7 +23,7 @@ export default function TopNavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#090D10]/90 dark:bg-[#090D10]/90 light:bg-white/90 backdrop-blur-md border-b border-[#1E293B] transition-colors">
+    <header className="sticky top-0 z-50 w-full bg-[#090D10]/90 backdrop-blur-md border-b border-[#1E293B]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-6 sm:gap-8">
@@ -64,10 +63,8 @@ export default function TopNavBar() {
           </nav>
         </div>
 
-        {/* Right Actions: Theme Toggle + New Goal + Notifications + Profile */}
+        {/* Right Actions: New Goal + Notifications + Profile */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          <ThemeToggle />
-
           <Link
             href="/goals/new"
             className="hidden sm:inline-flex btn-glass text-xs font-mono !py-1.5 !px-3 items-center gap-1.5"
