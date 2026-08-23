@@ -1,174 +1,163 @@
-/* ── Google Fonts & Material Symbols Fallback ── */
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
-
 @import "tailwindcss";
 
-/* ============================================================
-   CommitX — Obsidian & Emerald Fintech Design System (2027)
-   Strict Token Specification — Pure Precision & Neon Depth
-   ============================================================ */
+@layer base {
+  :root {
+    --bg-app: #090D10;
+    --surface-card: #12181E;
+    --border-subtle: #1E293B;
+    --accent-emerald: #10B981;
+    --accent-amber: #F59E0B;
+    --accent-rose: #F43F5E;
+    --accent-cyan: #06B6D4;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
 
-@theme inline {
-  /* ── Core Backgrounds & Surfaces ── */
-  --color-bg-app: #090D10;
-  --color-surface-card: #12181E;
-  --color-surface-card-hover: #172028;
-  --color-surface-glass: rgba(18, 24, 30, 0.75);
-  --color-surface-glass-modal: rgba(18, 24, 30, 0.85);
-  --color-surface-border: #1E293B;
-  --color-surface-border-light: rgba(255, 255, 255, 0.08);
-
-  /* ── Status & Brand Accents ── */
-  --color-accent-emerald: #10B981;
-  --color-accent-emerald-glow: rgba(16, 185, 129, 0.25);
-  --color-accent-amber: #F59E0B;
-  --color-accent-amber-glow: rgba(245, 158, 11, 0.25);
-  --color-accent-rose: #F43F5E;
-  --color-accent-rose-glow: rgba(244, 63, 94, 0.25);
-  --color-accent-cyan: #06B6D4;
-  --color-accent-cyan-glow: rgba(6, 182, 212, 0.25);
-
-  /* ── Text / Foreground ── */
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
-  --color-text-dim: #475569;
-
-  /* ── Typography ── */
-  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  body {
+    background-color: var(--bg-app);
+    color: #F8FAFC;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 }
 
-/* ============================================================
-   Base Styles & Material Symbols Fallback
-   ============================================================ */
-
-:root {
-  --bg-app: #090D10;
-  --surface-card: #12181E;
-  --surface-border: #1E293B;
-  --surface-glass: rgba(18, 24, 30, 0.75);
-  --accent-emerald: #10B981;
-  --accent-emerald-glow: rgba(16, 185, 129, 0.25);
-  --accent-amber: #F59E0B;
-  --accent-rose: #F43F5E;
-  --accent-cyan: #06B6D4;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+/* ── Typography Discipline (3 Bands Only) ── */
+.type-data {
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-body {
-  background-color: var(--bg-app);
-  color: #F8FAFC;
+.type-heading {
   font-family: var(--font-sans);
-  line-height: 1.5;
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.3;
 }
 
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined', sans-serif !important;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
+.type-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.type-body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+/* ── Signature Element: The 3D Commitment Vault Card ── */
+.commitment-card-wrapper {
+  perspective: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.commitment-card {
+  width: 340px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.commitment-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #12181E 0%, #1a2535 50%, #0f1a14 100%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4), 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 20px;
+  user-select: none;
+}
+
+/* Holographic Foil Layer tracking mouse coordinates */
+.commitment-card-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(16, 185, 129, 0.08) 0%,
+    rgba(6, 182, 212, 0.04) 40%,
+    transparent 70%
+  );
+  border-radius: 16px;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Matte diagonal texture overlay at 2% opacity */
+.commitment-card-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #ffffff 0,
+    #ffffff 1px,
+    transparent 0,
+    transparent 4px
+  );
+  z-index: 2;
+}
+
+/* Card Content Emboss */
+.card-amount-emboss {
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ── Hero Element: The Verify Button ── */
+.verify-btn {
+  background: #10B981;
+  color: #090D10;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: none;
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-  vertical-align: middle;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 80ms ease, background-color 0.2s ease;
+  user-select: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  letter-spacing: -0.025em;
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-  font-feature-settings: "tnum" 1, "zero" 1;
-}
-
-/* ── Selection ── */
-::selection {
-  background-color: var(--accent-emerald);
-  color: #090D10;
-}
-
-/* ============================================================
-   Living Background Grid & Ambient Mesh
-   ============================================================ */
-
-.bg-grid-mesh {
-  background-image: 
-    linear-gradient(rgba(30, 41, 59, 0.35) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(30, 41, 59, 0.35) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-@keyframes meshDriftEmerald {
-  0% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(120px, 60px) scale(1.15); }
-  100% { transform: translate(-60px, 100px) scale(0.95); }
-}
-
-@keyframes meshDriftCyan {
-  0% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(-100px, -80px) scale(1.1); }
-  100% { transform: translate(80px, -40px) scale(1.05); }
-}
-
-.mesh-orb-emerald {
-  animation: meshDriftEmerald 45s ease-in-out infinite alternate;
-}
-
-.mesh-orb-cyan {
-  animation: meshDriftCyan 55s ease-in-out infinite alternate;
-}
-
-/* ============================================================
-   3D Depth & Specular Sheen Layer System
-   ============================================================ */
-
-.card-3d {
-  background: var(--surface-card);
-  border: 1px solid var(--surface-border);
-  border-radius: 1.25rem;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
-              box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1),
-              border-color 0.3s ease;
-}
-
-.card-3d:hover {
-  transform: translateY(-4px) rotateY(2deg) rotateX(-1.5deg);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7),
-              0 0 25px rgba(16, 185, 129, 0.08);
-}
-
-/* Specular light sheen overlay */
-.specular-sheen {
-  position: relative;
-  overflow: hidden;
-}
-
-.specular-sheen::before {
-  content: "";
+.verify-btn::after {
+  content: '';
   position: absolute;
   top: 0;
   left: -100%;
@@ -177,213 +166,119 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.2),
     transparent
   );
-  transform: skewX(-25deg);
-  pointer-events: none;
-  transition: left 0.75s ease;
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
 }
 
-.specular-sheen:hover::before {
-  left: 200%;
+.verify-btn:hover::after {
+  left: 150%;
 }
 
-/* ============================================================
-   Neon Glow & Accent Depths
-   ============================================================ */
-
-.glow-emerald {
-  box-shadow: 0 0 0 1px #10B981, 
-              0 0 14px rgba(16, 185, 129, 0.4), 
-              0 0 45px rgba(16, 185, 129, 0.15);
+.verify-btn:active {
+  transform: scale(0.96);
 }
 
-.glow-emerald:hover {
-  box-shadow: 0 0 0 1px #10B981, 
-              0 0 22px rgba(16, 185, 129, 0.6), 
-              0 0 65px rgba(16, 185, 129, 0.25);
-}
-
-.glow-amber {
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5), 
-              0 0 24px rgba(245, 158, 11, 0.2);
-}
-
-.glow-amber:hover {
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.7), 
-              0 0 36px rgba(245, 158, 11, 0.3);
-}
-
-.glow-rose {
-  box-shadow: 0 0 8px rgba(244, 63, 94, 0.5), 
-              0 0 24px rgba(244, 63, 94, 0.2);
-}
-
-.glow-rose:hover {
-  box-shadow: 0 0 14px rgba(244, 63, 94, 0.7), 
-              0 0 36px rgba(244, 63, 94, 0.3);
-}
-
-.glow-cyan {
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), 
-              0 0 30px rgba(6, 182, 212, 0.15);
-}
-
-/* ============================================================
-   Glassmorphism Refinement
-   ============================================================ */
-
-.glass-panel {
-  background: rgba(18, 24, 30, 0.75);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* ============================================================
-   Tactile Micro-Interaction Buttons & Inputs
-   ============================================================ */
-
-.btn-primary {
-  background: #10B981;
-  color: #090D10;
-  font-weight: 700;
-  border-radius: 0.875rem;
-  padding: 0.75rem 1.5rem;
-  box-shadow: 0 0 0 1px #10B981, 0 0 14px rgba(16, 185, 129, 0.4), 0 0 40px rgba(16, 185, 129, 0.15);
-  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 0 1px #10B981, 0 0 22px rgba(16, 185, 129, 0.6), 0 0 50px rgba(16, 185, 129, 0.25);
-  filter: brightness(1.05);
-}
-
-.btn-primary:active {
-  transform: translateY(0px) scale(0.97);
-}
-
-.btn-destructive {
-  background: #F43F5E;
-  color: #FFFFFF;
-  font-weight: 700;
-  border-radius: 0.875rem;
-  padding: 0.75rem 1.5rem;
-  box-shadow: 0 0 8px rgba(244, 63, 94, 0.5), 0 0 24px rgba(244, 63, 94, 0.2);
-  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.btn-destructive:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 14px rgba(244, 63, 94, 0.7), 0 0 36px rgba(244, 63, 94, 0.3);
-}
-
-.btn-destructive:active {
-  transform: translateY(0px) scale(0.97);
-}
-
+/* Standard quiet buttons */
 .btn-glass {
-  background: rgba(255, 255, 255, 0.05);
-  color: #F8FAFC;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-weight: 600;
-  border-radius: 0.875rem;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
+  background: #12181E;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid #1E293B;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .btn-glass:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  border-color: #334155;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .btn-glass:active {
-  transform: translateY(0px) scale(0.97);
+  transform: scale(0.98);
 }
 
-/* ============================================================
-   Marching Ants & Isometric Roadmap Animation
-   ============================================================ */
-
-@keyframes marchingAnts {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 0; }
-}
-
-.marching-ants-line {
-  background-image: repeating-linear-gradient(
-    90deg,
-    #10B981,
-    #10B981 8px,
-    transparent 8px,
-    transparent 16px
-  );
-  background-size: 32px 2px;
-  animation: marchingAnts 1.5s linear infinite;
-}
-
-/* ============================================================
-   Scrollbars & Input Cleanups
-   ============================================================ */
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #090D10;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-::-webkit-calendar-picker-indicator {
-  filter: invert(1) opacity(0.6);
+.btn-destructive {
+  background: #12181E;
+  color: #F43F5E;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-destructive:hover {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: #F43F5E;
+}
+
+/* ── Physical Milestone Rail ── */
+.milestone-rail-track {
+  height: 4px;
+  background: #1E293B;
+  border-radius: 2px;
+  position: relative;
+  width: 100%;
+}
+
+.milestone-rail-fill {
+  background: #10B981;
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.milestone-node-current {
+  animation: node-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0%, 100% {
+    border-color: #F59E0B;
+  }
+  50% {
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+}
+
+/* Milestone Tooltip */
+.milestone-tooltip {
+  background: #12181E;
+  border: 1px solid #1E293B;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #F8FAFC;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  z-index: 30;
+}
+
+.milestone-node-container:hover .milestone-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
 }

@@ -1,28 +1,17 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import confetti from "canvas-confetti";
-import TiltCard from "@/components/ui/TiltCard";
+import CommitmentCard from "@/components/ui/CommitmentCard";
 import FlipCountdown from "@/components/ui/FlipCountdown";
 import ProgressRing from "@/components/ui/ProgressRing";
-import CountUpNumber from "@/components/ui/CountUpNumber";
 import {
-  PlusCircle,
-  Clock,
-  Camera,
-  Shield,
-  TrendingUp,
-  Flame,
+  Plus,
   ArrowRight,
   ArrowDownLeft,
-  Lock,
   X,
-  FolderKanban,
-  Receipt,
+  Lock,
   Loader2,
-  Banknote,
 } from "lucide-react";
 
 interface GoalItem {
@@ -33,7 +22,6 @@ interface GoalItem {
   totalTasks: number;
   completedTasks: number;
   stake: number;
-  nextTaskDeadline?: string;
   nextTaskId?: string;
 }
 
@@ -46,9 +34,6 @@ interface LogItem {
 }
 
 function DashboardContent() {
-  const searchParams = useSearchParams();
-  const isNewGoal = searchParams.get("new_goal");
-
   const [goals] = useState<GoalItem[]>([
     {
       id: "demo-1",
@@ -82,11 +67,6 @@ function DashboardContent() {
     },
   ]);
 
-  const [totalCapital] = useState<number>(4250);
-  const [successRate] = useState<number>(94);
-  const [refundedTotal] = useState<number>(3150);
-  const [streakDays] = useState<number>(14);
-
   const [treasuryLogs] = useState<LogItem[]>([
     {
       id: "log-1",
@@ -111,287 +91,243 @@ function DashboardContent() {
     },
   ]);
 
-  useEffect(() => {
-    if (isNewGoal) {
-      confetti({
-        particleCount: 100,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#10B981", "#F59E0B", "#06B6D4", "#F8FAFC"],
-      });
-    }
-  }, [isNewGoal]);
-
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       
-      {/* ── 1. Top Section: Header & Quick Action ── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#1E293B] pb-6">
+      {/* ── Level 1: Header Bar & New Goal Action ── */}
+      <div className="flex items-center justify-between border-b border-[#1E293B] pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
-              PORTFOLIO ACCOUNTABILITY VAULT
-            </span>
-          </div>
-          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          <span className="type-label text-[#10B981]">
+            PORTFOLIO ACCOUNTABILITY VAULT
+          </span>
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold text-[#FFFFFF] tracking-tight mt-0.5">
             Commitment Terminal
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link href="/goals/new" className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5 inline-flex items-center gap-2">
-            <PlusCircle className="w-4 h-4" />
-            <span>Lock New Goal</span>
-          </Link>
-        </div>
+        <Link
+          href="/goals/new"
+          className="btn-glass text-xs font-mono uppercase tracking-wider !py-2.5 !px-4 inline-flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4 text-[#10B981]" />
+          <span>New Goal</span>
+        </Link>
       </div>
 
-      {/* ── 2. Urgent Active Commitment Card with 3D Flip Clock ── */}
-      <TiltCard glow="amber" className="p-8 bg-gradient-to-br from-[#12181E] via-[#12181E]/95 to-[#1A1A1A] border border-[#F59E0B]/40 shadow-[0_0_40px_rgba(245,158,11,0.12)]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left info */}
-          <div className="lg:col-span-6 space-y-4">
-            <div className="inline-flex items-center gap-2 bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 px-3.5 py-1 rounded-full text-xs font-mono font-bold">
-              <Clock className="w-3.5 h-3.5 animate-pulse" />
-              <span>VERIFICATION WINDOW OPEN</span>
-            </div>
+      {/* ── Level 1 Signature Element: 3D Credit-Card Vault Hero ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Physical 3D Commitment Card */}
+        <div className="lg:col-span-5 flex justify-center">
+          <CommitmentCard
+            stakeAmount={4250}
+            goalTitle="Daily Morning Meditation & Focus"
+            deadline="07d 14h"
+            vaultId="COMMITX VAULT"
+          />
+        </div>
 
-            <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
-              Daily Morning Meditation & Focus
-            </h2>
-
-            <p className="text-sm text-[#94A3B8] leading-relaxed">
-              Milestone 9 of 10: Complete today&apos;s check-in before the deadline ticker reaches zero to recover your ₹150 stake.
-            </p>
-
-            <div className="flex items-center gap-3 pt-2">
-              <Link
-                href="/goals/demo-1/tasks/task-101/submit"
-                className="btn-primary !py-3.5 !px-6 text-sm inline-flex items-center gap-2"
-              >
-                <Camera className="w-4 h-4" />
-                <span>Verify Milestone Now</span>
-              </Link>
-              <Link
-                href="/goals/demo-1"
-                className="btn-glass !py-3.5 !px-5 text-sm inline-flex items-center"
-              >
-                View Roadmap
-              </Link>
-            </div>
-          </div>
-
-          {/* Right: 3D Flip Clock Container */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center p-6 rounded-2xl bg-[#090D10]/80 border border-[#1E293B]">
-            <FlipCountdown label="ESCROW AUTO-FORFEIT TICKER" />
-            <span className="text-[11px] font-mono text-[#94A3B8] mt-3">
-              Stake at Risk: <strong className="text-[#F8FAFC]">₹150</strong> (100% Refund upon Pass)
+        {/* Hero Action & Countdown */}
+        <div className="lg:col-span-7 bg-[#12181E] border border-[#1E293B] rounded-2xl p-6 space-y-5">
+          <div className="flex items-center justify-between">
+            <span className="type-label text-[#F59E0B]">
+              VERIFICATION WINDOW OPEN
+            </span>
+            <span className="font-mono text-xs text-white/50">
+              Milestone 9 of 10
             </span>
           </div>
-        </div>
-      </TiltCard>
 
-      {/* ── 3. Four Metric Tiles with Count-Up & Watermarks ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          {
-            label: "TOTAL CAPITAL PROTECTED",
-            value: totalCapital,
-            prefix: "₹",
-            color: "text-[#10B981]",
-            glow: "emerald",
-            Icon: Shield,
-            sub: "Locked in Escrow",
-          },
-          {
-            label: "HISTORIC SUCCESS RATE",
-            value: successRate,
-            suffix: "%",
-            color: "text-[#F8FAFC]",
-            glow: "none",
-            Icon: TrendingUp,
-            sub: "Top 5% of Protocol",
-          },
-          {
-            label: "TOTAL STAKE REFUNDED",
-            value: refundedTotal,
-            prefix: "₹",
-            color: "text-[#06B6D4]",
-            glow: "cyan",
-            Icon: Banknote,
-            sub: "Returned to Account",
-          },
-          {
-            label: "CURRENT STREAK",
-            value: streakDays,
-            suffix: " Days",
-            color: "text-[#F59E0B]",
-            glow: "amber",
-            Icon: Flame,
-            sub: "Zero missed milestones",
-          },
-        ].map(({ label, value, prefix, suffix, color, glow, Icon, sub }, i) => (
-          <TiltCard key={i} glow={glow as any} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-44">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
-                {label}
-              </span>
-              <Icon className={`w-5 h-5 ${color}`} />
-            </div>
-
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CountUpNumber
-                value={value}
-                prefix={prefix}
-                suffix={suffix}
-                className={`text-3xl sm:text-4xl ${color}`}
-              />
-              <p className="text-xs font-mono text-[#64748B] mt-1">{sub}</p>
+              <h2 className="type-heading text-lg text-white">
+                Daily Morning Meditation & Focus
+              </h2>
+              <p className="type-body text-xs mt-1">
+                Complete check-in before expiry to unlock your ₹150 stake refund.
+              </p>
             </div>
-          </TiltCard>
-        ))}
+            
+            {/* Ticker */}
+            <div className="shrink-0">
+              <FlipCountdown label="AUTO-FORFEIT" />
+            </div>
+          </div>
+
+          {/* THE ONE HERO MOMENT: Verify Now Button with Physical Sweep */}
+          <div className="pt-2 flex items-center gap-3">
+            <Link
+              href="/goals/demo-1/tasks/task-101/submit"
+              className="verify-btn flex-1 text-center"
+            >
+              Verify Milestone Now
+            </Link>
+            <Link
+              href="/goals/demo-1"
+              className="btn-glass !py-3.5 !px-4 text-xs font-mono"
+            >
+              Roadmap
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* ── 4. Active Vault Commitments ── */}
-      <div className="space-y-6">
+      {/* ── Level 2: Flat Stat Tiles (No glow, no drop-shadow) ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
+          <span className="type-label">CAPITAL PROTECTED</span>
+          <div className="type-data">₹ 4,250</div>
+          <span className="type-body text-[11px]">In Escrow Trust</span>
+        </div>
+
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
+          <span className="type-label">SUCCESS RATE</span>
+          <div className="type-data">94%</div>
+          <span className="type-body text-[11px]">Top 5% Protocol</span>
+        </div>
+
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
+          <span className="type-label">STAKE REFUNDED</span>
+          <div className="type-data">₹ 3,150</div>
+          <span className="type-body text-[11px]">Returned to You</span>
+        </div>
+
+        <div className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-32">
+          <span className="type-label">ACTIVE STREAK</span>
+          {/* Active streak gets emerald accent color */}
+          <div className="type-data !text-[#10B981]">14 Days</div>
+          <span className="type-body text-[11px]">Zero missed steps</span>
+        </div>
+      </div>
+
+      {/* ── Level 2: Active Commitment Vaults ── */}
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <FolderKanban className="w-5 h-5 text-[#10B981]" />
-            <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Active Commitment Vaults</h3>
-          </div>
-          <Link href="/goals" className="text-xs font-mono text-[#10B981] hover:underline inline-flex items-center gap-1">
-            <span>View All Vaults</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+          <h3 className="type-heading text-base text-white">Active Commitments</h3>
+          <Link
+            href="/goals"
+            className="type-label text-[#10B981] hover:underline inline-flex items-center gap-1 normal-case font-mono"
+          >
+            <span>View All</span>
+            <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {goals.map((g) => {
-            const isStudy = g.category === "study";
-            const isWork = g.category === "business_creative";
-
-            return (
-              <TiltCard key={g.id} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-80">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#090D10] text-[#94A3B8] border border-[#1E293B]">
-                      {isStudy ? "AI Study Quiz" : isWork ? "Artifact / Code" : "GPS Photo"}
-                    </span>
-                    <span className="text-xs font-mono text-[#10B981] font-bold">
-                      ₹{g.stake} Staked
-                    </span>
-                  </div>
-
-                  <h4 className="font-sans text-lg font-bold text-[#F8FAFC] line-clamp-2">
-                    {g.title}
-                  </h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {goals.map((g) => (
+            <div
+              key={g.id}
+              className="bg-[#12181E] border border-[#1E293B] rounded-2xl p-5 flex flex-col justify-between h-64 hover:border-[#334155] transition-colors"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="type-label text-[10px] px-2 py-0.5 rounded bg-[#090D10] border border-[#1E293B]">
+                    {g.category === "study" ? "Study Quiz" : g.category === "business_creative" ? "Code Review" : "GPS Photo"}
+                  </span>
+                  <span className="font-mono text-xs text-[#10B981] font-bold">
+                    ₹{g.stake}
+                  </span>
                 </div>
 
-                <div className="py-4 flex items-center justify-between border-y border-[#1E293B]/60">
-                  <div className="text-xs font-mono space-y-1">
-                    <p className="text-[#94A3B8]">Completed:</p>
-                    <p className="text-[#F8FAFC] font-bold">{g.completedTasks} / {g.totalTasks} Tasks</p>
-                  </div>
-                  <ProgressRing
-                    progress={g.progress}
-                    size={75}
-                    strokeWidth={7}
-                    label={`${g.progress}%`}
-                    color={g.progress >= 70 ? "emerald" : "amber"}
-                  />
-                </div>
+                <h4 className="type-heading text-sm text-white line-clamp-2">
+                  {g.title}
+                </h4>
+              </div>
 
-                <div className="flex items-center gap-2 pt-2">
-                  <Link
-                    href={`/goals/${g.id}`}
-                    className="btn-glass flex-1 text-center !py-2.5 text-xs font-mono inline-flex items-center justify-center"
-                  >
-                    Details
-                  </Link>
-                  <Link
-                    href={`/goals/${g.id}/tasks/${g.nextTaskId || "t1"}/submit`}
-                    className="btn-primary flex-1 text-center !py-2.5 text-xs font-mono inline-flex items-center justify-center"
-                  >
-                    Submit Proof
-                  </Link>
+              <div className="py-3 flex items-center justify-between border-y border-[#1E293B]">
+                <div className="space-y-0.5">
+                  <span className="type-body text-[11px] block">Progress</span>
+                  <span className="font-mono text-xs font-bold text-white">
+                    {g.completedTasks} / {g.totalTasks} Tasks
+                  </span>
                 </div>
-              </TiltCard>
-            );
-          })}
+                <ProgressRing
+                  progress={g.progress}
+                  size={46}
+                  strokeWidth={5}
+                  label={`${g.progress}%`}
+                  color={g.progress >= 70 ? "emerald" : "amber"}
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <Link
+                  href={`/goals/${g.id}`}
+                  className="btn-glass flex-1 text-center !py-2 text-xs font-mono"
+                >
+                  View
+                </Link>
+                <Link
+                  href={`/goals/${g.id}/tasks/${g.nextTaskId || "t1"}/submit`}
+                  className="bg-[#10B981] text-[#090D10] font-semibold flex-1 text-center py-2 px-3 rounded-lg text-xs font-mono hover:bg-[#10B981]/90 transition-colors"
+                >
+                  Submit
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* ── 5. Treasury Ledger / Transaction Log ── */}
-      <div className="space-y-6">
+      {/* ── Level 2: Financial Audit Ledger ── */}
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-[#F59E0B]" />
-            <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Financial Audit Ledger</h3>
-          </div>
-          <span className="text-xs font-mono text-[#64748B]">Automated Escrow Logs</span>
+          <h3 className="type-heading text-base text-white">Financial Audit Ledger</h3>
+          <span className="type-label">Automated Escrow Logs</span>
         </div>
 
-        <div className="rounded-2xl bg-[#12181E] border border-[#1E293B] overflow-hidden">
-          <div className="divide-y divide-[#1E293B]">
-            {treasuryLogs.map((log) => {
-              const isRefund = log.type === "refund";
-              const isForfeit = log.type === "forfeiture";
+        <div className="rounded-2xl bg-[#12181E] border border-[#1E293B] divide-y divide-[#1E293B] overflow-hidden">
+          {treasuryLogs.map((log) => {
+            const isRefund = log.type === "refund";
+            const isForfeit = log.type === "forfeiture";
 
-              return (
-                <div key={log.id} className="p-4 sm:p-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${
-                        isRefund
-                          ? "bg-[#10B981]/15 text-[#10B981]"
-                          : isForfeit
-                          ? "bg-[#F43F5E]/15 text-[#F43F5E]"
-                          : "bg-[#F59E0B]/15 text-[#F59E0B]"
-                      }`}
-                    >
-                      {isRefund ? (
-                        <ArrowDownLeft className="w-5 h-5" />
-                      ) : isForfeit ? (
-                        <X className="w-5 h-5" />
-                      ) : (
-                        <Lock className="w-5 h-5" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-[#F8FAFC]">{log.title}</p>
-                      <p className="text-xs font-mono text-[#64748B] mt-0.5">{log.date}</p>
-                    </div>
+            return (
+              <div
+                key={log.id}
+                className="p-4 sm:p-5 flex items-center justify-between hover:bg-white/[0.01] transition-colors"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                      isRefund
+                        ? "bg-[#10B981]/15 text-[#10B981]"
+                        : isForfeit
+                        ? "bg-[#F43F5E]/15 text-[#F43F5E]"
+                        : "bg-[#F59E0B]/15 text-[#F59E0B]"
+                    }`}
+                  >
+                    {isRefund ? (
+                      <ArrowDownLeft className="w-4 h-4" />
+                    ) : isForfeit ? (
+                      <X className="w-4 h-4" />
+                    ) : (
+                      <Lock className="w-4 h-4" />
+                    )}
                   </div>
-
-                  <div className="text-right">
-                    <p
-                      className={`font-mono text-sm sm:text-base font-extrabold ${
-                        isRefund
-                          ? "text-[#10B981]"
-                          : isForfeit
-                          ? "text-[#F43F5E]"
-                          : "text-[#F59E0B]"
-                      }`}
-                    >
-                      {isRefund ? `+₹${log.amount}` : `-₹${log.amount}`}
-                    </p>
-                    <span
-                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                        isRefund
-                          ? "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30"
-                          : isForfeit
-                          ? "bg-[#F43F5E]/10 text-[#F43F5E] border-[#F43F5E]/30"
-                          : "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30"
-                      }`}
-                    >
-                      {isRefund ? "Refunded" : isForfeit ? "Forfeited" : "Held in Escrow"}
-                    </span>
+                  <div>
+                    <p className="type-heading text-sm text-white">{log.title}</p>
+                    <p className="type-body text-[11px] font-mono mt-0.5">{log.date}</p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="text-right">
+                  <p
+                    className={`font-mono text-sm font-bold ${
+                      isRefund
+                        ? "text-[#10B981]"
+                        : isForfeit
+                        ? "text-[#F43F5E]"
+                        : "text-[#F59E0B]"
+                    }`}
+                  >
+                    {isRefund ? `+₹${log.amount}` : `-₹${log.amount}`}
+                  </p>
+                  <span className="type-label text-[10px]">
+                    {isRefund ? "Refunded" : isForfeit ? "Forfeited" : "Held in Escrow"}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
