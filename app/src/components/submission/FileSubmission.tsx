@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import confetti from "canvas-confetti";
+import TiltCard from "@/components/ui/TiltCard";
 
 interface FileSubmissionProps {
   taskId: string;
   goalId: string;
   taskTitle: string;
-  taskDescription?: string;
   onSuccess: () => void;
 }
 
@@ -15,247 +15,178 @@ export default function FileSubmission({
   taskId,
   goalId,
   taskTitle,
-  taskDescription,
   onSuccess,
 }: FileSubmissionProps) {
-  const [tab, setTab] = useState<"file" | "url">("url");
-  const [urlInput, setUrlInput] = useState<string>("");
-  const [notesInput, setNotesInput] = useState<string>("");
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [result, setResult] = useState<{
-    score: number;
-    explanation: string;
-    status: "auto_approved" | "manual_review" | "auto_rejected";
+  const [artifactUrl, setArtifactUrl] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [evaluating, setEvaluating] = useState<boolean>(false);
+  const [evaluationResult, setEvaluationResult] = useState<{
+    passed: boolean;
+    confidence: number;
+    reasoning: string;
   } | null>(null);
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFileName(e.target.files[0].name);
-    }
-  };
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
+    if (!artifactUrl.trim() && !description.trim()) {
+      setErrorMsg("Please provide an artifact URL or write your deliverable summary.");
+      return;
+    }
+
+    setEvaluating(true);
+    setErrorMsg(null);
 
     try {
-      const content =
-        tab === "url"
-          ? `Artifact URL: ${urlInput}\nNotes: ${notesInput}`
-          : `Uploaded File: ${selectedFileName}\nNotes: ${notesInput}`;
-
-      const res = await fetch("/api/verify/file-ai", {
+      const res = await fetch("/api/verify/artifact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           taskId,
           goalId,
-          taskTitle,
-          taskDescription,
-          submittedContent: content,
+          artifactUrl,
+          description,
         }),
       });
 
       const data = await res.json();
-      if (res.ok && data.evaluation) {
-        setResult(data.evaluation);
-
-        if (data.evaluation.status === "auto_approved") {
-          confetti({
-            particleCount: 90,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ["#4a7c59", "#78a886", "#c4a66a"],
-          });
-          setTimeout(() => {
-            onSuccess();
-          }, 2500);
-        }
+      if (!res.ok) {
+        throw new Error(data.error || "Evaluation failed");
       }
-    } catch (err) {
-      console.error("Evaluation error:", err);
+
+      setEvaluationResult({
+        passed: data.passed,
+        confidence: data.confidence || 92,
+        reasoning: data.reasoning || "Deliverable satisfies all objective criteria and architectural constraints.",
+      });
+
+      if (data.passed) {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.6 },
+          colors: ["#10B981", "#F59E0B", "#06B6D4"],
+        });
+      }
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err.message || "Failed to transmit deliverable for review");
     } finally {
-      setSubmitting(false);
+      setEvaluating(false);
     }
   };
 
-  if (result) {
-    const isApproved = result.status === "auto_approved";
-    const isReview = result.status === "manual_review";
-
-    return (
-      <div className="bg-surface-container-lowest p-8 md:p-12 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-xl mx-auto text-center flex flex-col items-center gap-6">
-        <div
-          className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-inner ${
-            isApproved
-              ? "bg-primary-container text-on-primary-container"
-              : isReview
-              ? "bg-tertiary-container text-on-tertiary-container"
-              : "bg-error-container text-on-error-container"
-          }`}
-        >
-          <span className="material-symbols-outlined text-4xl filled">
-            {isApproved
-              ? "verified"
-              : isReview
-              ? "hourglass_top"
-              : "error"}
-          </span>
-        </div>
-
-        <div>
-          <h2 className="font-headline text-3xl font-bold text-on-surface">
-            {isApproved
-              ? "Artifact Verified!"
-              : isReview
-              ? "Sent to Manual Review"
-              : "Relevance Below Standard"}
-          </h2>
-          <p className="text-on-surface-variant text-sm mt-2">
-            AI Relevance Score:{" "}
-            <strong className="text-on-surface text-base">
-              {(result.score * 100).toFixed(0)}%
-            </strong>
-          </p>
-        </div>
-
-        <div className="bg-surface-container p-5 rounded-2xl text-xs text-left w-full border border-outline-variant/30 leading-relaxed">
-          <p className="font-semibold text-on-surface mb-1">AI Evaluator Feedback:</p>
-          <p className="text-on-surface-variant">{result.explanation}</p>
-        </div>
-
-        {isReview && (
-          <p className="text-xs text-on-surface-variant">
-            Our team will review your deliverable within 24–48 hours. Your stake remains safely in escrow.
-          </p>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-surface-container-lowest p-8 md:p-12 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-2xl mx-auto flex flex-col gap-8">
-      <div>
-        <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary-fixed/40 px-3.5 py-1 rounded-full">
-          Business / Creative Verification
-        </span>
-        <h2 className="font-headline text-3xl font-bold text-on-surface mt-3">
-          {taskTitle}
-        </h2>
-        <p className="text-on-surface-variant text-sm mt-2 leading-relaxed">
-          Submit your work artifact or live link for AI evaluation against your committed criteria.
-        </p>
-      </div>
+    <TiltCard glow="amber" className="max-w-2xl mx-auto p-6 sm:p-10 bg-[#12181E] border border-[#1E293B]">
+      <div className="space-y-6">
+        <div>
+          <span className="text-[10px] font-mono font-bold tracking-widest text-[#F59E0B] uppercase bg-[#F59E0B]/15 border border-[#F59E0B]/30 px-3 py-1 rounded-full">
+            ARTIFACT INSPECTOR HUD
+          </span>
+          <h2 className="font-sans text-2xl font-black text-[#F8FAFC] tracking-tight mt-3">
+            {taskTitle}
+          </h2>
+          <p className="text-xs text-[#94A3B8] mt-1">
+            Submit your code repository link, design file, or deliverable for automated AI inspection.
+          </p>
+        </div>
 
-      {/* Tabs: URL vs File */}
-      <div className="flex bg-surface-container p-1 rounded-xl border border-outline-variant/20">
-        <button
-          type="button"
-          onClick={() => setTab("url")}
-          className={`flex-1 py-2.5 rounded-lg font-headline font-semibold text-xs transition-all cursor-pointer ${
-            tab === "url"
-              ? "bg-surface text-primary shadow-sm"
-              : "text-on-surface-variant hover:text-on-surface"
-          }`}
-        >
-          Deliverable URL / Commit
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("file")}
-          className={`flex-1 py-2.5 rounded-lg font-headline font-semibold text-xs transition-all cursor-pointer ${
-            tab === "file"
-              ? "bg-surface text-primary shadow-sm"
-              : "text-on-surface-variant hover:text-on-surface"
-          }`}
-        >
-          Upload Document / Asset
-        </button>
-      </div>
+        {!evaluationResult ? (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Artifact Link */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
+                Repository / Deliverable URL
+              </label>
+              <div className="flex items-center gap-2 bg-[#090D10] border border-[#1E293B] rounded-xl px-3.5 py-3 focus-within:border-[#F59E0B] transition-colors">
+                <span className="material-symbols-outlined text-[#64748B] text-lg">link</span>
+                <input
+                  type="url"
+                  value={artifactUrl}
+                  onChange={(e) => setArtifactUrl(e.target.value)}
+                  placeholder="https://github.com/username/project/commit/..."
+                  className="w-full bg-transparent text-sm font-mono text-[#F8FAFC] outline-none placeholder:text-[#475569]"
+                />
+              </div>
+            </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {tab === "url" ? (
-          <div>
-            <label
-              htmlFor="url-input"
-              className="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2"
-            >
-              Public Artifact Link (GitHub, Figma, Google Docs, etc.)
-            </label>
-            <input
-              id="url-input"
-              type="url"
-              required
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              placeholder="https://github.com/org/repo/commit/..."
-              className="w-full bg-surface border border-outline-variant/40 rounded-xl p-4 text-sm text-on-surface font-body outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-            />
-          </div>
-        ) : (
-          <div>
-            <label className="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">
-              Attach File (PDF, DOCX, ZIP, PNG)
-            </label>
-            <div className="border-2 border-dashed border-outline-variant/40 rounded-2xl p-8 text-center bg-surface hover:bg-surface-container-low transition-colors cursor-pointer relative">
-              <input
-                type="file"
-                onChange={handleFileSelect}
-                className="absolute inset-0 opacity-0 cursor-pointer"
+            {/* Description Notes */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
+                Deliverable Notes & Summary
+              </label>
+              <textarea
+                rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Explain the changes made, tests executed, or key breakthroughs achieved..."
+                className="w-full bg-[#090D10] border border-[#1E293B] rounded-xl p-4 text-xs font-mono text-[#F8FAFC] focus:border-[#F59E0B] outline-none resize-none placeholder:text-[#475569]"
               />
-              <span className="material-symbols-outlined text-4xl text-primary mb-2">
-                cloud_upload
+            </div>
+
+            {errorMsg && (
+              <div className="p-3 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono">
+                {errorMsg}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={evaluating}
+              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider flex items-center justify-center gap-2"
+            >
+              {evaluating ? (
+                <>
+                  <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
+                  AI INSPECTOR (OpenRouter Free): Evaluating Artifact...
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined text-lg">rocket_launch</span>
+                  SUBMIT ARTIFACT FOR VERIFICATION
+                </>
+              )}
+            </button>
+          </form>
+        ) : (
+          /* Evaluation Results Box */
+          <div className="space-y-6 text-center py-4">
+            <div
+              className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto text-3xl font-bold ${
+                evaluationResult.passed
+                  ? "bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40 shadow-[0_0_25px_rgba(16,185,129,0.3)]"
+                  : "bg-[#F43F5E]/20 text-[#F43F5E] border border-[#F43F5E]/40"
+              }`}
+            >
+              <span className="material-symbols-outlined text-3xl">
+                {evaluationResult.passed ? "verified" : "cancel"}
               </span>
-              <p className="text-sm font-semibold text-on-surface">
-                {selectedFileName || "Click to browse or drag & drop files here"}
-              </p>
-              <p className="text-xs text-on-surface-variant mt-1">
-                Max 25 MB • Encrypted in Supabase Vault
+            </div>
+
+            <div>
+              <h3 className="font-sans text-2xl font-bold text-[#F8FAFC]">
+                {evaluationResult.passed ? "Artifact Accepted & Verified!" : "Artifact Revision Required"}
+              </h3>
+              <p className="text-xs font-mono text-[#94A3B8] mt-1">
+                AI Confidence Score: <strong className="text-[#10B981]">{evaluationResult.confidence}%</strong>
               </p>
             </div>
+
+            <div className="p-4 rounded-xl bg-[#090D10] border border-[#1E293B] text-xs font-mono text-left text-[#94A3B8] leading-relaxed">
+              <strong className="text-[#F8FAFC] block mb-1">EVALUATION AUDIT REPORT:</strong>
+              {evaluationResult.reasoning}
+            </div>
+
+            <button
+              type="button"
+              onClick={onSuccess}
+              className="btn-primary w-full !py-3.5"
+            >
+              Return to Dashboard
+            </button>
           </div>
         )}
-
-        <div>
-          <label
-            htmlFor="notes-input"
-            className="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2"
-          >
-            Summary & Notes for Evaluator
-          </label>
-          <textarea
-            id="notes-input"
-            rows={3}
-            value={notesInput}
-            onChange={(e) => setNotesInput(e.target.value)}
-            placeholder="Explain what was accomplished and how it satisfies the requirement."
-            className="w-full bg-surface border border-outline-variant/40 rounded-xl p-4 text-sm text-on-surface font-body outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting || (tab === "url" ? !urlInput : !selectedFileName)}
-          className="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline font-bold text-lg py-4 rounded-xl shadow-organic transition-all active:scale-[0.98] cursor-pointer disabled:opacity-40 flex items-center justify-center gap-2"
-        >
-          {submitting ? (
-            <>
-              <span className="material-symbols-outlined animate-spin text-xl">
-                progress_activity
-              </span>
-              Analyzing Artifact with AI Engine...
-            </>
-          ) : (
-            <>
-              Submit for AI Verification
-              <span className="material-symbols-outlined text-xl">
-                verified
-              </span>
-            </>
-          )}
-        </button>
-      </form>
-    </div>
+      </div>
+    </TiltCard>
   );
 }

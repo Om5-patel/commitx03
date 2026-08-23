@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import TiltCard from "@/components/ui/TiltCard";
 
 interface DisputeItem {
   id: string;
@@ -34,36 +34,39 @@ export default function DisputesPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-4xl text-on-surface mb-2">
-          Dispute Center
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <div className="border-b border-[#1E293B] pb-6">
+        <span className="text-xs font-mono font-bold tracking-widest text-[#06B6D4] uppercase">
+          ARBITRATION PROTOCOL
+        </span>
+        <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          Dispute Resolution Center
         </h1>
-        <p className="text-on-surface-variant text-base">
-          If you believe a verification decision was inaccurate, our audit team will manually review your case.
+        <p className="text-sm text-[#94A3B8] mt-1">
+          If you believe an automated verification decision was inaccurate, our human arbitration team conducts fair reviews.
         </p>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center p-20">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary">
+        <div className="flex items-center justify-center p-24">
+          <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
             progress_activity
           </span>
         </div>
       ) : disputes.length === 0 ? (
-        <div className="bg-surface-container-lowest rounded-3xl p-12 text-center border border-outline-variant/30 shadow-sm">
-          <div className="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mx-auto mb-4 text-on-surface-variant">
-            <span className="material-symbols-outlined text-3xl">
+        <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
+          <div className="w-16 h-16 bg-[#06B6D4]/15 text-[#06B6D4] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="material-symbols-outlined text-3xl font-bold">
               gavel
             </span>
           </div>
-          <h3 className="font-headline text-xl font-bold text-on-surface mb-1">
-            No active disputes
+          <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
+            No Active Arbitration Cases
           </h3>
-          <p className="text-on-surface-variant text-sm">
-            All your submitted milestones have been verified automatically or are currently in good standing.
+          <p className="text-xs text-[#94A3B8] leading-relaxed">
+            All submitted milestones have either passed automated AI inspection or remain in good standing.
           </p>
-        </div>
+        </TiltCard>
       ) : (
         <div className="space-y-4">
           {disputes.map((d) => {
@@ -71,43 +74,45 @@ export default function DisputesPage() {
             const isWon = d.status === "resolved_in_favour";
 
             return (
-              <div
+              <TiltCard
                 key={d.id}
-                className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col gap-4"
+                className="p-6 bg-[#12181E] border border-[#1E293B] space-y-4"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-headline font-bold text-lg text-on-surface">
-                      Milestone: {d.tasks?.title || "Disputed Milestone"}
+                    <h3 className="font-sans font-bold text-base text-[#F8FAFC]">
+                      {d.tasks?.title || "Disputed Milestone Claim"}
                     </h3>
-                    <span className="text-xs text-on-surface-variant">
-                      Filed on {new Date(d.created_at).toLocaleDateString()}
+                    <span className="text-xs font-mono text-[#94A3B8]">
+                      Filed: {new Date(d.created_at).toLocaleDateString()}
                     </span>
                   </div>
 
                   <span
-                    className={`text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider ${
+                    className={`text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${
                       isOpen
-                        ? "bg-tertiary-container text-on-tertiary-container"
+                        ? "bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30"
                         : isWon
-                        ? "bg-primary-container text-on-primary-container"
-                        : "bg-error-container text-on-error-container"
+                        ? "bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30"
+                        : "bg-[#F43F5E]/15 text-[#F43F5E] border-[#F43F5E]/30"
                     }`}
                   >
                     {d.status.replace(/_/g, " ")}
                   </span>
                 </div>
 
-                <div className="bg-surface-container-low p-4 rounded-xl text-xs text-on-surface leading-relaxed">
-                  <strong>Your Reason:</strong> {d.reason}
+                <div className="bg-[#090D10] p-4 rounded-xl text-xs font-mono text-[#94A3B8] border border-[#1E293B]">
+                  <strong className="text-[#F8FAFC] block mb-1">YOUR CLAIM:</strong>
+                  {d.reason}
                 </div>
 
                 {d.admin_note && (
-                  <div className="bg-surface p-4 rounded-xl border border-outline-variant/30 text-xs leading-relaxed">
-                    <strong className="text-primary">Admin Resolution Note:</strong> {d.admin_note}
+                  <div className="bg-[#090D10] p-4 rounded-xl text-xs font-mono text-[#10B981] border border-[#10B981]/30">
+                    <strong className="text-[#10B981] block mb-1">ARBITRATION DECISION:</strong>
+                    {d.admin_note}
                   </div>
                 )}
-              </div>
+              </TiltCard>
             );
           })}
         </div>

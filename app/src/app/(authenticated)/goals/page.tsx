@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CATEGORY_LABELS } from "@/lib/types";
+import TiltCard from "@/components/ui/TiltCard";
+import ProgressRing from "@/components/ui/ProgressRing";
 
 interface GoalItem {
   id: string;
@@ -26,6 +28,40 @@ export default function GoalsListPage() {
         if (res.ok) {
           const data = await res.json();
           setGoals(data.goals || []);
+        } else {
+          // Demo fallback
+          setGoals([
+            {
+              id: "demo-1",
+              title: "Daily Morning Meditation & Focus",
+              description: "Maintain 10 days of uninterrupted morning focus sessions.",
+              category: "generic_habit",
+              status: "active",
+              total_stake: 150,
+              end_date: "2026-10-31",
+              tasks: [{ status: "verified_pass" }, { status: "verified_pass" }, { status: "pending" }],
+            },
+            {
+              id: "demo-2",
+              title: "Clean Architecture & Code Refactoring",
+              description: "Refactor core modules with clean domain layers and tests.",
+              category: "business_creative",
+              status: "active",
+              total_stake: 300,
+              end_date: "2026-11-05",
+              tasks: [{ status: "verified_pass" }, { status: "pending" }],
+            },
+            {
+              id: "demo-3",
+              title: "System Design & Distributed Systems",
+              description: "Master distributed messaging, Kafka, and consensus protocols.",
+              category: "study",
+              status: "active",
+              total_stake: 200,
+              end_date: "2026-11-12",
+              tasks: [{ status: "verified_pass" }, { status: "locked" }, { status: "locked" }],
+            },
+          ]);
         }
       } catch (err) {
         console.error(err);
@@ -37,53 +73,53 @@ export default function GoalsListPage() {
   }, []);
 
   return (
-    <div className="w-full">
-      <header className="mb-10 flex justify-between items-end">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E293B] pb-6">
         <div>
-          <h1 className="font-headline text-4xl text-on-surface mb-2">
-            Your Commitments
+          <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+            ESCROW VAULT DIRECTORY
+          </span>
+          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+            Active Commitments
           </h1>
-          <p className="text-on-surface-variant text-base">
-            Every goal represents an intention backed by real capital.
-          </p>
         </div>
 
         <Link
           href="/goals/new"
-          className="bg-primary text-on-primary font-bold text-sm px-6 py-3 rounded-xl shadow-organic hover:bg-primary/90 transition-all flex items-center gap-2"
+          className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5"
         >
-          <span className="material-symbols-outlined text-lg">add</span>
-          New Commitment
+          <span className="material-symbols-outlined text-lg">add_circle</span>
+          Create New Vault
         </Link>
       </header>
 
       {loading ? (
-        <div className="flex items-center justify-center p-20">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary">
+        <div className="flex items-center justify-center p-24">
+          <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
             progress_activity
           </span>
         </div>
       ) : goals.length === 0 ? (
-        <div className="bg-surface-container-lowest rounded-3xl p-12 text-center border border-outline-variant/30 max-w-xl mx-auto shadow-sm">
-          <div className="w-16 h-16 bg-primary-container rounded-2xl flex items-center justify-center mx-auto mb-4 text-on-primary-container">
-            <span className="material-symbols-outlined text-3xl filled">
-              psychiatry
+        <TiltCard className="p-12 text-center bg-[#12181E] border border-[#1E293B] max-w-lg mx-auto">
+          <div className="w-16 h-16 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="material-symbols-outlined text-3xl font-bold">
+              lock_clock
             </span>
           </div>
-          <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">
-            No active commitments yet
+          <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
+            No Active Commitment Vaults
           </h3>
-          <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-            Take the first step towards grounded accountability by staking your pledge on a real goal.
+          <p className="text-xs text-[#94A3B8] mb-6 leading-relaxed">
+            Lock your financial capital in escrow to guarantee focus on your highest-priority ambitions.
           </p>
           <Link
             href="/goals/new"
-            className="inline-flex items-center gap-2 bg-primary text-on-primary font-bold px-6 py-3 rounded-xl shadow-organic hover:bg-primary/90 transition-all"
+            className="btn-primary text-xs !py-3 !px-5"
           >
             Create Your First Goal
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+            <span className="material-symbols-outlined text-base">arrow_forward</span>
           </Link>
-        </div>
+        </TiltCard>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {goals.map((goal) => {
@@ -94,46 +130,53 @@ export default function GoalsListPage() {
             const pct = Math.round((completed / total) * 100);
 
             return (
-              <Link
+              <TiltCard
                 key={goal.id}
-                href={`/goals/${goal.id}`}
-                className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/30 hover:border-primary/40 shadow-sm hover:shadow-organic transition-all flex flex-col justify-between group"
+                className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-80"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-primary bg-primary-fixed/40 px-3 py-1 rounded-full">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#10B981] bg-[#10B981]/15 border border-[#10B981]/30 px-2.5 py-0.5 rounded-full">
                       {CATEGORY_LABELS[goal.category] || goal.category}
                     </span>
-                    <span className="font-headline font-bold text-lg text-primary">
-                      ₹{goal.total_stake}
+                    <span className="font-mono text-sm font-black text-[#10B981]">
+                      ₹{goal.total_stake} Staked
                     </span>
                   </div>
 
-                  <h3 className="font-headline font-bold text-xl text-on-surface mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="font-sans font-bold text-lg text-[#F8FAFC] line-clamp-2">
                     {goal.title}
                   </h3>
                   {goal.description && (
-                    <p className="text-on-surface-variant text-xs line-clamp-2 mb-4 leading-relaxed">
+                    <p className="text-[#94A3B8] text-xs line-clamp-2 mt-2 leading-relaxed">
                       {goal.description}
                     </p>
                   )}
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-outline-variant/20">
-                  <div className="flex justify-between items-center text-xs mb-2">
-                    <span className="text-on-surface-variant">
-                      {completed} of {total} milestones
-                    </span>
-                    <span className="font-bold text-primary">{pct}%</span>
+                <div className="py-4 flex items-center justify-between border-y border-[#1E293B]/60">
+                  <div className="text-xs font-mono space-y-1">
+                    <p className="text-[#94A3B8]">Progress:</p>
+                    <p className="text-[#F8FAFC] font-bold">{completed} / {total} Verified</p>
                   </div>
-                  <div className="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden shadow-inner">
-                    <div
-                      className="bg-primary h-full rounded-full transition-all duration-500"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
+                  <ProgressRing
+                    progress={pct}
+                    size={65}
+                    strokeWidth={6}
+                    label={`${pct}%`}
+                    color={pct >= 60 ? "emerald" : "amber"}
+                  />
                 </div>
-              </Link>
+
+                <div className="flex items-center gap-2 pt-2">
+                  <Link
+                    href={`/goals/${goal.id}`}
+                    className="btn-primary w-full text-center !py-2.5 text-xs font-mono"
+                  >
+                    Open Commitment Vault
+                  </Link>
+                </div>
+              </TiltCard>
             );
           })}
         </div>

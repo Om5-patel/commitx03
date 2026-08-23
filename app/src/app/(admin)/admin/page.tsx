@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import TiltCard from "@/components/ui/TiltCard";
+import CountUpNumber from "@/components/ui/CountUpNumber";
 
 export default function AdminOverviewPage() {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     pendingReviews: 3,
     openDisputes: 1,
     totalRevenue: 14250,
@@ -14,132 +16,119 @@ export default function AdminOverviewPage() {
   return (
     <div className="w-full flex flex-col gap-8">
       <div>
-        <h1 className="font-headline text-4xl text-on-surface mb-2">
-          Admin Control Center
+        <span className="text-xs font-mono font-bold tracking-widest text-[#F59E0B] uppercase">
+          AUDIT TERMINAL
+        </span>
+        <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          Admin Control Station
         </h1>
-        <p className="text-on-surface-variant text-base">
+        <p className="text-sm text-[#94A3B8] mt-1">
           Audit verification queues, adjudicate disputes, and oversee platform escrow health.
         </p>
       </div>
 
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
+        <TiltCard glow="amber" className="p-6 bg-[#12181E] border border-[#1E293B]">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-tertiary uppercase tracking-wider">
-              Pending Reviews
+            <span className="text-[10px] font-mono font-bold text-[#F59E0B] uppercase tracking-wider">
+              PENDING REVIEWS
             </span>
-            <div className="w-9 h-9 rounded-xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
-              <span className="material-symbols-outlined text-lg">rate_review</span>
-            </div>
+            <span className="material-symbols-outlined text-lg text-[#F59E0B]">rate_review</span>
           </div>
-          <div className="font-headline text-4xl font-bold text-on-surface">
-            {stats.pendingReviews}
-          </div>
+          <CountUpNumber value={stats.pendingReviews} className="text-3xl sm:text-4xl text-[#F8FAFC]" />
           <Link
             href="/admin/review"
-            className="text-xs text-primary font-bold mt-4 inline-flex items-center gap-1 hover:underline"
+            className="text-xs font-mono text-[#F59E0B] font-bold mt-4 inline-flex items-center gap-1 hover:underline"
           >
-            Review queue →
+            Review Queue →
           </Link>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
+        <TiltCard glow="rose" className="p-6 bg-[#12181E] border border-[#1E293B]">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-error uppercase tracking-wider">
-              Open Disputes
+            <span className="text-[10px] font-mono font-bold text-[#F43F5E] uppercase tracking-wider">
+              OPEN DISPUTES
             </span>
-            <div className="w-9 h-9 rounded-xl bg-error-container text-on-error-container flex items-center justify-center">
-              <span className="material-symbols-outlined text-lg">gavel</span>
-            </div>
+            <span className="material-symbols-outlined text-lg text-[#F43F5E]">gavel</span>
           </div>
-          <div className="font-headline text-4xl font-bold text-on-surface">
-            {stats.openDisputes}
-          </div>
+          <CountUpNumber value={stats.openDisputes} className="text-3xl sm:text-4xl text-[#F43F5E]" />
           <Link
             href="/admin/disputes"
-            className="text-xs text-error font-bold mt-4 inline-flex items-center gap-1 hover:underline"
+            className="text-xs font-mono text-[#F43F5E] font-bold mt-4 inline-flex items-center gap-1 hover:underline"
           >
-            Adjudicate cases →
+            Adjudicate Cases →
           </Link>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
+        <TiltCard glow="emerald" className="p-6 bg-[#12181E] border border-[#1E293B]">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-primary uppercase tracking-wider">
-              Platform Revenue
+            <span className="text-[10px] font-mono font-bold text-[#10B981] uppercase tracking-wider">
+              PLATFORM REVENUE
             </span>
-            <div className="w-9 h-9 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
-              <span className="material-symbols-outlined text-lg">monetization_on</span>
-            </div>
+            <span className="material-symbols-outlined text-lg text-[#10B981]">payments</span>
           </div>
-          <div className="font-headline text-4xl font-bold text-primary">
-            ₹{stats.totalRevenue.toLocaleString("en-IN")}
-          </div>
-          <span className="text-xs text-on-surface-variant mt-4 block">
-            Forfeited milestone revenue
+          <CountUpNumber value={stats.totalRevenue} prefix="₹" className="text-3xl sm:text-4xl text-[#10B981]" />
+          <span className="text-[10px] font-mono text-[#64748B] mt-4 block">
+            Forfeited stake revenue
           </span>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-6 border border-outline-variant/30 shadow-sm">
+        <TiltCard glow="cyan" className="p-6 bg-[#12181E] border border-[#1E293B]">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">
-              Escrow Vault
+            <span className="text-[10px] font-mono font-bold text-[#06B6D4] uppercase tracking-wider">
+              ESCROW VAULT
             </span>
-            <div className="w-9 h-9 rounded-xl bg-surface-container text-on-surface-variant flex items-center justify-center">
-              <span className="material-symbols-outlined text-lg">account_balance</span>
-            </div>
+            <span className="material-symbols-outlined text-lg text-[#06B6D4]">account_balance</span>
           </div>
-          <div className="font-headline text-4xl font-bold text-on-surface">
-            ₹{stats.activeStakes.toLocaleString("en-IN")}
-          </div>
-          <span className="text-xs text-on-surface-variant mt-4 block">
-            Currently held in trust
+          <CountUpNumber value={stats.activeStakes} prefix="₹" className="text-3xl sm:text-4xl text-[#06B6D4]" />
+          <span className="text-[10px] font-mono text-[#64748B] mt-4 block">
+            Active capital in trust
           </span>
-        </div>
+        </TiltCard>
       </div>
 
       {/* Quick Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-surface rounded-3xl p-8 border border-outline-variant/30 flex flex-col justify-between gap-6">
+        <TiltCard className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between gap-6">
           <div>
-            <div className="w-12 h-12 rounded-2xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-2xl">rate_review</span>
             </div>
-            <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">
+            <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
               Manual Review Queue
             </h3>
-            <p className="text-on-surface-variant text-sm leading-relaxed">
-              Submissions with image hash collisions, borderline AI relevance scores (0.40–0.69), or flagged timestamps require human sign-off.
+            <p className="text-xs text-[#94A3B8] leading-relaxed">
+              Submissions with image hash collisions or borderline AI relevance scores require human auditor sign-off.
             </p>
           </div>
           <Link
             href="/admin/review"
-            className="bg-primary text-on-primary font-bold text-sm px-6 py-3 rounded-xl shadow-sm hover:bg-primary/90 transition-all text-center"
+            className="btn-primary text-xs font-mono !py-3 text-center"
           >
             Open Review Queue
           </Link>
-        </div>
+        </TiltCard>
 
-        <div className="bg-surface rounded-3xl p-8 border border-outline-variant/30 flex flex-col justify-between gap-6">
+        <TiltCard className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between gap-6">
           <div>
-            <div className="w-12 h-12 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#10B981]/20 text-[#10B981] flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-2xl">payments</span>
             </div>
-            <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">
+            <h3 className="font-sans text-xl font-bold text-[#F8FAFC] mb-2">
               Treasury & Forfeiture Ledger
             </h3>
-            <p className="text-on-surface-variant text-sm leading-relaxed">
-              Complete historical ledger of all deposits, refunds, and forfeited commitments converted to platform earnings.
+            <p className="text-xs text-[#94A3B8] leading-relaxed">
+              Complete historical audit ledger of all deposits, refunds, and forfeited commitments converted to platform earnings.
             </p>
           </div>
           <Link
             href="/admin/revenue"
-            className="bg-secondary text-on-secondary font-bold text-sm px-6 py-3 rounded-xl shadow-sm hover:bg-secondary/90 transition-all text-center"
+            className="btn-glass text-xs font-mono !py-3 text-center"
           >
             View Treasury Ledger
           </Link>
-        </div>
+        </TiltCard>
       </div>
     </div>
   );

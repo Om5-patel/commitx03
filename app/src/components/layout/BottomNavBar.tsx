@@ -3,44 +3,61 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const mobileNavLinks = [
-  { href: "/dashboard", label: "Feed", icon: "grid_view", activeIcon: "grid_view" },
-  { href: "/goals", label: "Goals", icon: "target", activeIcon: "target" },
-  { href: "/goals/new", label: "New", icon: "add_circle", activeIcon: "add_circle" },
-  { href: "/profile", label: "Profile", icon: "person", activeIcon: "person" },
+const mobileLinks = [
+  { href: "/dashboard", label: "Home", icon: "dashboard" },
+  { href: "/goals", label: "Vault", icon: "lock" },
+  { href: "/goals/new", label: "Commit", icon: "add_circle", highlight: true },
+  { href: "/disputes", label: "Disputes", icon: "gavel" },
+  { href: "/profile", label: "Passport", icon: "badge" },
 ];
 
 export default function BottomNavBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container-highest rounded-t-xl shadow-[0_-4px_20px_rgba(46,50,48,0.06)] font-label text-xs">
-      {mobileNavLinks.map((link) => {
-        const isActive =
-          pathname === link.href ||
-          (link.href !== "/goals/new" && pathname.startsWith(link.href + "/"));
+    <div className="fixed bottom-4 inset-x-4 z-50 md:hidden flex justify-center">
+      <nav className="w-full max-w-md bg-[#12181E]/90 backdrop-blur-2xl border border-[#1E293B] shadow-[0_12px_40px_rgba(0,0,0,0.8)] rounded-2xl p-1.5 flex items-center justify-around">
+        {mobileLinks.map((link) => {
+          const isActive = pathname === link.href;
 
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`flex flex-col items-center justify-center transition-transform active:scale-90 ${
-              isActive
-                ? "bg-primary-container text-on-primary-container rounded-xl px-4 py-1"
-                : "text-on-surface-variant hover:text-primary p-2 rounded-xl"
-            }`}
-          >
-            <span
-              className={`material-symbols-outlined mb-1 text-xl ${
-                isActive ? "filled" : ""
+          if (link.highlight) {
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="w-12 h-12 -mt-5 rounded-2xl bg-[#10B981] text-[#090D10] flex flex-col items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 transition-transform"
+              >
+                <span className="material-symbols-outlined text-2xl font-bold">
+                  {link.icon}
+                </span>
+              </Link>
+            );
+          }
+
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-[#10B981]"
+                  : "text-[#94A3B8] hover:text-[#F8FAFC]"
               }`}
             >
-              {isActive ? link.activeIcon : link.icon}
-            </span>
-            <span className={isActive ? "font-bold" : ""}>{link.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+              <span
+                className={`material-symbols-outlined text-xl ${
+                  isActive ? "filled" : ""
+                }`}
+              >
+                {link.icon}
+              </span>
+              <span className="text-[10px] font-mono tracking-wider mt-0.5 font-semibold">
+                {link.label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

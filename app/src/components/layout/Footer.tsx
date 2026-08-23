@@ -1,37 +1,52 @@
 import Link from "next/link";
 
-const footerLinks = [
-  { href: "/privacy", label: "Privacy Policy" },
-  { href: "/terms", label: "Terms of Service" },
-  { href: "/how-it-works", label: "Protocol Whitepaper" },
-  { href: "/support", label: "Support" },
-];
-
 export default function Footer() {
   return (
-    <footer className="bg-surface-container border-t border-outline-variant/30 w-full py-12 px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6 mt-auto">
-      {/* Copyright / Brand */}
-      <div className="flex items-center gap-4">
-        <span className="font-headline text-lg font-semibold text-on-surface">
-          CommitX
-        </span>
-        <span className="text-outline-variant">|</span>
-        <span className="font-body text-sm leading-relaxed text-on-surface-variant">
-          © {new Date().getFullYear()} CommitX. Rooted in Accountability.
-        </span>
-      </div>
+    <footer className="w-full bg-[#090D10] border-t border-[#1E293B] mt-auto py-12 px-6 lg:px-8 text-xs font-sans">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Brand & Tagline */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-[#10B981] flex items-center justify-center text-[#090D10] font-black text-xs">
+              <span className="material-symbols-outlined text-sm font-bold">
+                lock_clock
+              </span>
+            </div>
+            <span className="font-sans font-bold text-sm text-[#F8FAFC]">
+              Commit<span className="text-[#10B981]">X</span> Protocol
+            </span>
+          </div>
+          <span className="hidden sm:inline text-[#64748B]">•</span>
+          <span className="text-[#94A3B8]">
+            High-Stakes Accountability Vault with Automated Instant Refunds.
+          </span>
+        </div>
 
-      {/* Links */}
-      <div className="flex flex-wrap justify-center gap-6 font-body text-sm leading-relaxed">
-        {footerLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="text-on-surface-variant hover:text-on-surface transition-all duration-300 hover:underline decoration-primary/30 underline-offset-4"
-          >
-            {link.label}
-          </Link>
-        ))}
+        {/* Live Network & Latency Indicator */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 bg-[#12181E] border border-[#1E293B] px-3 py-1.5 rounded-full font-mono text-[11px] text-[#94A3B8]">
+            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+            <span>VAULT ENGINE: ONLINE</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-[#94A3B8]">
+            <Link
+              href="/how-it-works"
+              className="hover:text-[#10B981] transition-colors"
+            >
+              Protocol Specs
+            </Link>
+            <Link
+              href="/disputes"
+              className="hover:text-[#10B981] transition-colors"
+            >
+              Arbitration
+            </Link>
+            <span className="text-[#64748B]">
+              © {new Date().getFullYear()} CommitX
+            </span>
+          </div>
+        </div>
       </div>
     </footer>
   );

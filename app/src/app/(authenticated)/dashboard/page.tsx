@@ -4,15 +4,21 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import confetti from "canvas-confetti";
+import TiltCard from "@/components/ui/TiltCard";
+import FlipCountdown from "@/components/ui/FlipCountdown";
+import ProgressRing from "@/components/ui/ProgressRing";
+import CountUpNumber from "@/components/ui/CountUpNumber";
 
 interface GoalItem {
   id: string;
   title: string;
-  category: string;
+  category: "generic_habit" | "study" | "business_creative";
   progress: number;
   totalTasks: number;
   completedTasks: number;
   stake: number;
+  nextTaskDeadline?: string;
+  nextTaskId?: string;
 }
 
 interface LogItem {
@@ -27,58 +33,62 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const isNewGoal = searchParams.get("new_goal");
 
-  const [timeLeft, setTimeLeft] = useState<string>("08h 45m 12s");
   const [goals, setGoals] = useState<GoalItem[]>([
     {
       id: "demo-1",
-      title: "Daily Morning Meditation",
+      title: "Daily Morning Meditation & Focus",
       category: "generic_habit",
       progress: 80,
       totalTasks: 10,
       completedTasks: 8,
       stake: 150,
+      nextTaskId: "task-101",
     },
     {
       id: "demo-2",
-      title: "Clean Code & Refactoring",
+      title: "Clean Architecture & Code Refactoring",
       category: "business_creative",
       progress: 60,
       totalTasks: 5,
       completedTasks: 3,
       stake: 300,
+      nextTaskId: "task-102",
     },
     {
       id: "demo-3",
-      title: "Deep Work Sprint (Algorithms)",
+      title: "System Design & Distributed Systems",
       category: "study",
       progress: 25,
       totalTasks: 4,
       completedTasks: 1,
       stake: 200,
+      nextTaskId: "task-103",
     },
   ]);
 
-  const [totalStake, setTotalStake] = useState<number>(4250);
+  const [totalCapital, setTotalCapital] = useState<number>(4250);
   const [successRate, setSuccessRate] = useState<number>(94);
+  const [refundedTotal, setRefundedTotal] = useState<number>(3150);
+  const [streakDays, setStreakDays] = useState<number>(14);
 
   const [treasuryLogs, setTreasuryLogs] = useState<LogItem[]>([
     {
       id: "log-1",
-      title: "Refund: Read 30 Pages",
+      title: "Verified: Read 30 Pages System Design",
       date: "Today • 14:30",
       amount: 50,
       type: "refund",
     },
     {
       id: "log-2",
-      title: "Stake: Morning Run Sprint",
+      title: "Vault Deposit: Morning Focus Sprint",
       date: "Yesterday • 08:15",
       amount: 150,
       type: "deposit",
     },
     {
       id: "log-3",
-      title: "Missed: Late Night Coding",
+      title: "Missed Deadline: Late Night Commit",
       date: "Oct 20 • 23:59",
       amount: 25,
       type: "forfeiture",
@@ -89,302 +99,285 @@ function DashboardContent() {
   useEffect(() => {
     if (isNewGoal) {
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 100,
+        spread: 80,
         origin: { y: 0.6 },
-        colors: ["#4a7c59", "#78a886", "#c4a66a", "#f8e0a8"],
+        colors: ["#10B981", "#F59E0B", "#06B6D4", "#F8FAFC"],
       });
     }
   }, [isNewGoal]);
 
-  // Live countdown timer effect
-  useEffect(() => {
-    let secondsTotal = 8 * 3600 + 45 * 60 + 12;
-    const interval = setInterval(() => {
-      secondsTotal = Math.max(0, secondsTotal - 1);
-      const h = Math.floor(secondsTotal / 3600).toString().padStart(2, "0");
-      const m = Math.floor((secondsTotal % 3600) / 60).toString().padStart(2, "0");
-      const s = (secondsTotal % 60).toString().padStart(2, "0");
-      setTimeLeft(`${h}h ${m}m ${s}s`);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fetch real goals if available
-  useEffect(() => {
-    async function fetchUserGoals() {
-      try {
-        const res = await fetch("/api/goals");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.goals && data.goals.length > 0) {
-            const mapped: GoalItem[] = data.goals.map((g: any) => {
-              const tasks = g.tasks || [];
-              const completed = tasks.filter((t: any) => t.status === "verified_pass").length;
-              const pct = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
-              return {
-                id: g.id,
-                title: g.title,
-                category: g.category,
-                progress: pct,
-                totalTasks: tasks.length || 1,
-                completedTasks: completed,
-                stake: Number(g.total_stake),
-              };
-            });
-            setGoals(mapped);
-
-            const calculatedTotal = mapped.reduce((acc, curr) => acc + curr.stake, 0);
-            if (calculatedTotal > 0) {
-              setTotalStake(calculatedTotal);
-            }
-          }
-        }
-      } catch (e) {
-        // Fallback gracefully to demo goals
-      }
-    }
-    fetchUserGoals();
-  }, []);
-
   return (
-    <div className="w-full">
-      {/* Header */}
-      <header className="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+    <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+      
+      {/* ── 1. Top Section: Header & Quick Action ── */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#1E293B] pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 bg-surface-container text-primary px-3 py-1 rounded-full text-xs font-semibold mb-2">
-            <span className="material-symbols-outlined text-sm filled">psychiatry</span>
-            Rooted in Accountability
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+            <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+              PORTFOLIO ACCOUNTABILITY VAULT
+            </span>
           </div>
-          <h1 className="font-headline text-4xl text-on-surface">
-            Dashboard
+          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+            Commitment Terminal
           </h1>
-          <p className="text-on-surface-variant text-base mt-1">
-            Welcome back. Keep your intentions locked and focused.
-          </p>
         </div>
 
-        <Link
-          href="/goals/new"
-          className="bg-primary text-on-primary font-bold text-sm px-6 py-3 rounded-xl shadow-organic hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-lg">add</span>
-          New Commitment
-        </Link>
-      </header>
-
-      {/* Bento Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
-        {/* ── Hero Stat: Total Stakes Held (Span 8) ── */}
-        <div className="col-span-1 md:col-span-8 bg-surface-container-lowest rounded-3xl p-8 shadow-organic flex flex-col justify-between relative overflow-hidden group border border-outline-variant/20">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary-container/15 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex justify-between items-start mb-8">
-            <div className="flex items-center gap-3">
-              <div className="bg-tertiary-container text-on-tertiary-container p-3 rounded-2xl flex items-center justify-center shadow-sm">
-                <span className="material-symbols-outlined icon-fill text-2xl">
-                  account_balance
-                </span>
-              </div>
-              <div>
-                <h2 className="font-headline text-xl text-on-surface font-semibold">
-                  Total Stakes Held in Escrow
-                </h2>
-                <span className="text-xs text-on-surface-variant">
-                  Protected & 100% Refundable
-                </span>
-              </div>
-            </div>
-            <span className="bg-surface-container-high text-on-surface-variant px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide border border-outline-variant/30">
-              Escrow Vault
-            </span>
-          </div>
-
-          <div className="relative z-10">
-            <div className="text-5xl md:text-7xl font-headline font-bold text-primary tracking-tight">
-              ₹{totalStake.toLocaleString("en-IN")}
-              <span className="text-2xl text-on-surface-variant ml-2 font-body font-normal">
-                .00
-              </span>
-            </div>
-            <p className="mt-4 text-on-surface-variant flex items-center gap-2 text-sm">
-              <span className="material-symbols-outlined text-primary text-base">
-                trending_up
-              </span>
-              <span className="text-primary font-semibold">+12%</span> active consistency this month
-            </p>
-          </div>
+        <div className="flex items-center gap-3">
+          <Link href="/goals/new" className="btn-primary text-xs uppercase tracking-wider !py-3 !px-5">
+            <span className="material-symbols-outlined text-lg">add_circle</span>
+            Lock New Goal
+          </Link>
         </div>
+      </div>
 
-        {/* ── Side Stats Stack (Span 4) ── */}
-        <div className="col-span-1 md:col-span-4 flex flex-col gap-6">
-          {/* Next Deadline */}
-          <div className="bg-surface-container rounded-3xl p-6 shadow-organic flex-grow flex flex-col justify-center border border-outline-variant/20">
-            <div className="flex items-center gap-2 mb-3 text-on-surface-variant">
-              <span className="material-symbols-outlined text-primary text-xl">
-                timer
-              </span>
-              <h3 className="font-semibold text-xs uppercase tracking-wider">
-                Next Deadline
-              </h3>
+      {/* ── 2. Urgent Active Commitment Card with 3D Flip Clock ── */}
+      <TiltCard glow="amber" className="p-8 bg-gradient-to-br from-[#12181E] via-[#12181E]/95 to-[#1A1A1A] border border-[#F59E0B]/40 shadow-[0_0_40px_rgba(245,158,11,0.12)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left info */}
+          <div className="lg:col-span-6 space-y-4">
+            <div className="inline-flex items-center gap-2 bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 px-3.5 py-1 rounded-full text-xs font-mono font-bold">
+              <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+              <span>VERIFICATION WINDOW OPEN</span>
             </div>
-            <div className="font-headline text-3xl text-on-surface font-bold mb-1">
-              {timeLeft}
-            </div>
-            <p className="text-on-surface-variant text-xs">
-              For: <span className="font-semibold text-on-surface">Daily Morning Meditation</span>
-            </p>
-          </div>
 
-          {/* Success Rate */}
-          <div className="bg-primary-container rounded-3xl p-6 shadow-organic flex-grow flex items-center justify-between text-on-primary-container border border-primary/20">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="material-symbols-outlined text-lg">
-                  hotel_class
-                </span>
-                <h3 className="font-semibold text-xs uppercase tracking-wider">
-                  Success Rate
-                </h3>
-              </div>
-              <div className="font-headline text-4xl font-bold">
-                {successRate}%
-              </div>
-              <span className="text-xs opacity-80 mt-1 block">
-                Top 5% consistency tier
-              </span>
-            </div>
-            <div className="w-16 h-16 bg-primary-fixed rounded-[40%_60%_70%_30%/40%_50%_60%_50%] flex items-center justify-center shadow-inner">
-              <span className="material-symbols-outlined text-primary text-3xl filled">
-                eco
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Active Commitments (Span 6) ── */}
-        <div className="col-span-1 md:col-span-6 bg-surface-container-lowest rounded-3xl p-6 md:p-8 shadow-organic border border-outline-variant/20">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-headline text-2xl text-on-surface font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary filled">
-                local_florist
-              </span>
-              Active Commitments
+            <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
+              Daily Morning Meditation & Focus
             </h2>
-            <Link
-              href="/goals/new"
-              className="text-primary hover:bg-surface-container p-2 rounded-full transition-colors"
-              title="Add Goal"
-            >
-              <span className="material-symbols-outlined">add</span>
-            </Link>
-          </div>
 
-          <div className="space-y-6">
-            {goals.map((goal) => (
+            <p className="text-sm text-[#94A3B8] leading-relaxed">
+              Milestone 9 of 10: Complete today&apos;s check-in before the deadline ticker reaches zero to recover your ₹150 stake.
+            </p>
+
+            <div className="flex items-center gap-3 pt-2">
               <Link
-                key={goal.id}
-                href={`/goals/${goal.id}`}
-                className="group block p-3 rounded-2xl hover:bg-surface-container-low transition-colors"
+                href="/goals/demo-1/tasks/task-101/submit"
+                className="btn-primary !py-3.5 !px-6 text-sm"
               >
-                <div className="flex justify-between items-end mb-2">
-                  <div>
-                    <h4 className="font-bold text-on-surface text-base group-hover:text-primary transition-colors">
-                      {goal.title}
-                    </h4>
-                    <p className="text-xs text-on-surface-variant">
-                      {goal.completedTasks} of {goal.totalTasks} milestones completed • Stake: ₹{goal.stake}
-                    </p>
-                  </div>
-                  <span className="font-headline text-primary font-bold text-sm">
-                    {goal.progress}%
-                  </span>
-                </div>
-                <div className="w-full bg-surface-container-highest rounded-full h-3 overflow-hidden shadow-inner">
-                  <div
-                    className="bg-primary h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{ width: `${goal.progress}%` }}
-                  />
-                </div>
+                <span className="material-symbols-outlined text-lg">camera_alt</span>
+                Verify Milestone Now
               </Link>
-            ))}
+              <Link
+                href="/goals/demo-1"
+                className="btn-glass !py-3.5 !px-5 text-sm"
+              >
+                View Roadmap
+              </Link>
+            </div>
           </div>
-        </div>
 
-        {/* ── Treasury Log (Span 6) ── */}
-        <div className="col-span-1 md:col-span-6 bg-surface-container-lowest rounded-3xl p-6 md:p-8 shadow-organic border border-outline-variant/20">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-headline text-2xl text-on-surface font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-tertiary filled">
-                history
-              </span>
-              Treasury Log
-            </h2>
-            <span className="text-xs text-primary font-semibold">
-              Live Transactions
+          {/* Right: 3D Flip Clock Container */}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center p-6 rounded-2xl bg-[#090D10]/80 border border-[#1E293B]">
+            <FlipCountdown label="ESCROW AUTO-FORFEIT TICKER" />
+            <span className="text-[11px] font-mono text-[#94A3B8] mt-3">
+              Stake at Risk: <strong className="text-[#F8FAFC]">₹150</strong> (100% Refund upon Pass)
             </span>
           </div>
+        </div>
+      </TiltCard>
 
-          <div className="space-y-3">
-            {treasuryLogs.map((log) => (
-              <div
-                key={log.id}
-                className="flex items-center justify-between p-4 bg-surface rounded-2xl border border-outline-variant/30 hover:border-primary/30 transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                      log.type === "refund"
-                        ? "bg-primary-container text-on-primary-container"
-                        : log.type === "deposit"
-                        ? "bg-surface-container-high text-on-surface"
-                        : "bg-error-container text-on-error-container"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-base">
-                      {log.type === "refund"
-                        ? "arrow_downward"
-                        : log.type === "deposit"
-                        ? "arrow_upward"
-                        : "local_fire_department"}
+      {/* ── 3. Four Metric Tiles with Count-Up & Watermarks ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          {
+            label: "TOTAL CAPITAL PROTECTED",
+            value: totalCapital,
+            prefix: "₹",
+            color: "text-[#10B981]",
+            glow: "emerald",
+            icon: "shield_lock",
+            sub: "Locked in Escrow",
+          },
+          {
+            label: "HISTORIC SUCCESS RATE",
+            value: successRate,
+            suffix: "%",
+            color: "text-[#F8FAFC]",
+            glow: "none",
+            icon: "trending_up",
+            sub: "Top 5% of Protocol",
+          },
+          {
+            label: "TOTAL STAKE REFUNDED",
+            value: refundedTotal,
+            prefix: "₹",
+            color: "text-[#06B6D4]",
+            glow: "cyan",
+            icon: "currency_rupee",
+            sub: "Returned to Account",
+          },
+          {
+            label: "CURRENT STREAK",
+            value: streakDays,
+            suffix: " Days",
+            color: "text-[#F59E0B]",
+            glow: "amber",
+            icon: "local_fire_department",
+            sub: "Zero missed milestones",
+          },
+        ].map((tile, i) => (
+          <TiltCard key={i} glow={tile.glow as any} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-44">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
+                {tile.label}
+              </span>
+              <span className={`material-symbols-outlined text-xl ${tile.color}`}>
+                {tile.icon}
+              </span>
+            </div>
+
+            <div>
+              <CountUpNumber
+                value={tile.value}
+                prefix={tile.prefix}
+                suffix={tile.suffix}
+                className={`text-3xl sm:text-4xl ${tile.color}`}
+              />
+              <p className="text-xs font-mono text-[#64748B] mt-1">{tile.sub}</p>
+            </div>
+          </TiltCard>
+        ))}
+      </div>
+
+      {/* ── 4. Active Vault Commitments ── */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#10B981]">folder_special</span>
+            <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Active Commitment Vaults</h3>
+          </div>
+          <Link href="/goals" className="text-xs font-mono text-[#10B981] hover:underline flex items-center gap-1">
+            View All Vaults
+            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {goals.map((g) => {
+            const isStudy = g.category === "study";
+            const isWork = g.category === "business_creative";
+
+            return (
+              <TiltCard key={g.id} className="p-6 bg-[#12181E] border border-[#1E293B] flex flex-col justify-between h-80">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#090D10] text-[#94A3B8] border border-[#1E293B]">
+                      {isStudy ? "AI Study Quiz" : isWork ? "Artifact / Code" : "GPS Photo"}
+                    </span>
+                    <span className="text-xs font-mono text-[#10B981] font-bold">
+                      ₹{g.stake} Staked
                     </span>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-on-surface text-sm">
-                      {log.title}
-                    </h4>
-                    <p className="text-xs text-on-surface-variant">
-                      {log.date}
-                    </p>
-                  </div>
+
+                  <h4 className="font-sans text-lg font-bold text-[#F8FAFC] line-clamp-2">
+                    {g.title}
+                  </h4>
                 </div>
 
-                <div className="text-right">
-                  <span
-                    className={`font-headline font-bold text-sm block ${
-                      log.type === "refund"
-                        ? "text-primary"
-                        : log.type === "deposit"
-                        ? "text-on-surface"
-                        : "text-error"
-                    }`}
-                  >
-                    {log.type === "refund"
-                      ? `+ ₹${log.amount}.00`
-                      : log.type === "deposit"
-                      ? `- ₹${log.amount}.00`
-                      : `- ₹${log.amount}.00`}
-                  </span>
-                  <span className="text-[10px] text-on-surface-variant uppercase">
-                    {log.type === "forfeiture" ? "Forfeited" : "INR Escrow"}
-                  </span>
+                <div className="py-4 flex items-center justify-between border-y border-[#1E293B]/60">
+                  <div className="text-xs font-mono space-y-1">
+                    <p className="text-[#94A3B8]">Completed:</p>
+                    <p className="text-[#F8FAFC] font-bold">{g.completedTasks} / {g.totalTasks} Tasks</p>
+                  </div>
+                  <ProgressRing
+                    progress={g.progress}
+                    size={75}
+                    strokeWidth={7}
+                    label={`${g.progress}%`}
+                    color={g.progress >= 70 ? "emerald" : "amber"}
+                  />
                 </div>
-              </div>
-            ))}
+
+                <div className="flex items-center gap-2 pt-2">
+                  <Link
+                    href={`/goals/${g.id}`}
+                    className="btn-glass flex-1 text-center !py-2.5 text-xs font-mono"
+                  >
+                    Details
+                  </Link>
+                  <Link
+                    href={`/goals/${g.id}/tasks/${g.nextTaskId || "t1"}/submit`}
+                    className="btn-primary flex-1 text-center !py-2.5 text-xs font-mono"
+                  >
+                    Submit Proof
+                  </Link>
+                </div>
+              </TiltCard>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── 5. Treasury Ledger / Transaction Log ── */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#F59E0B]">receipt_long</span>
+            <h3 className="font-sans text-xl font-bold text-[#F8FAFC]">Financial Audit Ledger</h3>
+          </div>
+          <span className="text-xs font-mono text-[#64748B]">Automated Escrow Logs</span>
+        </div>
+
+        <div className="rounded-2xl bg-[#12181E] border border-[#1E293B] overflow-hidden">
+          <div className="divide-y divide-[#1E293B]">
+            {treasuryLogs.map((log) => {
+              const isRefund = log.type === "refund";
+              const isForfeit = log.type === "forfeiture";
+
+              return (
+                <div key={log.id} className="p-4 sm:p-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${
+                        isRefund
+                          ? "bg-[#10B981]/15 text-[#10B981]"
+                          : isForfeit
+                          ? "bg-[#F43F5E]/15 text-[#F43F5E]"
+                          : "bg-[#F59E0B]/15 text-[#F59E0B]"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {isRefund ? "arrow_downward" : isForfeit ? "close" : "lock"}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-[#F8FAFC]">{log.title}</p>
+                      <p className="text-xs font-mono text-[#64748B] mt-0.5">{log.date}</p>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <p
+                      className={`font-mono text-sm sm:text-base font-extrabold ${
+                        isRefund
+                          ? "text-[#10B981]"
+                          : isForfeit
+                          ? "text-[#F43F5E]"
+                          : "text-[#F59E0B]"
+                      }`}
+                    >
+                      {isRefund ? `+₹${log.amount}` : `-₹${log.amount}`}
+                    </p>
+                    <span
+                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                        isRefund
+                          ? "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30"
+                          : isForfeit
+                          ? "bg-[#F43F5E]/10 text-[#F43F5E] border-[#F43F5E]/30"
+                          : "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30"
+                      }`}
+                    >
+                      {isRefund ? "Refunded" : isForfeit ? "Forfeited" : "Held in Escrow"}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
+
     </div>
   );
 }
@@ -393,8 +386,8 @@ export default function DashboardPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center p-20">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
             progress_activity
           </span>
         </div>

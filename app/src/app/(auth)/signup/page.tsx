@@ -22,8 +22,7 @@ export default function SignupPage() {
     setMessage(null);
 
     try {
-      // Sign up with Supabase Auth (OTP via email)
-      const { data, error } = await supabase.auth.signInWithOtp({
+      const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -39,7 +38,7 @@ export default function SignupPage() {
       } else {
         setMessage({
           type: "success",
-          text: "Check your email for a confirmation link to complete your registration.",
+          text: "Check your email for a secure link to activate your CommitX account.",
         });
       }
     } catch {
@@ -54,27 +53,25 @@ export default function SignupPage() {
 
   return (
     <>
-      {/* Header */}
       <div className="text-center mb-8">
-        <div className="w-14 h-14 bg-tertiary-container rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <span className="material-symbols-outlined filled text-on-tertiary-container text-2xl">
+        <div className="w-12 h-12 bg-[#10B981]/15 text-[#10B981] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#10B981]/30">
+          <span className="material-symbols-outlined text-2xl font-bold">
             person_add
           </span>
         </div>
-        <h1 className="font-headline text-3xl font-bold text-on-surface mb-2">
-          Create your account
+        <h1 className="font-sans text-2xl font-extrabold text-[#F8FAFC]">
+          Join CommitX Protocol
         </h1>
-        <p className="text-on-surface-variant text-sm">
-          Start your accountability journey today
+        <p className="text-xs font-mono text-[#94A3B8] mt-1">
+          Lock in your intention with high-stakes accountability
         </p>
       </div>
 
-      {/* Form */}
-      <form onSubmit={handleSignup} className="space-y-5">
+      <form onSubmit={handleSignup} className="space-y-4">
         <div>
           <label
             htmlFor="fullName"
-            className="block font-label text-sm font-semibold text-on-surface-variant mb-2"
+            className="block text-xs font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-2"
           >
             Full Name
           </label>
@@ -84,17 +81,17 @@ export default function SignupPage() {
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="Your full name"
-            className="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-xl px-4 py-3 text-on-surface font-body placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200"
+            placeholder="Ada Lovelace"
+            className="w-full bg-[#090D10] border border-[#1E293B] rounded-xl px-4 py-3 text-sm font-mono text-[#F8FAFC] placeholder:text-[#475569] focus:border-[#10B981] outline-none transition-colors"
           />
         </div>
 
         <div>
           <label
             htmlFor="email"
-            className="block font-label text-sm font-semibold text-on-surface-variant mb-2"
+            className="block text-xs font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-2"
           >
-            Email address
+            Email Address
           </label>
           <input
             id="email"
@@ -103,17 +100,16 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-xl px-4 py-3 text-on-surface font-body placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200"
+            className="w-full bg-[#090D10] border border-[#1E293B] rounded-xl px-4 py-3 text-sm font-mono text-[#F8FAFC] placeholder:text-[#475569] focus:border-[#10B981] outline-none transition-colors"
           />
         </div>
 
         <div>
           <label
             htmlFor="phone"
-            className="block font-label text-sm font-semibold text-on-surface-variant mb-2"
+            className="block text-xs font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-2"
           >
-            Phone{" "}
-            <span className="text-outline-variant font-normal">(optional)</span>
+            Phone <span className="text-[#64748B] lowercase">(optional)</span>
           </label>
           <input
             id="phone"
@@ -121,17 +117,16 @@ export default function SignupPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+91 98765 43210"
-            className="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-xl px-4 py-3 text-on-surface font-body placeholder:text-outline-variant focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200"
+            className="w-full bg-[#090D10] border border-[#1E293B] rounded-xl px-4 py-3 text-sm font-mono text-[#F8FAFC] placeholder:text-[#475569] focus:border-[#10B981] outline-none transition-colors"
           />
         </div>
 
-        {/* Message */}
         {message && (
           <div
-            className={`p-4 rounded-xl text-sm font-body ${
+            className={`p-3.5 rounded-xl text-xs font-mono ${
               message.type === "success"
-                ? "bg-primary-fixed text-on-primary-fixed"
-                : "bg-error-container text-on-error-container"
+                ? "bg-[#10B981]/15 border border-[#10B981]/30 text-[#10B981]"
+                : "bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E]"
             }`}
           >
             {message.text}
@@ -141,53 +136,31 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary text-on-primary font-headline font-semibold text-lg py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:bg-primary/90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="btn-primary w-full !py-3.5 text-xs font-mono tracking-wider disabled:opacity-50"
         >
           {loading ? (
             <>
-              <span className="material-symbols-outlined animate-spin text-lg">
+              <span className="material-symbols-outlined animate-spin text-base">
                 progress_activity
               </span>
-              Creating account...
+              INITIALIZING ACCOUNT...
             </>
           ) : (
             <>
-              Create Account
-              <span className="material-symbols-outlined text-lg">
-                arrow_forward
-              </span>
+              CREATE ACCOUNT
+              <span className="material-symbols-outlined text-base">arrow_forward</span>
             </>
           )}
         </button>
       </form>
 
-      {/* Terms */}
-      <p className="text-center text-xs text-on-surface-variant mt-4 leading-relaxed">
-        By signing up, you agree to our{" "}
-        <Link
-          href="/terms"
-          className="text-primary hover:underline underline-offset-2"
-        >
-          Terms of Service
-        </Link>{" "}
-        and{" "}
-        <Link
-          href="/privacy"
-          className="text-primary hover:underline underline-offset-2"
-        >
-          Privacy Policy
-        </Link>
-        .
-      </p>
-
-      {/* Footer */}
-      <p className="text-center text-sm text-on-surface-variant mt-4">
+      <p className="text-center text-xs text-[#94A3B8] mt-6">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-primary font-semibold hover:underline underline-offset-4"
+          className="text-[#10B981] font-bold hover:underline"
         >
-          Log in
+          Sign In
         </Link>
       </p>
     </>

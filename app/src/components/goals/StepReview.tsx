@@ -1,6 +1,7 @@
 "use client";
 
 import { GoalFormData, TaskFormData, VERIFICATION_LABELS, CATEGORY_LABELS } from "@/lib/types";
+import TiltCard from "@/components/ui/TiltCard";
 
 interface StepReviewProps {
   goal: GoalFormData;
@@ -18,67 +19,65 @@ export default function StepReview({
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="font-headline text-3xl font-bold text-on-surface mb-2">
-          Review & Lock Commitment
+        <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+          STEP 03 // LOCK & DEPOSIT
+        </span>
+        <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          Review & Lock Escrow
         </h2>
-        <p className="text-on-surface-variant text-base">
-          Verify all details before depositing your stake into escrow.
+        <p className="text-sm text-[#94A3B8] mt-1">
+          Confirm your commitment details before depositing stake capital into escrow.
         </p>
       </div>
 
-      {/* Overview Card */}
-      <div className="bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/30 shadow-sm flex flex-col gap-6">
-        <div className="flex items-start justify-between">
+      {/* Review Tilt Card */}
+      <TiltCard glow="emerald" className="p-6 sm:p-8 bg-[#12181E] border border-[#1E293B] space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary-fixed/40 px-3 py-1 rounded-full">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#10B981] bg-[#10B981]/15 border border-[#10B981]/30 px-3 py-1 rounded-full">
               {CATEGORY_LABELS[goal.category]}
             </span>
-            <h3 className="font-headline text-2xl font-bold text-on-surface mt-3">
+            <h3 className="font-sans text-2xl font-extrabold text-[#F8FAFC] mt-3">
               {goal.title}
             </h3>
             {goal.description && (
-              <p className="text-on-surface-variant text-sm mt-2 leading-relaxed">
+              <p className="text-xs text-[#94A3B8] mt-1.5 leading-relaxed max-w-xl">
                 {goal.description}
               </p>
             )}
           </div>
-          <div className="text-right">
-            <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block">
-              Total Escrow Stake
-            </span>
-            <span className="font-headline text-3xl font-bold text-primary">
-              ₹{goal.total_stake}
-            </span>
+
+          <div className="text-left sm:text-right">
+            <span className="text-[11px] font-mono text-[#94A3B8] uppercase block">TOTAL ESCROW PLEDGE</span>
+            <span className="font-mono text-3xl font-black text-[#10B981]">₹{goal.total_stake}</span>
           </div>
         </div>
 
-        <hr className="border-outline-variant/20" />
+        <hr className="border-[#1E293B]" />
 
-        {/* Milestones list */}
+        {/* Milestone Path */}
         <div>
-          <h4 className="font-headline font-bold text-lg text-on-surface mb-4">
-            Milestones & Verifications ({tasks.length})
+          <h4 className="font-sans text-sm font-bold text-[#F8FAFC] mb-3">
+            Milestones & Scheduled Deadlines ({tasks.length})
           </h4>
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {tasks.map((task, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant/20"
+                className="flex items-center justify-between p-3.5 bg-[#090D10] rounded-xl border border-[#1E293B]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-6 h-6 rounded-full bg-primary-container text-on-primary-container text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-[#12181E] text-[#10B981] border border-[#10B981]/30 text-xs font-mono font-bold flex items-center justify-center">
                     {idx + 1}
                   </span>
                   <div>
-                    <h5 className="font-bold text-on-surface text-sm">
-                      {task.title}
-                    </h5>
-                    <span className="text-xs text-on-surface-variant">
-                      Method: {VERIFICATION_LABELS[task.verification_method]} • Deadline: {task.deadline}
+                    <h5 className="font-bold text-[#F8FAFC] text-xs sm:text-sm">{task.title}</h5>
+                    <span className="text-[11px] font-mono text-[#94A3B8]">
+                      {VERIFICATION_LABELS[task.verification_method]} • Due: {task.deadline}
                     </span>
                   </div>
                 </div>
-                <span className="font-headline font-bold text-sm text-primary">
+                <span className="font-mono text-sm font-extrabold text-[#10B981]">
                   ₹{task.stake_amount}
                 </span>
               </div>
@@ -86,31 +85,31 @@ export default function StepReview({
           </div>
         </div>
 
-        {/* Accountability terms */}
-        <div className="bg-primary-container/20 p-5 rounded-2xl border border-primary/20 flex items-start gap-4">
-          <span className="material-symbols-outlined text-primary text-2xl shrink-0 mt-0.5">
-            shield
+        {/* Escrow Guarantee Callout */}
+        <div className="p-4 rounded-xl bg-[#10B981]/10 border border-[#10B981]/30 flex items-start gap-3 text-xs text-[#F8FAFC]">
+          <span className="material-symbols-outlined text-[#10B981] text-xl shrink-0 mt-0.5">
+            shield_lock
           </span>
-          <div className="text-xs text-on-surface leading-relaxed">
-            <strong>The CommitX Guarantee:</strong> Your ₹{goal.total_stake} stake will be safely held in Razorpay escrow. Each sub-task passed will trigger an instant 100% refund.
+          <div className="leading-relaxed">
+            <strong className="text-[#10B981]">The CommitX Escrow Guarantee:</strong> Your ₹{goal.total_stake} stake is safely held in trust. As you complete and verify each milestone, 100% of that milestone&apos;s stake is instantly refunded back to you.
           </div>
         </div>
-      </div>
+      </TiltCard>
 
-      {/* Action button */}
+      {/* Lock CTA Button */}
       <button
         onClick={onConfirm}
         disabled={isLoading}
-        className="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline font-bold text-lg py-4 rounded-xl transition-all duration-200 shadow-organic active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+        className="btn-primary w-full text-center !py-4 text-base tracking-wide"
       >
         {isLoading ? (
           <span className="flex items-center gap-2">
             <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span>
-            Locking In Stake...
+            Locking In Escrow Capital...
           </span>
         ) : (
           <>
-            Deposit Stake & Begin Journey (₹{goal.total_stake})
+            Deposit Stake & Lock Commitment (₹{goal.total_stake})
             <span className="material-symbols-outlined text-xl">lock</span>
           </>
         )}

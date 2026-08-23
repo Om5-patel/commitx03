@@ -1,52 +1,63 @@
 import type { Metadata } from "next";
-import { Literata, Nunito_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import BackgroundMesh from "@/components/ui/BackgroundMesh";
+import { ToastProvider } from "@/components/ui/CinematicToast";
 
-const literata = Literata({
-  variable: "--font-literata",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const nunitoSans = Nunito_Sans({
-  variable: "--font-nunito-sans",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "CommitX — Rooted Accountability",
+    default: "CommitX — High-Stakes Accountability Protocol",
     template: "%s | CommitX",
   },
   description:
-    "Commit to your growth with real stakes. Set a goal, lock in your intention, stake a meaningful pledge, and let the organic pressure of the protocol guide you to success.",
+    "Commit to your goals with real stakes. AI-verified proof, dynamic escrow vaults, and automated refunds upon verified completion.",
   keywords: [
     "commitment",
     "accountability",
-    "goals",
-    "stakes",
-    "habit tracking",
-    "personal growth",
+    "financial stakes",
+    "goals vault",
+    "habit protocol",
+    "AI verification",
   ],
   openGraph: {
-    title: "CommitX — Rooted Accountability",
+    title: "CommitX — High-Stakes Accountability Protocol",
     description:
-      "Commit to your growth with real stakes. A calm, grounded approach to achieving your goals.",
+      "Lock in your intention with financial stakes. Verified milestones trigger instant refunds.",
     siteName: "CommitX",
     locale: "en_IN",
     type: "website",
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
-      className={`${literata.variable} ${nunitoSans.variable} h-full`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable} dark h-full`}
     >
-      <body className="min-h-full flex flex-col bg-background text-on-background font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
-        {children}
+      <body className="min-h-full flex flex-col bg-[#090D10] text-[#F8FAFC] font-sans antialiased relative">
+        <ToastProvider>
+          <BackgroundMesh />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

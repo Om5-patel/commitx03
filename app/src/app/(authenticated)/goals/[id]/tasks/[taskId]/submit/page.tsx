@@ -29,20 +29,19 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
           if (found) {
             setTask(found);
           } else {
-            // Fallback mock task for testing
             setTask({
               id: taskId,
-              title: "Morning Habit / Deep Work Check-in",
-              description: "Complete and submit proof for today's milestone.",
-              verification_method: "photo",
-              stake_amount: 150,
+              title: "System Design & Distributed Services Check-in",
+              description: "Complete and submit verified evidence for today's milestone.",
+              verification_method: "quiz",
+              stake_amount: 200,
             });
           }
         } else {
           setTask({
             id: taskId,
-            title: "Morning Habit / Deep Work Check-in",
-            description: "Complete and submit proof for today's milestone.",
+            title: "Morning Habit / Focus Sprint Check-in",
+            description: "Complete and submit verified evidence for today's milestone.",
             verification_method: "photo",
             stake_amount: 150,
           });
@@ -50,7 +49,7 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
       } catch {
         setTask({
           id: taskId,
-          title: "Milestone Task",
+          title: "Milestone Task Verification",
           description: "Submit evidence for verification.",
           verification_method: "photo",
           stake_amount: 150,
@@ -66,13 +65,13 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
     setSuccess(true);
     setTimeout(() => {
       router.push(`/goals/${goalId}`);
-    }, 2500);
+    }, 2000);
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-20">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary">
+      <div className="flex items-center justify-center p-24">
+        <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
           progress_activity
         </span>
       </div>
@@ -81,17 +80,17 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
 
   if (success) {
     return (
-      <div className="bg-surface-container-lowest p-12 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-lg mx-auto text-center flex flex-col items-center gap-6 my-12">
-        <div className="w-20 h-20 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center">
-          <span className="material-symbols-outlined text-4xl filled">
+      <div className="p-12 rounded-3xl bg-[#12181E] border border-[#10B981]/50 shadow-[0_0_50px_rgba(16,185,129,0.2)] max-w-lg mx-auto text-center flex flex-col items-center gap-6 my-16">
+        <div className="w-20 h-20 bg-[#10B981]/20 text-[#10B981] rounded-full flex items-center justify-center border border-[#10B981]/40">
+          <span className="material-symbols-outlined text-4xl font-bold">
             verified
           </span>
         </div>
-        <h2 className="font-headline text-3xl font-bold text-on-surface">
-          Proof Successfully Verified!
+        <h2 className="font-sans text-3xl font-extrabold text-[#F8FAFC]">
+          Milestone Verified!
         </h2>
-        <p className="text-on-surface-variant text-sm">
-          Your milestone stake has been unlocked and refunded. Redirecting to your commitment details...
+        <p className="text-xs font-mono text-[#94A3B8] leading-relaxed">
+          Your ₹{task?.stake_amount || 150} stake has been unlocked and credited back to your account. Returning to vault...
         </p>
       </div>
     );
@@ -100,51 +99,36 @@ export default function TaskSubmitPage({ params }: SubmitPageProps) {
   const method = task?.verification_method || "photo";
 
   return (
-    <div className="w-full flex flex-col gap-6">
-      {/* If camera is used, we give it a clean full viewport container matching the mockup */}
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-6">
+      <Link
+        href={`/goals/${goalId}`}
+        className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors mb-2"
+      >
+        <span className="material-symbols-outlined text-base">arrow_back</span>
+        BACK TO COMMITMENT VAULT
+      </Link>
+
       {method === "photo" ? (
-        <div className="max-w-xl mx-auto w-full">
-          <CameraCapture
-            taskId={taskId}
-            goalId={goalId}
-            taskTitle={task.title}
-            onSuccess={handleSuccess}
-          />
-        </div>
+        <CameraCapture
+          taskId={taskId}
+          goalId={goalId}
+          taskTitle={task.title}
+          onSuccess={handleSuccess}
+        />
       ) : method === "quiz" ? (
-        <div className="max-w-3xl mx-auto w-full">
-          <Link
-            href={`/goals/${goalId}`}
-            className="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold mb-6"
-          >
-            <span className="material-symbols-outlined text-lg">arrow_back</span>
-            Back to Commitment
-          </Link>
-          <QuizSubmission
-            taskId={taskId}
-            goalId={goalId}
-            taskTitle={task.title}
-            taskDescription={task.description}
-            onSuccess={handleSuccess}
-          />
-        </div>
+        <QuizSubmission
+          taskId={taskId}
+          goalId={goalId}
+          taskTitle={task.title}
+          onSuccess={handleSuccess}
+        />
       ) : (
-        <div className="max-w-3xl mx-auto w-full">
-          <Link
-            href={`/goals/${goalId}`}
-            className="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold mb-6"
-          >
-            <span className="material-symbols-outlined text-lg">arrow_back</span>
-            Back to Commitment
-          </Link>
-          <FileSubmission
-            taskId={taskId}
-            goalId={goalId}
-            taskTitle={task.title}
-            taskDescription={task.description}
-            onSuccess={handleSuccess}
-          />
-        </div>
+        <FileSubmission
+          taskId={taskId}
+          goalId={goalId}
+          taskTitle={task.title}
+          onSuccess={handleSuccess}
+        />
       )}
     </div>
   );

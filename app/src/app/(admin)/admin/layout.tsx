@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import BackgroundMesh from "@/components/ui/BackgroundMesh";
 
 export default async function AdminLayout({
   children,
@@ -30,38 +31,48 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-surface-container-low flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#090D10] text-[#F8FAFC] flex flex-col md:flex-row relative">
+      <BackgroundMesh />
+
       {/* ── Admin Sidebar ── */}
-      <aside className="w-full md:w-64 bg-surface border-r border-outline-variant/30 p-6 flex flex-col justify-between shrink-0">
+      <aside className="w-full md:w-64 bg-[#090D10]/90 backdrop-blur-2xl border-r border-[#1E293B] p-6 flex flex-col justify-between shrink-0 z-20">
         <div className="space-y-8">
           <div>
             <Link
               href="/admin"
-              className="font-headline text-2xl font-bold text-primary tracking-tight"
+              className="flex items-center gap-2.5 font-sans text-xl font-black tracking-tight"
             >
-              CommitX <span className="text-xs text-tertiary bg-tertiary-fixed px-2 py-0.5 rounded-md uppercase">Admin</span>
+              <div className="w-8 h-8 rounded-xl bg-[#10B981] flex items-center justify-center text-[#090D10] font-black">
+                <span className="material-symbols-outlined text-lg font-bold">terminal</span>
+              </div>
+              <span>
+                Commit<span className="text-[#10B981]">X</span>
+              </span>
+              <span className="text-[9px] font-mono font-bold bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 px-2 py-0.5 rounded-full uppercase">
+                Admin
+              </span>
             </Link>
-            <p className="text-[11px] text-on-surface-variant mt-1">
-              Admin: {user.email}
+            <p className="text-[10px] font-mono text-[#64748B] mt-2 truncate">
+              {user.email}
             </p>
           </div>
 
-          <nav className="space-y-1">
+          <nav className="space-y-1.5 font-mono text-xs">
             <Link
               href="/admin"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-headline font-semibold text-sm text-on-surface hover:bg-surface-container transition-colors"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-primary">
+              <span className="material-symbols-outlined text-lg text-[#10B981]">
                 dashboard
               </span>
-              Overview
+              Terminal Overview
             </Link>
 
             <Link
               href="/admin/review"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-headline font-semibold text-sm text-on-surface hover:bg-surface-container transition-colors"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-tertiary">
+              <span className="material-symbols-outlined text-lg text-[#F59E0B]">
                 rate_review
               </span>
               Review Queue
@@ -69,41 +80,39 @@ export default async function AdminLayout({
 
             <Link
               href="/admin/disputes"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-headline font-semibold text-sm text-on-surface hover:bg-surface-container transition-colors"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-error">
+              <span className="material-symbols-outlined text-lg text-[#06B6D4]">
                 gavel
               </span>
-              Disputes
+              Arbitration
             </Link>
 
             <Link
               href="/admin/revenue"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-headline font-semibold text-sm text-on-surface hover:bg-surface-container transition-colors"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04] transition-colors"
             >
-              <span className="material-symbols-outlined text-lg text-primary">
+              <span className="material-symbols-outlined text-lg text-[#10B981]">
                 payments
               </span>
-              Revenue Log
+              Escrow Ledger
             </Link>
           </nav>
         </div>
 
-        <div className="pt-6 border-t border-outline-variant/20">
+        <div className="pt-6 border-t border-[#1E293B]">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 text-xs font-bold text-on-surface-variant hover:text-primary transition-colors"
+            className="flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors"
           >
-            <span className="material-symbols-outlined text-base">
-              arrow_back
-            </span>
-            Return to User Dashboard
+            <span className="material-symbols-outlined text-base">arrow_back</span>
+            User Dashboard
           </Link>
         </div>
       </aside>
 
       {/* ── Main Content Area ── */}
-      <main className="flex-1 p-6 md:p-10 max-w-7xl">
+      <main className="flex-1 p-6 md:p-10 max-w-7xl z-10">
         {children}
       </main>
     </div>

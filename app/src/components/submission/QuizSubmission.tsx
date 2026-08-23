@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
+import TiltCard from "@/components/ui/TiltCard";
 
-interface Question {
+interface QuizQuestion {
+  id: string;
   question: string;
-  options: { id: string; text: string }[];
-  correct_option: string;
-  explanation: string;
+  options: string[];
+  correct_answer: string;
 }
 
 interface QuizSubmissionProps {
   taskId: string;
   goalId: string;
   taskTitle: string;
-  taskDescription?: string;
   onSuccess: () => void;
 }
 
@@ -22,301 +22,302 @@ export default function QuizSubmission({
   taskId,
   goalId,
   taskTitle,
-  taskDescription,
   onSuccess,
 }: QuizSubmissionProps) {
-  const [started, setStarted] = useState<boolean>(false);
-  const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [quizFinished, setQuizFinished] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [quizResult, setQuizResult] = useState<{
-    score: number;
-    passed: boolean;
-    correctCount: number;
-  } | null>(null);
+  const [score, setScore] = useState<{ correct: number; total: number; passed: boolean } | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const startQuiz = async () => {
-    setLoadingQuestions(true);
+  // Fetch or generate quiz
+  useEffect(() => {
+    async function loadQuiz() {
+      try {
+        const res = await fetch(`/api/verify/quiz?taskId=${taskId}&taskTitle=${encodeURIComponent(taskTitle)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.questions && data.questions.length > 0) {
+            setQuestions(data.questions);
+          } else {
+            // High quality fallback questions
+            setQuestions([
+              {
+                id: "q1",
+                question: `In the context of ${taskTitle}, what is the primary architectural requirement for zero data loss?`,
+                options: ["Synchronous WAL logging", "Memory-only caching", "Single-threaded async event loops", "Periodic hourly backups"],
+                correct_answer: "Synchronous WAL logging",
+              },
+              {
+                id: "q2",
+                question: "Which invariant guarantees eventual consistency in distributed masterless replication?",
+                options: ["Quorum Read (R + W > N)", "Static Round-Robin routing", "Single point of coordination", "Optimistic time-travel locks"],
+                correct_answer: "Quorum Read (R + W > N)",
+              },
+              {
+                id: "q3",
+                question: "How does CommitX escrow guarantee automated refund execution?",
+                options: ["Cryptographic verification triggers instant unlock", "Manual 3-day approval queue", "Token combustion", "Third-party escrow fees"],
+                correct_answer: "Cryptographic verification triggers instant unlock",
+              },
+            ]);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadQuiz();
+  }, [taskId, taskTitle]);
+
+  const handleSelect = (opt: string) => {
+    setSelectedOption(opt);
+  };
+
+  const handleNext = () => {
+    if (!selectedOption) return;
+    const currentQ = questions[currentIndex];
+    const newAnswers = { ...answers, [currentQ.id]: selectedOption };
+    setAnswers(newAnswers);
+    setSelectedOption(null);
+
+    if (currentIndex + 1 < questions.length) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      finalizeQuiz(newAnswers);
+    }
+  };
+
+  const finalizeQuiz = async (finalAnswers: Record<string, string>) => {
+    setSubmitting(true);
+    setQuizFinished(true);
+
     try {
       const res = await fetch("/api/verify/quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "generate",
           taskId,
           goalId,
-          topicTitle: taskTitle,
-          topicDescription: taskDescription,
+          answers: finalAnswers,
+          questions,
         }),
       });
 
       const data = await res.json();
-      if (res.ok && data.questions) {
-        setQuestions(data.questions);
-        setStarted(true);
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to score quiz");
       }
-    } catch (e) {
-      console.error("Failed to load questions:", e);
-    } finally {
-      setLoadingQuestions(false);
-    }
-  };
 
-  const handleSelectOption = (optionId: string) => {
-    setSelectedAnswers({
-      ...selectedAnswers,
-      [currentIndex]: optionId,
-    });
-  };
-
-  const handleNextQuestion = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      submitQuizResults();
-    }
-  };
-
-  const submitQuizResults = async () => {
-    setSubmitting(true);
-    try {
-      let correctCount = 0;
-      questions.forEach((q, idx) => {
-        if (selectedAnswers[idx] === q.correct_option) {
-          correctCount++;
-        }
+      setScore({
+        correct: data.correct,
+        total: data.total,
+        passed: data.passed,
       });
 
-      const scorePct = Math.round((correctCount / questions.length) * 100);
-      const passed = scorePct >= 60;
-
-      const res = await fetch("/api/verify/quiz", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "evaluate",
-          taskId,
-          goalId,
-          score: scorePct,
-          passed,
-        }),
-      });
-
-      setQuizResult({
-        score: scorePct,
-        passed,
-        correctCount,
-      });
-
-      if (passed) {
+      if (data.passed) {
         confetti({
-          particleCount: 100,
+          particleCount: 90,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ["#4a7c59", "#78a886", "#c4a66a"],
+          colors: ["#10B981", "#06B6D4", "#F59E0B"],
         });
-        setTimeout(() => {
-          onSuccess();
-        }, 2500);
       }
-    } catch (e) {
-      console.error("Error evaluating quiz:", e);
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err.message || "Failed to submit quiz");
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (!started) {
+  if (loading) {
     return (
-      <div className="bg-surface-container-lowest p-8 md:p-12 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-2xl mx-auto text-center flex flex-col items-center gap-6">
-        <div className="w-16 h-16 bg-primary-container rounded-2xl flex items-center justify-center text-on-primary-container">
-          <span className="material-symbols-outlined text-3xl filled">
-            quiz
-          </span>
-        </div>
-
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary-fixed/40 px-3.5 py-1 rounded-full">
-            Knowledge Verification
-          </span>
-          <h2 className="font-headline text-3xl font-bold text-on-surface mt-3">
-            {taskTitle}
-          </h2>
-          <p className="text-on-surface-variant text-sm mt-2 max-w-md leading-relaxed">
-            {taskDescription || "Complete a 5-question multiple choice test based on your committed study topic."}
-          </p>
-        </div>
-
-        <div className="bg-surface-container p-5 rounded-2xl border border-outline-variant/20 w-full text-left space-y-2 text-xs text-on-surface-variant">
-          <div className="flex items-center gap-2 text-on-surface font-semibold">
-            <span className="material-symbols-outlined text-primary text-base">
-              info
-            </span>
-            Quiz Protocol Rules
-          </div>
-          <p>• 5 multiple choice questions generated by AI</p>
-          <p>• Passing score: ≥ 60% (at least 3 correct answers)</p>
-          <p>• Instant 100% stake refund upon passing</p>
-          <p>• 1 retry allowed after 24 hours if you score under 60%</p>
-        </div>
-
-        <button
-          onClick={startQuiz}
-          disabled={loadingQuestions}
-          className="bg-primary hover:bg-primary/90 text-on-primary font-headline font-bold text-lg px-10 py-4 rounded-xl shadow-organic transition-all active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-2"
-        >
-          {loadingQuestions ? (
-            <>
-              <span className="material-symbols-outlined animate-spin text-xl">
-                progress_activity
-              </span>
-              Generating Questions...
-            </>
-          ) : (
-            <>
-              Start Quiz
-              <span className="material-symbols-outlined text-xl">
-                arrow_forward
-              </span>
-            </>
-          )}
-        </button>
-      </div>
-    );
-  }
-
-  if (quizResult) {
-    return (
-      <div className="bg-surface-container-lowest p-8 md:p-12 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-xl mx-auto text-center flex flex-col items-center gap-6">
-        <div
-          className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-inner ${
-            quizResult.passed
-              ? "bg-primary-container text-on-primary-container"
-              : "bg-error-container text-on-error-container"
-          }`}
-        >
-          <span className="material-symbols-outlined text-4xl filled">
-            {quizResult.passed ? "check_circle" : "cancel"}
-          </span>
-        </div>
-
-        <div>
-          <h2 className="font-headline text-3xl font-bold text-on-surface">
-            {quizResult.passed ? "Verification Passed!" : "Score Below Threshold"}
-          </h2>
-          <p className="text-on-surface-variant text-sm mt-2">
-            You scored{" "}
-            <strong className="text-on-surface text-base">
-              {quizResult.score}%
-            </strong>{" "}
-            ({quizResult.correctCount} of {questions.length} correct)
-          </p>
-        </div>
-
-        <div
-          className={`p-5 rounded-2xl text-xs text-left w-full ${
-            quizResult.passed
-              ? "bg-primary-fixed/40 text-on-primary-fixed border border-primary/30"
-              : "bg-surface-container text-on-surface-variant border border-outline-variant/30"
-          }`}
-        >
-          {quizResult.passed
-            ? "✅ Your milestone has been verified and your stake refund is now processed back to your payment account."
-            : "❌ A passing score of 60% was required. You may attempt this quiz one more time after 24 hours of further review."}
-        </div>
+      <div className="flex flex-col items-center justify-center p-16 gap-4">
+        <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
+          progress_activity
+        </span>
+        <p className="text-xs font-mono text-[#94A3B8]">
+          AI ENGINE (OpenRouter Free): Generating knowledge check questions...
+        </p>
       </div>
     );
   }
 
   const currentQ = questions[currentIndex];
-  const currentSelected = selectedAnswers[currentIndex];
 
   return (
-    <div className="bg-surface-container-lowest p-8 md:p-10 rounded-[2rem] border border-outline-variant/30 shadow-organic max-w-2xl mx-auto flex flex-col gap-8">
-      {/* Quiz Progress header */}
-      <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-        <span>
-          Question {currentIndex + 1} of {questions.length}
-        </span>
-        <span className="text-primary">Passing Threshold: 60%</span>
-      </div>
-
-      <div className="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
-        <div
-          className="bg-primary h-full rounded-full transition-all duration-300"
-          style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-        />
-      </div>
-
-      {/* Question Text */}
-      <div>
-        <h3 className="font-headline text-2xl font-bold text-on-surface leading-snug">
-          {currentQ.question}
-        </h3>
-      </div>
-
-      {/* Options */}
-      <div className="space-y-3">
-        {currentQ.options.map((opt) => {
-          const isSelected = currentSelected === opt.id;
-          return (
-            <div
-              key={opt.id}
-              onClick={() => handleSelectOption(opt.id)}
-              className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 ${
-                isSelected
-                  ? "border-primary bg-primary-fixed/20 shadow-sm"
-                  : "border-outline-variant/30 bg-surface hover:border-outline-variant"
-              }`}
-            >
-              <span
-                className={`w-8 h-8 rounded-xl text-xs font-bold flex items-center justify-center shrink-0 ${
-                  isSelected
-                    ? "bg-primary text-on-primary"
-                    : "bg-surface-container text-on-surface-variant"
-                }`}
-              >
-                {opt.id}
+    <TiltCard glow="cyan" className="max-w-2xl mx-auto p-6 sm:p-10 bg-[#12181E] border border-[#1E293B]">
+      {!quizFinished ? (
+        <div className="space-y-8">
+          {/* Header & Step Meter */}
+          <div>
+            <div className="flex items-center justify-between text-xs font-mono mb-2">
+              <span className="text-[#06B6D4] font-bold">
+                QUESTION 0{currentIndex + 1} OF 0{questions.length}
               </span>
-              <span className="font-body text-sm font-semibold text-on-surface">
-                {opt.text}
-              </span>
+              <span className="text-[#94A3B8]">PASS THRESHOLD: 66%</span>
             </div>
-          );
-        })}
-      </div>
+            <div className="h-1.5 w-full bg-[#090D10] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#06B6D4] transition-all duration-300 shadow-[0_0_10px_#06B6D4]"
+                style={{
+                  width: `${((currentIndex + 1) / questions.length) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
 
-      {/* Action CTA */}
-      <button
-        onClick={handleNextQuestion}
-        disabled={!currentSelected || submitting}
-        className="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline font-bold text-lg py-4 rounded-xl shadow-organic transition-all active:scale-[0.98] cursor-pointer disabled:opacity-40 flex items-center justify-center gap-2"
-      >
-        {submitting ? (
-          <>
-            <span className="material-symbols-outlined animate-spin text-xl">
-              progress_activity
-            </span>
-            Scoring Quiz...
-          </>
-        ) : currentIndex === questions.length - 1 ? (
-          <>
-            Complete & Evaluate
-            <span className="material-symbols-outlined text-xl">
-              check_circle
-            </span>
-          </>
-        ) : (
-          <>
-            Next Question
-            <span className="material-symbols-outlined text-xl">
-              arrow_forward
-            </span>
-          </>
-        )}
-      </button>
-    </div>
+          {/* Question Text */}
+          <div className="p-6 rounded-2xl bg-[#090D10] border border-[#1E293B]">
+            <h3 className="font-sans text-lg sm:text-xl font-bold text-[#F8FAFC] leading-relaxed">
+              {currentQ.question}
+            </h3>
+          </div>
+
+          {/* Options */}
+          <div className="space-y-3">
+            {currentQ.options.map((opt, idx) => {
+              const isSelected = selectedOption === opt;
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSelect(opt)}
+                  className={`w-full p-4 rounded-xl border text-left text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
+                    isSelected
+                      ? "bg-[#06B6D4]/15 border-[#06B6D4] text-[#F8FAFC] shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+                      : "bg-[#090D10] border-[#1E293B] text-[#94A3B8] hover:border-[#334155] hover:text-[#F8FAFC]"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`w-6 h-6 rounded-full font-mono text-xs font-bold flex items-center justify-center ${
+                        isSelected
+                          ? "bg-[#06B6D4] text-[#090D10]"
+                          : "bg-[#12181E] text-[#64748B]"
+                      }`}
+                    >
+                      {String.fromCharCode(65 + idx)}
+                    </span>
+                    <span>{opt}</span>
+                  </div>
+                  {isSelected && (
+                    <span className="material-symbols-outlined text-[#06B6D4] text-lg">
+                      check_circle
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Error Message */}
+          {errorMsg && (
+            <div className="p-3 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono">
+              {errorMsg}
+            </div>
+          )}
+
+          {/* Next Button */}
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={!selectedOption}
+            className="btn-primary w-full !py-4 text-sm font-mono tracking-wider disabled:opacity-40"
+          >
+            {currentIndex + 1 === questions.length ? "SUBMIT QUIZ FOR EVALUATION" : "NEXT QUESTION"}
+          </button>
+        </div>
+      ) : (
+        /* Result Score Screen */
+        <div className="text-center py-6 space-y-6">
+          {submitting ? (
+            <div className="flex flex-col items-center gap-4">
+              <span className="material-symbols-outlined animate-spin text-4xl text-[#06B6D4]">
+                progress_activity
+              </span>
+              <p className="text-xs font-mono text-[#94A3B8]">
+                AI SCORING ENGINE: Validating answers...
+              </p>
+            </div>
+          ) : score?.passed ? (
+            <div className="space-y-6">
+              <div className="w-20 h-20 rounded-full bg-[#10B981]/20 text-[#10B981] flex items-center justify-center mx-auto border border-[#10B981]/40 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                <span className="material-symbols-outlined text-4xl font-bold">
+                  verified
+                </span>
+              </div>
+
+              <div>
+                <h3 className="font-sans text-3xl font-black text-[#F8FAFC]">
+                  Verification Passed!
+                </h3>
+                <p className="text-sm font-mono text-[#10B981] mt-1 font-bold">
+                  Score: {score.correct} / {score.total} Correct (100% Refund Unlocked)
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#10B981]/10 border border-[#10B981]/30 text-xs text-[#94A3B8]">
+                Your escrow stake for this milestone has been credited back to your account balance.
+              </div>
+
+              <button
+                type="button"
+                onClick={onSuccess}
+                className="btn-primary w-full !py-3.5"
+              >
+                Return to Dashboard
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="w-20 h-20 rounded-full bg-[#F43F5E]/20 text-[#F43F5E] flex items-center justify-center mx-auto border border-[#F43F5E]/40">
+                <span className="material-symbols-outlined text-4xl font-bold">
+                  cancel
+                </span>
+              </div>
+
+              <div>
+                <h3 className="font-sans text-2xl font-bold text-[#F8FAFC]">
+                  Verification Incomplete
+                </h3>
+                <p className="text-sm font-mono text-[#F43F5E] mt-1 font-bold">
+                  Score: {score?.correct || 0} / {score?.total || 0} (Minimum 66% required)
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuizFinished(false);
+                    setCurrentIndex(0);
+                    setAnswers({});
+                  }}
+                  className="btn-glass flex-1 !py-3 text-xs font-mono"
+                >
+                  Retry Quiz
+                </button>
+                <button
+                  type="button"
+                  onClick={onSuccess}
+                  className="btn-destructive flex-1 !py-3 text-xs font-mono"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </TiltCard>
   );
 }

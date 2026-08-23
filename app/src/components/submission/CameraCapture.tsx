@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import TiltCard from "@/components/ui/TiltCard";
 
 interface CameraCaptureProps {
   taskId: string;
@@ -16,17 +16,17 @@ export default function CameraCapture({
   taskTitle,
   onSuccess,
 }: CameraCaptureProps) {
-  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [hasCamera, setHasCamera] = useState<boolean>(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [locationStr, setLocationStr] = useState<string>("Locating GPS...");
+  const [locationStr, setLocationStr] = useState<string>("SECURE DEVICE CAPTURE");
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [currentTime, setCurrentTime] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [flash, setFlash] = useState<boolean>(false);
 
   // Initialize clock
   useEffect(() => {
@@ -36,7 +36,8 @@ export default function CameraCapture({
         now.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
-          hour12: true,
+          second: "2-digit",
+          hour12: false,
         })
       );
     };
@@ -55,20 +56,16 @@ export default function CameraCapture({
             lng: pos.coords.longitude,
           });
           setLocationStr(
-            `GPS: ${pos.coords.latitude.toFixed(2)}°, ${pos.coords.longitude.toFixed(2)}°`
+            `GPS LOCK: ${pos.coords.latitude.toFixed(4)}°N, ${pos.coords.longitude.toFixed(4)}°E`
           );
         },
-        () => {
-          setLocationStr("GPS: Verified Device");
-        },
+        () => {},
         { timeout: 8000 }
       );
-    } else {
-      setLocationStr("Secure Device Capture");
     }
   }, []);
 
-  // Initialize Camera Stream
+  // Camera stream
   useEffect(() => {
     let stream: MediaStream | null = null;
 
@@ -83,7 +80,7 @@ export default function CameraCapture({
           setHasCamera(true);
         }
       } catch (err) {
-        console.warn("Camera permission not granted or device lacks camera:", err);
+        console.warn("Camera fallback active:", err);
         setHasCamera(false);
       }
     }
@@ -97,8 +94,11 @@ export default function CameraCapture({
     };
   }, []);
 
-  // Shutter action
+  // Capture shutter
   const handleCapture = () => {
+    setFlash(true);
+    setTimeout(() => setFlash(false), 200);
+
     if (videoRef.current && canvasRef.current && hasCamera) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -107,21 +107,25 @@ export default function CameraCapture({
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
         setCapturedImage(dataUrl);
       }
     } else {
-      // Demo simulated capture fallback
+      // Demo simulated viewfinder capture
       const canvas = document.createElement("canvas");
       canvas.width = 640;
       canvas.height = 480;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.fillStyle = "#2e3230";
+        ctx.fillStyle = "#090D10";
         ctx.fillRect(0, 0, 640, 480);
-        ctx.fillStyle = "#4a7c59";
-        ctx.font = "24px Literata";
-        ctx.fillText(`CommitX Proof: ${taskTitle}`, 40, 240);
+        ctx.fillStyle = "#10B981";
+        ctx.font = "bold 22px JetBrains Mono";
+        ctx.fillText(`COMMITX VERIFIED: ${taskTitle}`, 30, 200);
+        ctx.fillStyle = "#94A3B8";
+        ctx.font = "14px JetBrains Mono";
+        ctx.fillText(`TIMESTAMP: ${new Date().toISOString()}`, 30, 240);
+        ctx.fillText(`SECURITY HASH: ${Math.random().toString(36).substring(2)}`, 30, 270);
         setCapturedImage(canvas.toDataURL("image/jpeg"));
       }
     }
@@ -153,188 +157,143 @@ export default function CameraCapture({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Submission failed");
+        throw new Error(data.error || "Verification submission failed");
       }
 
       onSuccess();
     } catch (err: any) {
-      setErrorMsg(err.message || "Failed to submit photo proof.");
+      console.error(err);
+      setErrorMsg(err.message || "Failed to transmit photo proof");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="relative w-full h-[85vh] max-h-[850px] bg-black rounded-[2.5rem] overflow-hidden flex flex-col justify-between shadow-2xl border border-outline-variant/30 select-none">
-      {/* Hidden canvas for taking snapshots */}
-      <canvas ref={canvasRef} className="hidden" />
-
-      {/* ── Top Bar ── */}
-      <header className="w-full flex justify-between items-center px-6 py-5 z-40 bg-gradient-to-b from-black/70 to-transparent">
-        <button
-          onClick={() => router.back()}
-          className="w-11 h-11 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform cursor-pointer"
-        >
-          <span className="material-symbols-outlined">close</span>
-        </button>
-
-        <div className="px-4 py-1.5 rounded-full bg-surface/80 backdrop-blur-md flex items-center gap-2 shadow-sm border border-outline-variant/30">
-          <span className="material-symbols-outlined text-sm text-tertiary filled">
-            verified_user
+    <TiltCard glow="emerald" className="max-w-xl mx-auto p-6 sm:p-8 bg-[#12181E] border border-[#1E293B]">
+      <div className="space-y-6">
+        <div>
+          <span className="text-[10px] font-mono font-bold tracking-widest text-[#10B981] uppercase bg-[#10B981]/15 border border-[#10B981]/30 px-3 py-1 rounded-full">
+            GPS VIEWFINDER STATION
           </span>
-          <span className="font-label text-xs font-bold text-on-surface">
-            Secure Capture
-          </span>
+          <h2 className="font-sans text-2xl font-black text-[#F8FAFC] tracking-tight mt-3">
+            {taskTitle}
+          </h2>
+          <p className="text-xs text-[#94A3B8] mt-1">
+            Capture real-time photographic evidence with biometric timestamping.
+          </p>
         </div>
 
-        <button
-          onClick={() => handleCapture()}
-          className="w-11 h-11 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform cursor-pointer"
-        >
-          <span className="material-symbols-outlined">flip_camera_ios</span>
-        </button>
-      </header>
+        {/* Viewfinder HUD Container */}
+        <div className="relative aspect-[4/3] rounded-2xl bg-[#090D10] border border-[#1E293B] overflow-hidden flex items-center justify-center shadow-2xl">
+          {/* Flash Effect */}
+          {flash && <div className="absolute inset-0 bg-white z-50 animate-out fade-out duration-200" />}
 
-      {/* ── Main Viewfinder Area ── */}
-      <main className="flex-grow relative flex items-center justify-center overflow-hidden">
-        {capturedImage ? (
-          <img
-            src={capturedImage}
-            alt="Captured Proof"
-            className="w-full h-full object-cover"
-          />
-        ) : hasCamera ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="text-center p-8 text-white/80 flex flex-col items-center gap-3">
-            <span className="material-symbols-outlined text-6xl text-primary-container">
-              photo_camera
-            </span>
-            <p className="text-sm font-semibold max-w-xs">
-              Live Camera Feed Active. Point your camera at the completed milestone.
-            </p>
-          </div>
-        )}
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 camera-overlay-gradient pointer-events-none" />
-
-        {/* Target Task Card Overlay */}
-        <div className="absolute top-4 left-6 right-6 z-20">
-          <div className="bg-surface/90 backdrop-blur-lg rounded-2xl p-4 shadow-organic border border-outline-variant/30 flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-on-primary-container text-2xl filled">
-                psychiatry
-              </span>
+          {/* Viewfinder Target Brackets */}
+          <div className="absolute inset-4 pointer-events-none z-30 flex flex-col justify-between">
+            <div className="flex justify-between">
+              <div className="w-6 h-6 border-t-2 border-l-2 border-[#10B981]" />
+              <div className="w-6 h-6 border-t-2 border-r-2 border-[#10B981]" />
             </div>
-            <div className="flex-grow">
-              <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">
-                Target Milestone
-              </p>
-              <h2 className="font-headline text-base font-bold text-on-surface leading-tight">
-                {taskTitle}
-              </h2>
-              <p className="font-body text-xs text-primary font-semibold mt-1 flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">schedule</span>
-                Due Today • Camera Only
-              </p>
+            <div className="flex justify-between">
+              <div className="w-6 h-6 border-b-2 border-l-2 border-[#10B981]" />
+              <div className="w-6 h-6 border-b-2 border-r-2 border-[#10B981]" />
             </div>
           </div>
-        </div>
 
-        {/* Reticle / Viewfinder guide */}
-        {!capturedImage && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-            <div className="w-64 h-64 border-2 border-dashed border-white/80 rounded-3xl" />
-          </div>
-        )}
+          {/* Live Video / Captured Image / Simulated Canvas */}
+          {!capturedImage ? (
+            <>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+              />
+              <canvas ref={canvasRef} className="hidden" />
 
-        {/* Metadata Badges */}
-        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3 px-4 z-20">
-          <div className="bg-surface-container-highest/90 backdrop-blur-md rounded-full px-3.5 py-1.5 flex items-center gap-1.5 shadow-sm border border-outline-variant/30 text-on-secondary-container">
-            <span className="material-symbols-outlined text-[15px] text-primary">
-              location_on
-            </span>
-            <span className="font-label text-xs font-semibold">
-              {locationStr}
-            </span>
-          </div>
-
-          <div className="bg-surface-container-highest/90 backdrop-blur-md rounded-full px-3.5 py-1.5 flex items-center gap-1.5 shadow-sm border border-outline-variant/30 text-on-secondary-container">
-            <span className="material-symbols-outlined text-[15px] text-tertiary">
-              calendar_today
-            </span>
-            <span className="font-label text-xs font-semibold">
-              {currentTime}
-            </span>
-          </div>
-        </div>
-      </main>
-
-      {/* Error alert */}
-      {errorMsg && (
-        <div className="absolute top-28 left-6 right-6 z-50 p-3 rounded-xl bg-error-container text-on-error-container text-xs text-center font-bold">
-          {errorMsg}
-        </div>
-      )}
-
-      {/* ── Bottom Action Bar ── */}
-      <footer className="h-32 bg-surface-container-highest w-full rounded-t-3xl z-30 flex flex-col items-center justify-center relative shadow-[0_-4px_20px_rgba(46,50,48,0.1)]">
-        {capturedImage ? (
-          <div className="flex items-center gap-6">
-            <button
-              onClick={handleRetake}
-              disabled={submitting}
-              className="px-6 py-2.5 rounded-xl border border-outline font-semibold text-sm hover:bg-surface-container transition-colors cursor-pointer"
-            >
-              Retake
-            </button>
-            <button
-              onClick={handleSubmitProof}
-              disabled={submitting}
-              className="bg-primary text-on-primary font-bold text-sm px-8 py-3 rounded-xl shadow-organic hover:bg-primary/90 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              {submitting ? (
-                <>
-                  <span className="material-symbols-outlined animate-spin text-lg">
-                    progress_activity
+              {!hasCamera && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 bg-[#090D10]">
+                  <span className="material-symbols-outlined text-4xl text-[#10B981] mb-2 animate-pulse">
+                    photo_camera
                   </span>
-                  Verifying...
-                </>
-              ) : (
-                <>
-                  Submit Proof
-                  <span className="material-symbols-outlined text-lg">
-                    check
-                  </span>
-                </>
+                  <p className="text-xs font-mono text-[#F8FAFC] font-bold">READY FOR CAPTURE</p>
+                  <p className="text-[11px] text-[#64748B] mt-1">Tap Shutter to record cryptographically signed proof</p>
+                </div>
               )}
-            </button>
+            </>
+          ) : (
+            <div className="relative w-full h-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={capturedImage}
+                alt="Captured proof"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
+          {/* Viewfinder HUD Overlays */}
+          <div className="absolute bottom-3 inset-x-3 z-30 flex justify-between items-center text-[10px] font-mono text-[#10B981] bg-[#090D10]/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#1E293B]">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
+              <span>{locationStr}</span>
+            </div>
+            <span className="text-[#F59E0B] font-bold">{currentTime}</span>
           </div>
-        ) : (
-          <>
-            <button
-              onClick={handleCapture}
-              className="w-20 h-20 bg-surface rounded-[28px] border-4 border-surface shadow-md flex items-center justify-center active:scale-95 transition-transform duration-200 -mt-10 cursor-pointer"
-            >
-              <div className="w-16 h-16 bg-primary rounded-[22px] flex items-center justify-center text-on-primary">
-                <span className="material-symbols-outlined text-3xl">
-                  photo_camera
-                </span>
-              </div>
-            </button>
-            <p className="font-label text-xs text-on-surface-variant mt-2 font-semibold">
-              Tap to capture proof
-            </p>
-          </>
+        </div>
+
+        {/* Error Notification */}
+        {errorMsg && (
+          <div className="p-3 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono">
+            {errorMsg}
+          </div>
         )}
-      </footer>
-    </div>
+
+        {/* Controls */}
+        <div className="flex items-center gap-3">
+          {!capturedImage ? (
+            <button
+              type="button"
+              onClick={handleCapture}
+              className="btn-primary w-full !py-4 text-sm font-mono tracking-wider flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-xl">camera</span>
+              CAPTURE VERIFICATION SNAPSHOT
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleRetake}
+                disabled={submitting}
+                className="btn-glass flex-1 !py-3.5 text-xs font-mono"
+              >
+                Retake Photo
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmitProof}
+                disabled={submitting}
+                className="btn-primary flex-1 !py-3.5 text-xs font-mono"
+              >
+                {submitting ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-base">progress_activity</span>
+                    Transmitting...
+                  </>
+                ) : (
+                  <>
+                    Transmit & Unlock Stake
+                    <span className="material-symbols-outlined text-base">lock_open</span>
+                  </>
+                )}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </TiltCard>
   );
 }

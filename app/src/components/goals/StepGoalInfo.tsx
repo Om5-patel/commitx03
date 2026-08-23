@@ -1,6 +1,6 @@
 "use client";
 
-import { GoalCategory, GoalFormData, CATEGORY_LABELS } from "@/lib/types";
+import { GoalCategory, GoalFormData } from "@/lib/types";
 
 interface StepGoalInfoProps {
   data: GoalFormData;
@@ -13,27 +13,31 @@ const categories: {
   desc: string;
   icon: string;
   method: string;
+  accentColor: string;
 }[] = [
   {
-    id: "generic_habit",
-    title: "Generic Habit",
-    desc: "Daily rituals, morning routines, gym check-ins, meditation sessions.",
-    icon: "psychiatry",
-    method: "Photo proof (in-app camera)",
+    id: "study",
+    title: "Deep Study & Skill Sprint",
+    desc: "Read books, master complex technical topics, prep for exams or certifications.",
+    icon: "menu_book",
+    method: "AI Dynamic Quiz (OpenRouter Free)",
+    accentColor: "#06B6D4",
   },
   {
-    id: "study",
-    title: "Study & Learning",
-    desc: "Reading books, course modules, research papers, exam preparation.",
-    icon: "menu_book",
-    method: "Knowledge quiz (AI generated)",
+    id: "generic_habit",
+    title: "Habit, Fitness & Routine",
+    desc: "Daily morning focus, workout sessions, gym check-ins, meditation streak.",
+    icon: "fitness_center",
+    method: "GPS Viewfinder Photo Proof",
+    accentColor: "#10B981",
   },
   {
     id: "business_creative",
-    title: "Business & Creative",
-    desc: "Shipping features, design files, essays, client deliverables.",
+    title: "Code, Product & Deliverables",
+    desc: "Shipping feature code, GitHub commits, design prototypes, client deliverables.",
     icon: "terminal",
-    method: "File artifact + AI check",
+    method: "Artifact Link / File AI Inspector",
+    accentColor: "#F59E0B",
   },
 ];
 
@@ -41,11 +45,14 @@ export default function StepGoalInfo({ data, onChange }: StepGoalInfoProps) {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="font-headline text-3xl font-bold text-on-surface mb-2">
-          Name Your Commitment
+        <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+          STEP 01 // OBJECTIVE
+        </span>
+        <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          Define Your Commitment Vault
         </h2>
-        <p className="text-on-surface-variant text-base">
-          What is the primary ambition you want to lock in?
+        <p className="text-sm text-[#94A3B8] mt-1">
+          What milestone are you committing your financial capital to achieve?
         </p>
       </div>
 
@@ -53,17 +60,17 @@ export default function StepGoalInfo({ data, onChange }: StepGoalInfoProps) {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="goal-title"
-          className="font-label text-sm font-bold text-on-surface-variant"
+          className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase"
         >
-          Goal Title
+          Commitment Title
         </label>
         <input
           id="goal-title"
           type="text"
           value={data.title}
           onChange={(e) => onChange({ title: e.target.value })}
-          placeholder="e.g. Daily Morning Meditation (10 Days)"
-          className="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 text-xl font-headline text-on-surface focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all shadow-sm"
+          placeholder="e.g. Master System Design & Microservices (14 Days)"
+          className="w-full bg-[#12181E] border border-[#1E293B] rounded-xl p-4 text-base sm:text-lg font-bold text-[#F8FAFC] focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] outline-none transition-all shadow-inner placeholder:text-[#475569]"
         />
       </div>
 
@@ -71,63 +78,61 @@ export default function StepGoalInfo({ data, onChange }: StepGoalInfoProps) {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="goal-desc"
-          className="font-label text-sm font-bold text-on-surface-variant"
+          className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase"
         >
-          Why does this matter? (Description)
+          Scope & Success Criteria (Optional)
         </label>
         <textarea
           id="goal-desc"
           rows={3}
           value={data.description}
           onChange={(e) => onChange({ description: e.target.value })}
-          placeholder="Clarify your intention and the exact outcome you commit to achieve."
-          className="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 text-base font-body text-on-surface focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all shadow-sm resize-none"
+          placeholder="Clarify what genuine completion looks like so the verification engine can accurately evaluate."
+          className="w-full bg-[#12181E] border border-[#1E293B] rounded-xl p-4 text-sm text-[#F8FAFC] focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] outline-none transition-all shadow-inner resize-none placeholder:text-[#475569]"
         />
       </div>
 
       {/* Category Selection */}
-      <div className="flex flex-col gap-4">
-        <label className="font-label text-sm font-bold text-on-surface-variant">
-          Select Category & Verification Engine
+      <div className="flex flex-col gap-3">
+        <label className="text-xs font-mono font-bold tracking-wider text-[#94A3B8] uppercase">
+          Category & Verification Engine
         </label>
         <div className="grid grid-cols-1 gap-4">
           {categories.map((cat) => {
             const isSelected = data.category === cat.id;
+
             return (
               <div
                 key={cat.id}
                 onClick={() => onChange({ category: cat.id })}
-                className={`p-6 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
+                className={`p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
                   isSelected
-                    ? "border-primary bg-primary-fixed/20 shadow-sm"
-                    : "border-outline-variant/30 bg-surface-container-lowest hover:border-outline-variant"
+                    ? "border-[#10B981] bg-[#12181E] shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+                    : "border-[#1E293B] bg-[#0E141A] hover:border-[#334155]"
                 }`}
               >
                 <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-bold ${
                     isSelected
-                      ? "bg-primary text-on-primary"
-                      : "bg-surface-container text-on-surface-variant"
+                      ? "bg-[#10B981] text-[#090D10] shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                      : "bg-[#12181E] text-[#94A3B8] border border-[#1E293B]"
                   }`}
                 >
-                  <span
-                    className={`material-symbols-outlined text-2xl ${
-                      isSelected ? "filled" : ""
-                    }`}
-                  >
+                  <span className="material-symbols-outlined text-2xl">
                     {cat.icon}
                   </span>
                 </div>
+
                 <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-headline font-bold text-lg text-on-surface">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <h4 className="font-sans font-bold text-base text-[#F8FAFC]">
                       {cat.title}
                     </h4>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#090D10] text-[#10B981] border border-[#10B981]/30 w-max">
                       {cat.method}
                     </span>
                   </div>
-                  <p className="text-on-surface-variant text-sm mt-1 leading-relaxed">
+                  <p className="text-[#94A3B8] text-xs mt-1 leading-relaxed">
                     {cat.desc}
                   </p>
                 </div>

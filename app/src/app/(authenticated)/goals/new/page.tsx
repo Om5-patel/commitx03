@@ -24,8 +24,8 @@ export default function NewGoalPage() {
     return {
       title: "",
       description: "",
-      category: "generic_habit",
-      total_stake: 150,
+      category: "study",
+      total_stake: 500,
       start_date: now.toISOString().split("T")[0],
       end_date: future.toISOString().split("T")[0],
     };
@@ -37,21 +37,26 @@ export default function NewGoalPage() {
     const future = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
     return [
       {
-        title: "Daily Proof Submission",
-        description: "Submit daily verified evidence",
-        verification_method: "photo",
-        stake_amount: 150,
+        title: "Milestone 1: Fundamentals Mastery",
+        description: "Complete and pass the verification check",
+        verification_method: "quiz",
+        stake_amount: 250,
+        deadline: future.toISOString().split("T")[0],
+      },
+      {
+        title: "Milestone 2: Practical Implementation",
+        description: "Complete and pass the verification check",
+        verification_method: "quiz",
+        stake_amount: 250,
         deadline: future.toISOString().split("T")[0],
       },
     ];
   });
 
-
   const handleGoalChange = (updated: Partial<GoalFormData>) => {
     const nextGoal = { ...goalData, ...updated };
     setGoalData(nextGoal);
 
-    // If category changed, update default verification method
     if (updated.category) {
       const defaultMethod = CATEGORY_VERIFICATION_MAP[updated.category];
       setTasks(tasks.map((t) => ({ ...t, verification_method: defaultMethod })));
@@ -62,13 +67,13 @@ export default function NewGoalPage() {
     setErrorMsg(null);
     if (step === 1) {
       if (!goalData.title.trim()) {
-        setErrorMsg("Please provide a title for your commitment.");
+        setErrorMsg("Please enter a title for your commitment.");
         return;
       }
       setStep(2);
     } else if (step === 2) {
       if (!goalData.total_stake || goalData.total_stake < 100) {
-        setErrorMsg("Minimum stake amount is ₹100.");
+        setErrorMsg("Minimum stake pledge is ₹100.");
         return;
       }
       setStep(3);
@@ -100,12 +105,12 @@ export default function NewGoalPage() {
 
       const goalJson = await goalRes.json();
       if (!goalRes.ok) {
-        throw new Error(goalJson.error?.message || "Failed to create goal");
+        throw new Error(goalJson.error?.message || "Failed to create commitment vault");
       }
 
       const createdGoal = goalJson.goal;
 
-      // 2. Create Tasks for Goal
+      // 2. Create Tasks
       const tasksRes = await fetch(`/api/goals/${createdGoal.id}/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -114,7 +119,7 @@ export default function NewGoalPage() {
 
       const tasksJson = await tasksRes.json();
       if (!tasksRes.ok) {
-        throw new Error(tasksJson.error?.message || "Failed to save tasks");
+        throw new Error(tasksJson.error?.message || "Failed to save milestones");
       }
 
       // 3. Create Payment Order
@@ -130,10 +135,10 @@ export default function NewGoalPage() {
 
       const orderData = await orderRes.json();
       if (!orderRes.ok) {
-        throw new Error(orderData.error || "Failed to create payment order");
+        throw new Error(orderData.error || "Failed to initialize escrow deposit");
       }
 
-      // 4. Verify & Activate Goal (Seamlessly handling test/mock mode or real Razorpay)
+      // 4. Verify & Lock
       const verifyRes = await fetch("/api/payments/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,75 +152,66 @@ export default function NewGoalPage() {
 
       if (!verifyRes.ok) {
         const verifyJson = await verifyRes.json();
-        throw new Error(verifyJson.error || "Verification failed");
+        throw new Error(verifyJson.error || "Deposit verification failed");
       }
 
-      // Success -> Redirect to Dashboard
+      // Redirect to Dashboard
       router.push(`/dashboard?new_goal=${createdGoal.id}`);
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err.message || "Something went wrong creating your commitment.");
+      setErrorMsg(err.message || "Failed to finalize commitment.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full">
-      {/* Wizard Step Progress Header */}
-      <div className="flex items-center justify-between py-4 border-b border-outline-variant/20 mb-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Step Progress Header */}
+      <div className="flex items-center justify-between py-4 border-b border-[#1E293B]">
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+          className="flex items-center gap-2 text-xs font-mono font-bold text-[#94A3B8] hover:text-[#10B981] transition-colors cursor-pointer"
         >
-          <span className="material-symbols-outlined text-xl">arrow_back</span>
-          <span className="font-label font-semibold text-sm">
-            {step === 1 ? "Dashboard" : "Back"}
-          </span>
+          <span className="material-symbols-outlined text-lg">arrow_back</span>
+          <span>{step === 1 ? "DASHBOARD" : "PREVIOUS STEP"}</span>
         </button>
 
         <div className="flex flex-col items-center">
-          <span className="font-label text-xs uppercase tracking-[0.2em] text-tertiary mb-1 font-bold">
-            Step {step} of 3
+          <span className="text-[11px] font-mono tracking-widest text-[#10B981] font-bold uppercase mb-1.5">
+            STEP 0{step} OF 03
           </span>
           <div className="flex gap-2">
-            <div
-              className={`h-1.5 w-8 rounded-full transition-all duration-300 ${
-                step >= 1 ? "bg-primary" : "bg-surface-container-high"
-              }`}
-            />
-            <div
-              className={`h-1.5 w-8 rounded-full transition-all duration-300 ${
-                step >= 2 ? "bg-primary" : "bg-surface-container-high"
-              }`}
-            />
-            <div
-              className={`h-1.5 w-8 rounded-full transition-all duration-300 ${
-                step >= 3 ? "bg-primary" : "bg-surface-container-high"
-              }`}
-            />
+            {[1, 2, 3].map((s) => (
+              <div
+                key={s}
+                className={`h-1.5 w-10 rounded-full transition-all duration-300 ${
+                  step >= s ? "bg-[#10B981] shadow-[0_0_8px_#10B981]" : "bg-[#1E293B]"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
         <Link
           href="/dashboard"
-          className="font-label text-sm font-semibold text-on-surface-variant hover:text-error transition-colors"
+          className="text-xs font-mono text-[#94A3B8] hover:text-[#F43F5E] transition-colors"
         >
-          Cancel
+          DISCARD
         </Link>
       </div>
 
-      {/* Error alert banner */}
+      {/* Error Alert Banner */}
       {errorMsg && (
-        <div className="mb-8 p-4 rounded-2xl bg-error-container text-on-error-container text-sm flex items-center gap-3">
+        <div className="p-4 rounded-xl bg-[#F43F5E]/15 border border-[#F43F5E]/30 text-[#F43F5E] text-xs font-mono flex items-center gap-3">
           <span className="material-symbols-outlined text-lg shrink-0">error</span>
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Main Form Content Canvas */}
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-        <div className="flex-1 max-w-3xl">
+      {/* Main Content Layout */}
+      <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-start">
+        <div className="flex-1 w-full max-w-3xl">
           {step === 1 && (
             <StepGoalInfo data={goalData} onChange={handleGoalChange} />
           )}
@@ -239,7 +235,7 @@ export default function NewGoalPage() {
           )}
         </div>
 
-        {/* Sticky Sidebar Preview */}
+        {/* Wizard Sidebar */}
         <WizardSidebar
           goal={goalData}
           tasks={tasks}

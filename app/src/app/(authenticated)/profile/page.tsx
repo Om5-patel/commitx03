@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import TiltCard from "@/components/ui/TiltCard";
+import CountUpNumber from "@/components/ui/CountUpNumber";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -47,113 +49,105 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-20">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary">
+      <div className="flex items-center justify-center p-24">
+        <span className="material-symbols-outlined animate-spin text-4xl text-[#10B981]">
           progress_activity
         </span>
       </div>
     );
   }
 
-  const fullName = user?.user_metadata?.full_name || "Account Member";
+  const fullName = user?.user_metadata?.full_name || "Protocol Member";
   const email = user?.email || "user@commitx.in";
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-4xl text-on-surface mb-2">
-          Your Profile
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <div className="border-b border-[#1E293B] pb-6">
+        <span className="text-xs font-mono font-bold tracking-widest text-[#10B981] uppercase">
+          ACCOUNTABILITY PASSPORT
+        </span>
+        <h1 className="font-sans text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight mt-1">
+          Identity & Escrow Passport
         </h1>
-        <p className="text-on-surface-variant text-base">
-          Manage your personal account, staked capital history, and settings.
-        </p>
       </div>
 
       {/* Profile Card */}
-      <div className="bg-surface-container-lowest rounded-[2rem] p-8 md:p-10 border border-outline-variant/30 shadow-organic flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <TiltCard glow="emerald" className="p-8 bg-[#12181E] border border-[#1E293B] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="flex items-center gap-6">
-          <div className="w-20 h-20 rounded-3xl bg-primary-container text-on-primary-container flex items-center justify-center text-3xl font-headline font-bold shadow-sm">
+          <div className="w-18 h-18 rounded-2xl bg-[#10B981] text-[#090D10] flex items-center justify-center text-3xl font-mono font-black shadow-[0_0_20px_rgba(16,185,129,0.4)]">
             {fullName.charAt(0).toUpperCase()}
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="font-headline text-2xl font-bold text-on-surface">
+              <h2 className="font-sans text-2xl font-extrabold text-[#F8FAFC]">
                 {fullName}
               </h2>
               {isAdmin && (
-                <span className="bg-tertiary-fixed text-on-tertiary-fixed text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                  Admin
+                <span className="bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                  Auditor Admin
                 </span>
               )}
             </div>
-            <p className="text-on-surface-variant text-sm mt-1">{email}</p>
+            <p className="text-xs font-mono text-[#94A3B8] mt-1">{email}</p>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="text-error hover:bg-error-container/30 border border-error/30 font-bold text-sm px-6 py-2.5 rounded-xl transition-colors cursor-pointer"
+          className="btn-destructive text-xs !py-2.5 !px-5 font-mono cursor-pointer"
         >
-          Sign Out
+          Disconnect & Sign Out
         </button>
-      </div>
+      </TiltCard>
 
-      {/* Admin Panel Quick Link if Admin */}
+      {/* Admin Quick Link */}
       {isAdmin && (
-        <div className="bg-secondary-container rounded-3xl p-6 border border-tertiary/30 flex items-center justify-between">
+        <TiltCard glow="amber" className="p-6 bg-[#12181E] border border-[#F59E0B]/40 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
-              <span className="material-symbols-outlined text-2xl filled">
-                admin_panel_settings
-              </span>
+            <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
+              <span className="material-symbols-outlined text-2xl">admin_panel_settings</span>
             </div>
             <div>
-              <h3 className="font-headline font-bold text-lg text-on-secondary-container">
-                CommitX Admin Portal
+              <h3 className="font-sans text-base font-bold text-[#F8FAFC]">
+                CommitX Admin Arbitration Station
               </h3>
-              <p className="text-on-secondary-container/80 text-xs">
+              <p className="text-xs text-[#94A3B8] mt-0.5">
                 Review flagged submissions, resolve disputes, and audit treasury forfeitures.
               </p>
             </div>
           </div>
 
-          <Link
-            href="/admin"
-            className="bg-primary text-on-primary font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm hover:bg-primary/90 transition-all"
-          >
-            Open Admin
+          <Link href="/admin" className="btn-primary text-xs !py-2.5 !px-4 shrink-0">
+            Open Terminal
           </Link>
-        </div>
+        </TiltCard>
       )}
 
-      {/* Overview Stats */}
+      {/* Performance Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30">
-          <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-2">
-            Completed Goals
+        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+            COMPLETED VAULTS
           </span>
-          <span className="font-headline text-3xl font-bold text-primary">
-            8
-          </span>
-        </div>
+          <CountUpNumber value={8} className="text-3xl text-[#10B981]" />
+          <p className="text-xs font-mono text-[#64748B] mt-1">100% verified milestones</p>
+        </TiltCard>
 
-        <div className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30">
-          <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-2">
-            Refund Rate
+        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+            HISTORIC REFUND RATE
           </span>
-          <span className="font-headline text-3xl font-bold text-tertiary">
-            94%
-          </span>
-        </div>
+          <CountUpNumber value={94} suffix="%" className="text-3xl text-[#F8FAFC]" />
+          <p className="text-xs font-mono text-[#64748B] mt-1">Top tier protocol reputation</p>
+        </TiltCard>
 
-        <div className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30">
-          <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-2">
-            Total Stake Recovered
+        <TiltCard className="p-6 bg-[#12181E] border border-[#1E293B]">
+          <span className="text-[11px] font-mono font-bold text-[#94A3B8] uppercase block mb-2">
+            CAPITAL RECOVERED
           </span>
-          <span className="font-headline text-3xl font-bold text-on-surface">
-            ₹3,850
-          </span>
-        </div>
+          <CountUpNumber value={3850} prefix="₹" className="text-3xl text-[#06B6D4]" />
+          <p className="text-xs font-mono text-[#64748B] mt-1">Refunded directly to you</p>
+        </TiltCard>
       </div>
     </div>
   );
